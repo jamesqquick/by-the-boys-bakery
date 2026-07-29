@@ -1,0 +1,59 @@
+---
+---
+
+<footer class="site-footer">
+  <a href="/" class="footer-logo">By the Boys Bakery</a>
+  <p>© {new Date().getFullYear()} · Home Baked in Germantown, TN</p>
+  <a href="https://instagram.com/bytheboysbakery" target="_blank" rel="noopener">
+    Follow on Instagram →
+  </a>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-choco);
+    border-top: 4px solid var(--color-choco);
+    padding: 3rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-logo {
+    font-family: var(--font-family-display);
+    font-size: 1.5rem;
+    color: var(--color-butter);
+    text-decoration: none;
+  }
+
+  .site-footer p {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .site-footer a:not(.footer-logo) {
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: var(--color-sky);
+    text-decoration: none;
+  }
+
+  /* ── Tablet ── */
+  @media (max-width: 1023px) {
+    .site-footer { padding: 2.5rem 2rem; }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 767px) {
+    .site-footer {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      gap: 1rem;
+    }
+  }
+</style>

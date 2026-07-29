@@ -1,0 +1,55 @@
+---
+const items = [
+  "Brown Butter Chocolate Chip Cookies",
+  "Chocolate Frosted Brownies",
+  "Pastel Frosted Cupcakes",
+  "Buttercream Sugar Cookie Sandwiches",
+];
+// Duplicate for seamless loop
+const tickerItems = [...items, ...items];
+---
+
+<div class="ticker">
+  <div class="ticker-track">
+    {tickerItems.map((item) => <span class="ticker-item">{item}</span>)}
+  </div>
+</div>
+
+<style>
+  .ticker {
+    background: var(--color-mint);
+    border-top: 3px solid var(--color-choco);
+    border-bottom: 3px solid var(--color-choco);
+    padding: 0.75rem 0;
+    overflow: hidden;
+  }
+
+  .ticker-track {
+    display: flex;
+    gap: 4rem;
+    width: max-content;
+    animation: ticker-scroll 22s linear infinite;
+  }
+
+  @keyframes ticker-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .ticker-item {
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: var(--color-choco);
+    white-space: nowrap;
+  }
+
+  .ticker-item:not(:last-child)::after {
+    content: " ·";
+    margin-left: 4rem;
+    opacity: 0.4;
+  }
+</style>

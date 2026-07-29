@@ -1,0 +1,62 @@
+@import "tailwindcss";
+@import "./global.css";
+
+/* ============================================================
+   Tailwind v4 theme — maps our brand tokens into Tailwind's
+   color / spacing / radius utilities and shadcn's CSS-var API.
+   ============================================================ */
+
+@theme inline {
+  /* Fonts */
+  --font-sans:    "Nunito", sans-serif;
+  --font-display: "Pacifico", cursive;
+
+  /* Brand colors (Tailwind utilities: bg-butter, text-choco, etc.) */
+  --color-butter:      #FFE566;
+  --color-choco:       #3D1F0A;
+  --color-sky:         #7BCFED;
+  --color-strawberry:  #E85D5D;
+  --color-mint:        #6DDBA1;
+  --color-cream:       #FFF9EE;
+  --color-muted-brown: #8B6555;
+  --color-border-warm: #D4C5B8;
+
+  /* shadcn semantic aliases */
+  --color-background:           #FFF9EE;
+  --color-foreground:           #3D1F0A;
+  --color-primary:              #E85D5D;
+  --color-primary-foreground:   #ffffff;
+  --color-secondary:            #FFE566;
+  --color-secondary-foreground: #3D1F0A;
+  --color-muted:                #D4C5B8;
+  --color-muted-foreground:     #8B6555;
+  --color-accent:               #7BCFED;
+  --color-accent-foreground:    #3D1F0A;
+  --color-destructive:          #E85D5D;
+  --color-border:               #3D1F0A;
+  --color-input:                #FFF9EE;
+  --color-ring:                 #3D1F0A;
+
+  /* Radius */
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  20px;
+  --radius-2xl: 24px;
+
+  /* Neo-brutalist shadows (use with shadow-neo etc.) */
+  --shadow-neo-sm: 2px 2px 0 #3D1F0A;
+  --shadow-neo:    4px 4px 0 #3D1F0A;
+  --shadow-neo-lg: 8px 8px 0 #3D1F0A;
+}
+
+/* ============================================================
+   shadcn component overrides — apply the neo-brutalist style
+   to all shadcn primitives automatically.
+   ============================================================ */
+
+@layer base {
+  * {
+    border-color: theme(colors.choco / 15%);
+  }
+}

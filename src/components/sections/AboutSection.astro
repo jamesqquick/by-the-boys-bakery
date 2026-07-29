@@ -1,0 +1,191 @@
+---
+import PlaceholderImg from "../PlaceholderImg.astro";
+---
+
+<section id="about" class="about">
+  <!-- Image side -->
+  <div class="about-img-wrap">
+    <PlaceholderImg aspectRatio="4/5" alt="James and the boys baking" class="about-img" />
+    <div class="about-badge">Made with<br />Real Love</div>
+  </div>
+
+  <!-- Content side -->
+  <div class="about-content">
+    <span class="section-label">Meet the Bakers</span>
+    <h2 class="about-title">
+      James &amp; the <span class="pop">Boys!</span>
+    </h2>
+    <p>
+      Hi, I'm James. I live in Germantown, TN and I love baking. Every weekend
+      my three nephews and I get in the kitchen together and make something good.
+    </p>
+    <p>
+      We call them the boys. They show up every Saturday, and before long
+      neighbors started asking where the food was coming from.
+    </p>
+    <ul class="about-list">
+      <li>100% homemade, baked in our own kitchen</li>
+      <li>Small batches so every treat gets real attention</li>
+      <li>Made-to-order, never sitting on a shelf</li>
+      <li>Right here in Germantown, TN</li>
+    </ul>
+    <p>
+      By the Boys Bakery started because good food is worth sharing. We'd love
+      to bake something for you.
+    </p>
+  </div>
+</section>
+
+<style>
+  /* ── Desktop ── */
+  .about {
+    background: var(--color-sky);
+    border-bottom: 4px solid var(--color-choco);
+    padding: 7rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .about-img-wrap {
+    position: relative;
+    /* Extra right space for the badge that overflows */
+    padding-bottom: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .about-img {
+    border-radius: var(--radius-card);
+    border: 3px solid var(--color-choco);
+    box-shadow: var(--shadow-neo);
+    overflow: hidden;
+  }
+
+  .about-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--color-strawberry);
+    color: #fff;
+    border: 4px solid var(--color-choco);
+    box-shadow: var(--shadow-neo);
+    border-radius: 50%;
+    width: 110px;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    text-align: center;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    transform: rotate(10deg);
+  }
+
+  .section-label {
+    display: inline-block;
+    background: var(--color-choco);
+    color: var(--color-butter);
+    padding: 0.35rem 0.85rem;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.25rem;
+  }
+
+  .about-title {
+    font-family: var(--font-family-display);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    color: var(--color-choco);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-title .pop { color: var(--color-strawberry); }
+
+  .about-content p {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.8;
+    color: var(--color-choco);
+    margin-bottom: 1.1rem;
+  }
+
+  .about-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--color-choco);
+  }
+
+  .about-list li::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-strawberry);
+    border: 2px solid var(--color-choco);
+    flex-shrink: 0;
+  }
+
+  /* ── Tablet ── */
+  @media (max-width: 1023px) {
+    .about {
+      padding: 5rem 2.5rem;
+      gap: 3rem;
+    }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 767px) {
+    .about {
+      grid-template-columns: 1fr;
+      padding: 3rem 1.5rem 3.5rem;
+      gap: 2.5rem;
+    }
+
+    /* Image comes second (content first) on mobile */
+    .about-content { order: -1; }
+
+    .about-img-wrap {
+      padding-bottom: 1.5rem;
+      padding-right: 1.5rem;
+      max-width: 420px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .about-img {
+      /* Use landscape ratio on mobile so it doesn't take up huge height */
+      aspect-ratio: 3/2 !important;
+    }
+
+    .about-badge {
+      width: 90px;
+      height: 90px;
+      font-size: 0.7rem;
+      border-width: 3px;
+    }
+
+    .about-title {
+      font-size: clamp(2rem, 8vw, 2.75rem);
+      margin-bottom: 1rem;
+    }
+  }
+</style>

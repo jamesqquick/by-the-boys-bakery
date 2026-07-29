@@ -1,0 +1,51 @@
+---
+import "../styles/app.css";
+import { EmDashHead, EmDashBodyStart, EmDashBodyEnd } from "emdash/ui";
+import { createPublicPageContext } from "emdash/page";
+import { getSiteSettings } from "emdash";
+import SiteNav from "../components/layout/SiteNav.astro";
+import SiteFooter from "../components/layout/SiteFooter.astro";
+
+interface Props {
+  title: string;
+  description?: string | null;
+  currentPath?: string;
+}
+
+const { title, description, currentPath } = Astro.props;
+const settings = await getSiteSettings();
+const siteTitle = settings?.title ?? "By the Boys Bakery";
+
+const pageCtx = createPublicPageContext({
+  Astro,
+  kind: "custom",
+  pageType: "website",
+  title: `${title} | ${siteTitle}`,
+  pageTitle: title,
+  description: description ?? undefined,
+  siteName: siteTitle,
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | {siteTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+    <EmDashHead page={pageCtx} />
+  </head>
+  <body>
+    <EmDashBodyStart page={pageCtx} />
+    <SiteNav currentPath={currentPath} />
+    <main>
+      <slot />
+    </main>
+    <SiteFooter />
+    <EmDashBodyEnd page={pageCtx} />
+  </body>
+</html>

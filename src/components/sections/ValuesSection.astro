@@ -1,0 +1,129 @@
+---
+const values = [
+  {
+    title: "Truly Homemade",
+    description:
+      "We bake in our own home kitchen using real ingredients. No commercial kitchen. No preservatives.",
+  },
+  {
+    title: "Local to Germantown",
+    description:
+      "We're your neighbors. A small, community-rooted bakery serving Germantown, TN.",
+  },
+  {
+    title: "Made with Purpose",
+    description:
+      "Every order is a family affair. James and the boys bake every batch together. That's how they spend their weekends.",
+  },
+];
+---
+
+<section class="values">
+  <div class="values-header">
+    <span class="values-label">What Makes Us Different</span>
+    <h2 class="values-title">Why the Boys?</h2>
+  </div>
+  <div class="values-grid">
+    {
+      values.map((v) => (
+        <div class="value-card">
+          <h3 class="value-title">{v.title}</h3>
+          <p class="value-desc">{v.description}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  /* ── Desktop ── */
+  .values {
+    background: var(--color-butter);
+    border-top: 4px solid var(--color-choco);
+    border-bottom: 4px solid var(--color-choco);
+    padding: 5rem 4rem;
+  }
+
+  .values-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .values-label {
+    display: inline-block;
+    background: var(--color-choco);
+    color: var(--color-butter);
+    padding: 0.35rem 0.85rem;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+  }
+
+  .values-title {
+    font-family: var(--font-family-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--color-choco);
+    line-height: 1;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .value-card {
+    background: #fff;
+    border: 3px solid var(--color-choco);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-neo);
+    padding: 2.25rem 2rem;
+  }
+
+  .value-title {
+    font-family: var(--font-family-display);
+    font-size: 1.35rem;
+    color: var(--color-choco);
+    margin-bottom: 0.6rem;
+  }
+
+  .value-desc {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-muted);
+    line-height: 1.65;
+  }
+
+  /* ── Tablet ── */
+  @media (max-width: 1023px) {
+    .values {
+      padding: 4rem 2.5rem;
+    }
+    .values-grid {
+      gap: 1.25rem;
+    }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 767px) {
+    .values {
+      padding: 3rem 1.5rem;
+    }
+
+    .values-header {
+      margin-bottom: 2rem;
+    }
+
+    .values-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .value-card {
+      padding: 1.75rem 1.5rem;
+    }
+  }
+</style>

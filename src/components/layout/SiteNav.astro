@@ -1,0 +1,277 @@
+---
+interface Props {
+  currentPath?: string;
+}
+const { currentPath = "/" } = Astro.props;
+---
+
+<nav class="site-nav">
+  <!-- Top row: logo + hamburger -->
+  <div class="nav-row">
+    <a href="/" class="nav-logo">
+      By the <span class="pop">Boys</span> Bakery
+    </a>
+
+    <!--
+      CSS-only toggle via hidden checkbox + :has().
+      All elements share the same Astro scope attribute so :has() works correctly.
+    -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" />
+    <label for="nav-toggle" class="nav-hamburger" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+  </div>
+
+  <!-- Collapsible link list -->
+  <ul class="nav-links">
+    <li><a href="/" class:list={[{ active: currentPath === "/" }]}>Home</a></li>
+    <li><a href="/#treats">Our Treats</a></li>
+    <li><a href="/#about">About</a></li>
+    <li><a href="/inquiry" class="nav-cta">Place an Inquiry</a></li>
+  </ul>
+</nav>
+
+<script>
+  // Close mobile menu when any link is tapped
+  const toggle = document.getElementById("nav-toggle") as HTMLInputElement | null;
+  document.querySelectorAll(".nav-links a").forEach((link) => {
+    link.addEventListener("click", () => {
+      if (toggle) toggle.checked = false;
+    });
+  });
+</script>
+
+<style>
+  /* ─────────────────────────────────────────
+     Shared across all breakpoints
+  ───────────────────────────────────────── */
+
+  .site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-cream);
+    border-bottom: 3px solid var(--color-choco);
+  }
+
+  /* Top row always stays horizontal */
+  .nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1rem 3rem;
+  }
+
+  .nav-logo {
+    font-family: var(--font-family-display);
+    font-size: 1.6rem;
+    color: var(--color-choco);
+    text-decoration: none;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .nav-logo .pop { color: var(--color-strawberry); }
+
+  /* Hidden checkbox — only for toggle state */
+  .nav-toggle {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  /* Hamburger button */
+  .nav-hamburger {
+    display: none; /* shown only on mobile */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 10px;
+    border: 3px solid var(--color-choco);
+    background: var(--color-butter);
+    box-shadow: var(--shadow-neo-sm);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .nav-hamburger:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-neo);
+  }
+
+  .nav-hamburger span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--color-choco);
+    border-radius: 2px;
+    transition: transform 0.22s ease, opacity 0.15s ease;
+  }
+
+  /* Animate to X when open */
+  .site-nav:has(.nav-toggle:checked) .nav-hamburger span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .site-nav:has(.nav-toggle:checked) .nav-hamburger span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  .site-nav:has(.nav-toggle:checked) .nav-hamburger span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* ─────────────────────────────────────────
+     Desktop nav links (inline)
+  ───────────────────────────────────────── */
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    align-items: center;
+    /* On desktop the list lives inside .nav-row visually,
+       but we keep it as a sibling for the mobile toggle to work. */
+    padding: 0 3rem 0;
+    /* On desktop: collapse the padding since the row already has it */
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  /* Desktop: links sit on the same visual row as the logo.
+     We pull the list up using negative margin-top to overlap
+     the nav-row — simpler than nesting inside nav-row, which
+     would break the :has() collapse on mobile. */
+  @media (min-width: 861px) {
+    .site-nav {
+      /* On desktop the nav is a single visual row */
+      display: flex;
+      align-items: stretch;
+    }
+
+    .nav-row {
+      padding-right: 0;
+      flex: 0 0 auto;
+    }
+
+    .nav-links {
+      display: flex;
+      flex: 1;
+      justify-content: flex-end;
+      padding: 0 3rem;
+      border: none;
+    }
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--color-choco);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--color-strawberry);
+  }
+
+  .nav-cta {
+    display: inline-block;
+    background: var(--color-butter);
+    color: var(--color-choco) !important;
+    padding: 0.55rem 1.4rem;
+    border-radius: 100px;
+    border: 3px solid var(--color-choco);
+    box-shadow: var(--shadow-neo-sm);
+    font-weight: 900 !important;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .nav-cta:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-neo) !important;
+  }
+
+  /* ─────────────────────────────────────────
+     Tablet — tighten horizontal padding
+  ───────────────────────────────────────── */
+  @media (max-width: 1023px) and (min-width: 861px) {
+    .nav-row  { padding: 1rem 2rem 1rem 2rem; }
+    .nav-links { padding: 0 2rem; gap: 1.5rem; }
+  }
+
+  /* ─────────────────────────────────────────
+     Mobile — hamburger menu
+  ───────────────────────────────────────── */
+  @media (max-width: 860px) {
+    .site-nav {
+      display: block; /* stack nav-row then nav-links */
+    }
+
+    .nav-row {
+      padding: 0.85rem 1.25rem;
+      gap: 1.5rem; /* space between logo and hamburger */
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+    }
+
+    /* Show the hamburger button */
+    .nav-hamburger { display: flex; }
+
+    /* ── Links: hidden by default ── */
+    .nav-links {
+      display: none;           /* collapsed */
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 0.5rem 1.25rem 0.75rem;
+      border-top: 2px solid rgba(61, 31, 10, 0.1);
+      list-style: none;
+    }
+
+    /* ── Links: shown when checkbox is checked ── */
+    .site-nav:has(.nav-toggle:checked) .nav-links {
+      display: flex;           /* expanded */
+    }
+
+    .nav-links li { width: 100%; }
+
+    .nav-links a {
+      display: block;
+      padding: 0.85rem 0.5rem;
+      font-size: 1rem;
+      border-bottom: 1px solid rgba(61, 31, 10, 0.07);
+    }
+
+    .nav-links li:last-child a { border-bottom: none; }
+
+    /* CTA becomes a full-width block button in the dropdown */
+    .nav-cta {
+      display: block;
+      text-align: center;
+      border-radius: 12px;
+      margin-top: 0.25rem;
+      padding: 0.85rem 1rem;
+    }
+  }
+
+  /* ─────────────────────────────────────────
+     Very small phones
+  ───────────────────────────────────────── */
+  @media (max-width: 380px) {
+    .nav-logo { font-size: 1.1rem; }
+  }
+</style>

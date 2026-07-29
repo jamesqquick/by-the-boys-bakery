@@ -1,0 +1,437 @@
+---
+import BakeryLayout from "../layouts/BakeryLayout.astro";
+import InquiryForm from "../components/InquiryForm";
+---
+
+<BakeryLayout
+  title="Place an Inquiry"
+  description="Tell us the occasion, flavor, and quantity. We'll let you know what we can make."
+  currentPath="/inquiry"
+>
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="page-header-content">
+      <span class="page-eyebrow">Let's Make Something</span>
+      <h1>Place an Inquiry</h1>
+      <p class="page-header-desc">
+        Fill out the form and we'll get back to you within 48 hours. Tell us
+        what you need and we'll take it from there.
+      </p>
+    </div>
+    <div class="page-header-aside">
+      <h4>What happens next?</h4>
+      <ul class="aside-list">
+        <li>We review your inquiry</li>
+        <li>We reach out within 48 hrs</li>
+        <li>We confirm what we can do</li>
+        <li>You get fresh baked goods</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="form-wrap">
+    <InquiryForm client:load />
+  </div>
+</BakeryLayout>
+
+<style is:global>
+  /* ── Page Header ── */
+  .page-header {
+    background: var(--color-butter);
+    border-bottom: 4px solid var(--color-choco);
+    padding: 4rem 4rem 3.5rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: end;
+  }
+
+  .page-eyebrow {
+    display: inline-block;
+    background: var(--color-choco);
+    color: var(--color-butter);
+    padding: 0.35rem 0.85rem;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+
+  .page-header h1 {
+    font-family: var(--font-family-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: var(--color-choco);
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+  }
+
+  .page-header-desc {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-muted);
+    max-width: 480px;
+    line-height: 1.7;
+  }
+
+  .page-header-aside {
+    background: #fff;
+    border: 3px solid var(--color-choco);
+    box-shadow: var(--shadow-neo);
+    border-radius: var(--radius-card);
+    padding: 1.5rem 1.75rem;
+    min-width: 220px;
+    align-self: center;
+  }
+
+  .page-header-aside h4 {
+    font-family: var(--font-family-display);
+    font-size: 1rem;
+    color: var(--color-choco);
+    margin-bottom: 0.75rem;
+  }
+
+  .aside-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .aside-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-muted);
+    line-height: 1.4;
+  }
+
+  .aside-list li::before {
+    content: "✓";
+    color: var(--color-mint);
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+
+  /* ── Form wrapper ── */
+  .form-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+  }
+
+  /* ── InquiryForm card ── */
+  .inquiry-form {
+    background: #fff;
+    border: 3px solid var(--color-choco);
+    border-radius: 24px;
+    box-shadow: var(--shadow-neo-lg);
+    overflow: hidden;
+  }
+
+  .form-section {
+    padding: 2.5rem 3rem;
+    border-bottom: 3px solid var(--color-choco);
+  }
+
+  .form-section:last-of-type {
+    border-bottom: none;
+  }
+
+  .form-section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    margin-bottom: 1.75rem;
+  }
+
+  .form-section-label::before {
+    content: attr(data-step);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--color-butter);
+    border: 2px solid var(--color-choco);
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: var(--color-choco);
+    flex-shrink: 0;
+  }
+
+  .field-row {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .field-row.two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .field-hint {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-muted);
+    line-height: 1.4;
+  }
+
+  /* shadcn Input / Textarea overrides */
+  .inquiry-form input,
+  .inquiry-form textarea {
+    background: var(--color-cream);
+    border: 3px solid var(--color-choco);
+    border-radius: 12px;
+    font-family: var(--font-family);
+    font-weight: 700;
+    color: var(--color-choco);
+  }
+
+  .inquiry-form input:focus,
+  .inquiry-form textarea:focus {
+    background: #fff;
+    box-shadow: var(--shadow-neo-sm);
+    outline: none;
+  }
+
+  .inquiry-form textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  /* shadcn Label override */
+  .inquiry-form label {
+    font-size: 0.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--color-choco);
+  }
+
+  .required {
+    color: var(--color-strawberry);
+    margin-left: 2px;
+  }
+
+  .optional {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--color-muted);
+    text-transform: none;
+    letter-spacing: 0;
+    margin-left: 4px;
+  }
+
+  /* Treat checkbox grid */
+  .treat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .treat-option {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-cream);
+    border: 3px solid var(--color-choco);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+    user-select: none;
+  }
+
+  .treat-option:hover {
+    background: var(--color-butter);
+    box-shadow: var(--shadow-neo-sm);
+  }
+
+  .treat-checkbox {
+    width: 18px !important;
+    height: 18px !important;
+    flex-shrink: 0;
+    border: 3px solid var(--color-choco) !important;
+    border-radius: 4px !important;
+    accent-color: var(--color-strawberry);
+  }
+
+  .treat-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .treat-name {
+    font-size: 0.88rem;
+    font-weight: 900;
+    color: var(--color-choco);
+    line-height: 1.2;
+  }
+
+  .treat-sub {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-muted);
+    margin-top: 0.1rem;
+  }
+
+  /* Form footer */
+  .form-footer {
+    background: var(--color-butter);
+    border-top: 3px solid var(--color-choco);
+    padding: 2.5rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .form-footer-note {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-muted);
+    line-height: 1.5;
+    max-width: 340px;
+  }
+
+  .form-footer-note strong {
+    color: var(--color-choco);
+    font-weight: 900;
+  }
+
+  .submit-btn {
+    flex-shrink: 0;
+  }
+
+  /* Success state */
+  .form-success {
+    padding: 4rem 3rem;
+    text-align: center;
+  }
+
+  .success-title {
+    font-family: var(--font-family-display);
+    font-size: 2rem;
+    color: var(--color-choco);
+    margin-bottom: 0.75rem;
+  }
+
+  .success-body {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-muted);
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ═══════════════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════════════ */
+
+  /* ── Tablet ── */
+  @media (max-width: 1023px) {
+    .page-header {
+      padding: 3rem 2.5rem 2.5rem;
+      gap: 1.5rem;
+    }
+
+    .form-wrap {
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    .form-section {
+      padding: 2rem 2rem;
+    }
+
+    .form-footer {
+      padding: 2rem 2rem;
+    }
+
+    .form-success {
+      padding: 3rem 2rem;
+    }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 767px) {
+    /* Page header: single column */
+    .page-header {
+      grid-template-columns: 1fr;
+      padding: 2rem 1.5rem;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .page-header h1 {
+      font-size: clamp(2rem, 9vw, 2.75rem);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-header-aside {
+      min-width: 0;
+      width: 100%;
+    }
+
+    /* Form wrapper */
+    .form-wrap {
+      padding: 1.5rem 1rem 4rem;
+    }
+
+    /* Form card: tighter on small screens */
+    .inquiry-form {
+      border-radius: 16px;
+    }
+
+    .form-section {
+      padding: 1.5rem 1.25rem;
+    }
+
+    /* Two-col fields → single column */
+    .field-row.two-col {
+      grid-template-columns: 1fr;
+    }
+
+    /* Treat grid → single column */
+    .treat-grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* Form footer: stack vertically */
+    .form-footer {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 1.5rem 1.25rem;
+      gap: 1.25rem;
+    }
+
+    .form-footer-note {
+      max-width: 100%;
+    }
+
+    .submit-btn {
+      width: 100%;
+    }
+
+    .form-success {
+      padding: 2.5rem 1.5rem;
+    }
+  }
+</style>

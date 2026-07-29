@@ -1,0 +1,91 @@
+---
+interface Props {
+  aspectRatio?: string;
+  alt?: string;
+  class?: string;
+  /** When true the element is position:absolute inset-0, filling its positioned parent. */
+  fill?: boolean;
+}
+
+const {
+  aspectRatio = "4/3",
+  alt = "Image coming soon",
+  class: className,
+  fill = false,
+} = Astro.props;
+
+// Unique ID per instance so multiple clipPaths on the same page don't collide.
+const uid = `ph-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div
+  class:list={["placeholder-img", className, { "placeholder-img--fill": fill }]}
+  style={fill ? undefined : `aspect-ratio: ${aspectRatio}`}
+  role="img"
+  aria-label={alt}
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 400 300"
+    preserveAspectRatio="xMidYMid meet"
+    aria-hidden="true"
+    class="placeholder-svg"
+  >
+    <defs>
+      <!-- Clip everything to the rounded-rect border so shapes never overflow -->
+      <clipPath id={uid}>
+        <rect x="20" y="20" width="360" height="260" rx="20" ry="20" />
+      </clipPath>
+    </defs>
+
+    <!-- Inner background -->
+    <rect x="20" y="20" width="360" height="260" rx="20" ry="20" fill="#F3F4F6" />
+
+    <!-- Scene, clipped to the border rect -->
+    <g clip-path={`url(#${uid})`}>
+      <!-- Sun — upper right, above both mountain peaks -->
+      <circle cx="315" cy="68" r="32" fill="#9CA3AF" />
+
+      <!-- Back mountain (right, shorter) — drawn first so front mountain covers overlap -->
+      <polygon points="290,148 178,300 402,300" fill="#9CA3AF" />
+
+      <!-- Front mountain (left, taller) — drawn on top -->
+      <polygon points="152,108 18,300 286,300" fill="#B0B7C3" />
+    </g>
+
+    <!-- Border stroke drawn last so it sits cleanly on top -->
+    <rect
+      x="20" y="20"
+      width="360" height="260"
+      rx="20" ry="20"
+      fill="none"
+      stroke="#9CA3AF"
+      stroke-width="8"
+    />
+  </svg>
+</div>
+
+<style>
+  .placeholder-img {
+    background-color: #f3f4f6;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Fill mode: sits absolute inside a positioned parent */
+  .placeholder-img--fill {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .placeholder-svg {
+    width: 55%;
+    max-width: 240px;
+    height: auto;
+  }
+</style>

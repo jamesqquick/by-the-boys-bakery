@@ -1,0 +1,58 @@
+---
+import PlaceholderImg from "./PlaceholderImg.astro";
+
+interface Props {
+  name: string;
+  description: string;
+}
+
+const { name, description } = Astro.props;
+---
+
+<div class="menu-card">
+  <PlaceholderImg aspectRatio="1/1" alt={name} class="menu-card-img" />
+  <div class="menu-card-body">
+    <h3 class="menu-card-name">{name}</h3>
+    <p class="menu-card-desc">{description}</p>
+  </div>
+</div>
+
+<style>
+  .menu-card {
+    background: #fff;
+    border: 3px solid var(--color-choco);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: var(--shadow-neo);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .menu-card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: var(--shadow-neo-lg);
+  }
+
+  .menu-card-img {
+    border-radius: 0;
+  }
+
+  .menu-card-body {
+    padding: 1.25rem;
+    border-top: 3px solid var(--color-choco);
+  }
+
+  .menu-card-name {
+    font-family: var(--font-family-display);
+    font-size: 1rem;
+    color: var(--color-choco);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .menu-card-desc {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-muted);
+    line-height: 1.5;
+  }
+</style>

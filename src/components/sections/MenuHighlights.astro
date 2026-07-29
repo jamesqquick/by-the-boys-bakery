@@ -1,0 +1,130 @@
+---
+import MenuCard from "../MenuCard.astro";
+
+const treats = [
+  {
+    name: "Brown Butter Choc Chip Cookies",
+    description:
+      "Classic cookie elevated with nutty browned butter and big chocolate chunks.",
+  },
+  {
+    name: "Chocolate Frosted Brownies",
+    description:
+      "Rich, fudgy brownies finished with a silky chocolate ganache on top.",
+  },
+  {
+    name: "Frosted Cupcakes",
+    description:
+      "Fluffy cupcakes piled high with frosting. Works for birthdays, showers, or no reason at all.",
+  },
+  {
+    name: "Buttercream Sugar Sandwiches",
+    description:
+      "Soft sugar cookies with a generous swirl of vanilla buttercream in the middle.",
+  },
+];
+---
+
+<section id="treats" class="menu">
+  <div class="menu-header">
+    <div>
+      <span class="section-label">What We Make</span>
+      <h2 class="section-title">Our Treats</h2>
+    </div>
+    <p class="menu-note">
+      See something you like? Submit an inquiry and we'll sort out the details.
+    </p>
+  </div>
+  <div class="menu-grid">
+    {treats.map((treat) => <MenuCard name={treat.name} description={treat.description} />)}
+  </div>
+</section>
+
+<style>
+  /* ── Desktop ── */
+  .menu {
+    padding: 7rem 4rem;
+    background: var(--color-cream);
+  }
+
+  .menu-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    gap: 1.5rem;
+  }
+
+  .section-label {
+    display: inline-block;
+    background: var(--color-sky);
+    color: var(--color-choco);
+    border: 3px solid var(--color-choco);
+    padding: 0.3rem 0.85rem;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: var(--font-family-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--color-choco);
+    line-height: 1;
+  }
+
+  .menu-note {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--color-muted);
+    text-align: right;
+    max-width: 220px;
+    line-height: 1.5;
+    flex-shrink: 0;
+  }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  /* ── Tablet ── */
+  @media (max-width: 1023px) {
+    .menu {
+      padding: 5rem 2.5rem;
+    }
+
+    .menu-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 767px) {
+    .menu {
+      padding: 3rem 1.5rem;
+    }
+
+    .menu-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .menu-note {
+      text-align: left;
+      max-width: 100%;
+    }
+
+    .menu-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+</style>

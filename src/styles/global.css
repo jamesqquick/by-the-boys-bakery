@@ -1,0 +1,401 @@
+/* ============================================================
+   By the Boys Bakery — Design Tokens & Base Styles
+   Design: Playful Family (#5)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Color Tokens
+   ------------------------------------------------------------ */
+:root {
+  /* Brand Palette */
+  --color-butter:     #FFE566;  /* Primary accent — yellow highlight */
+  --color-choco:      #3D1F0A;  /* Near-black — text, borders, shadows */
+  --color-sky:        #7BCFED;  /* Secondary accent — sky blue */
+  --color-strawberry: #E85D5D;  /* CTA / emphasis — red */
+  --color-mint:       #6DDBA1;  /* Tertiary accent — green */
+  --color-cream:      #FFF9EE;  /* Base background */
+  --color-muted:      #8B6555;  /* Muted text */
+
+  /* Core */
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-dark-gray: #3D1F0A;   /* Maps to choco */
+  --color-border-gray: #D4C5B8; /* Soft warm border */
+
+  /* Background Schemes */
+  --color-bg-white: #ffffff;              /* Scheme 1 */
+  --color-bg-light-gray: #FFF9EE;         /* Scheme 2 — cream */
+  --color-bg-sage: #6DDBA1;              /* Scheme 3 — mint */
+  --color-bg-sky: #7BCFED;               /* Scheme 4 — sky */
+  --color-bg-charcoal: #3D1F0A;          /* Scheme 5 — choco */
+
+  /* Status */
+  --color-in-stock: #6DDBA1;    /* Mint */
+  --color-low-stock: #FFE566;   /* Butter */
+  --color-out-of-stock: #D4C5B8;
+  --color-error: #E85D5D;       /* Strawberry */
+  --color-success: #6DDBA1;     /* Mint */
+
+  /* Semantic */
+  --color-bg: var(--color-cream);
+  --color-fg: var(--color-choco);
+  --color-fg-heading: var(--color-choco);
+  --color-fg-muted: var(--color-muted);
+  --color-border: var(--color-choco);
+
+  /* Buttons */
+  --color-btn-primary-bg: var(--color-strawberry);
+  --color-btn-primary-text: #ffffff;
+  --color-btn-primary-hover-bg: #d44444;
+  --color-btn-secondary-bg: var(--color-cream);
+  --color-btn-secondary-text: var(--color-choco);
+  --color-btn-secondary-border: var(--color-choco);
+  --color-btn-secondary-hover-bg: var(--color-butter);
+  --color-btn-secondary-hover-text: var(--color-choco);
+
+  /* Inputs */
+  --color-input-bg: #ffffff;
+  --color-input-text: var(--color-choco);
+  --color-input-border: var(--color-choco);
+}
+
+/* ------------------------------------------------------------
+   Typography Tokens
+   ------------------------------------------------------------ */
+:root {
+  --font-family: 'Nunito', sans-serif;
+  --font-family-display: 'Pacifico', cursive;
+
+  --font-weight-normal:    400;
+  --font-weight-semibold:  600;
+  --font-weight-bold:      700;
+  --font-weight-extrabold: 800;
+  --font-weight-black:     900;
+
+  --font-size-3xs: 0.625rem;
+  --font-size-2xs: 0.75rem;
+  --font-size-xs:  0.8125rem;
+  --font-size-sm:  0.875rem;
+  --font-size-md:  1rem;
+  --font-size-lg:  1.125rem;
+  --font-size-xl:  1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.5rem;
+
+  --font-size-h1: clamp(3rem, 5.6vw, 3.5rem);
+  --font-size-h2: clamp(2.25rem, 4.8vw, 3rem);
+  --font-size-h3: 2rem;
+  --font-size-h4: 1.5rem;
+  --font-size-h5: 0.875rem;
+  --font-size-h6: 0.75rem;
+  --font-size-body: 1rem;
+
+  --line-height-tight:  1;
+  --line-height-snug:   1.1;
+  --line-height-normal: 1.25;
+  --line-height-body:   1.6;
+
+  --letter-spacing-tight:  -0.03em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide:   0.03em;
+  --letter-spacing-label:  0.08em;
+}
+
+/* ------------------------------------------------------------
+   Spacing Tokens
+   ------------------------------------------------------------ */
+:root {
+  --space-3xs: 0.125rem;
+  --space-2xs: 0.3rem;
+  --space-xs:  0.5rem;
+  --space-sm:  0.7rem;
+  --space-md:  0.8rem;
+  --space-lg:  1rem;
+  --space-xl:  1.25rem;
+  --space-2xl: 1.5rem;
+  --space-3xl: 1.75rem;
+  --space-4xl: 2rem;
+  --space-5xl: 3rem;
+  --space-6xl: 5rem;
+}
+
+/* ------------------------------------------------------------
+   Border & Shape Tokens
+   ------------------------------------------------------------ */
+:root {
+  --radius-xs:      0.2rem;
+  --radius-sm:      0.6rem;
+  --radius-md:      0.8rem;
+  --radius-lg:      1rem;
+  --radius-card:    20px;
+  --radius-input:   12px;
+  --radius-button:  12px;
+  --radius-popover: 16px;
+  --radius-pill:    100px;
+  --radius-circle:  50%;
+
+  --border-width: 3px;          /* Neo-brutalist heavy borders */
+  --border-color: var(--color-border);
+
+  /* Neo-brutalist offset drop shadows */
+  --shadow-neo-sm: 2px 2px 0 var(--color-choco);
+  --shadow-neo:    4px 4px 0 var(--color-choco);
+  --shadow-neo-lg: 8px 8px 0 var(--color-choco);
+}
+
+/* ------------------------------------------------------------
+   Layout Tokens
+   ------------------------------------------------------------ */
+:root {
+  --page-width-narrow: 90rem;
+  --page-width-normal: 120rem;
+  --page-width-wide:   150rem;
+
+  --touch-target-min: 44px;
+}
+
+/* ------------------------------------------------------------
+   Base Reset & Global Styles
+   ------------------------------------------------------------ */
+
+/*
+  Placed in @layer base so Tailwind's @layer utilities can override it.
+  Unlayered global.css rules (button, input, etc.) stay unlayered and
+  therefore still take priority over Tailwind utilities where we want them to.
+*/
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-body);
+  color: var(--color-fg);
+  background-color: var(--color-bg);
+}
+
+/* ------------------------------------------------------------
+   Headings
+   ------------------------------------------------------------ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-normal); /* Pacifico is single-weight */
+  color: var(--color-fg-heading);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); line-height: var(--line-height-snug); }
+h4 { font-size: var(--font-size-h4); }
+h5 { font-size: var(--font-size-h5); }
+h6 { font-size: var(--font-size-h6); text-transform: uppercase; letter-spacing: var(--letter-spacing-label); }
+
+p {
+  line-height: var(--line-height-body);
+  color: var(--color-fg);
+}
+
+/* ------------------------------------------------------------
+   Links
+   ------------------------------------------------------------ */
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--color-fg-heading);
+}
+
+/* ------------------------------------------------------------
+   Buttons
+   ------------------------------------------------------------ */
+button,
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-target-min);
+  padding: var(--space-md) var(--space-4xl);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-black);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-label);
+  border-radius: var(--radius-button);
+  border: var(--border-width) solid var(--color-choco);
+  box-shadow: var(--shadow-neo);
+  cursor: pointer;
+  transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.125s ease-in-out;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+button:hover,
+.btn:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--shadow-neo-lg);
+}
+
+/* Primary */
+.btn-primary,
+button[data-variant='primary'] {
+  background-color: var(--color-btn-primary-bg);
+  color: var(--color-btn-primary-text);
+  border-color: var(--color-choco);
+}
+
+.btn-primary:hover,
+button[data-variant='primary']:hover {
+  background-color: var(--color-btn-primary-hover-bg);
+  border-color: var(--color-choco);
+}
+
+/* Secondary */
+.btn-secondary,
+button[data-variant='secondary'] {
+  background-color: var(--color-btn-secondary-bg);
+  color: var(--color-btn-secondary-text);
+  border-color: var(--color-btn-secondary-border);
+}
+
+.btn-secondary:hover,
+button[data-variant='secondary']:hover {
+  background-color: var(--color-btn-secondary-hover-bg);
+  color: var(--color-btn-secondary-hover-text);
+}
+
+button:disabled,
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--shadow-neo);
+}
+
+/* ------------------------------------------------------------
+   Form Inputs
+   ------------------------------------------------------------ */
+input,
+textarea,
+select {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  color: var(--color-input-text);
+  background-color: var(--color-input-bg);
+  border: var(--border-width) solid var(--color-input-border);
+  border-radius: var(--radius-input);
+  padding: var(--space-md);
+  width: 100%;
+  min-height: var(--touch-target-min);
+  outline: none;
+  transition: border-color 0.125s ease-in-out;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-fg);
+}
+
+textarea {
+  min-height: 55px;
+  resize: vertical;
+}
+
+label {
+  display: block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-label);
+  margin-bottom: var(--space-xs);
+}
+
+/* ------------------------------------------------------------
+   Utility: Background Schemes
+   ------------------------------------------------------------ */
+.bg-white      { background-color: var(--color-bg-white); }
+.bg-light-gray { background-color: var(--color-bg-light-gray); }  /* cream */
+.bg-sage       { background-color: var(--color-bg-sage); }         /* mint */
+.bg-sky        { background-color: var(--color-bg-sky); }          /* sky blue */
+.bg-charcoal   {
+  background-color: var(--color-bg-charcoal);  /* choco */
+  color: var(--color-cream);
+}
+
+/* Dark (choco) scheme overrides */
+.bg-charcoal h1,
+.bg-charcoal h2,
+.bg-charcoal h3,
+.bg-charcoal h4,
+.bg-charcoal h5,
+.bg-charcoal h6 {
+  color: var(--color-butter);
+}
+
+.bg-charcoal .btn-primary {
+  background-color: var(--color-butter);
+  color: var(--color-choco);
+  border-color: var(--color-choco);
+  box-shadow: var(--shadow-neo);
+}
+
+.bg-charcoal .btn-primary:hover {
+  background-color: var(--color-cream);
+}
+
+.bg-charcoal .btn-secondary {
+  background-color: transparent;
+  color: var(--color-cream);
+  border-color: var(--color-cream);
+  box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* ------------------------------------------------------------
+   Utility: Status Badges
+   ------------------------------------------------------------ */
+.badge-in-stock {
+  color: var(--color-choco);
+  background-color: var(--color-mint);
+  border: var(--border-width) solid var(--color-choco);
+}
+.badge-low-stock {
+  color: var(--color-choco);
+  background-color: var(--color-butter);
+  border: var(--border-width) solid var(--color-choco);
+}
+.badge-out-of-stock {
+  color: var(--color-muted);
+  background-color: var(--color-border-gray);
+  border: var(--border-width) solid var(--color-muted);
+}
+
+/* ------------------------------------------------------------
+   Images
+   ------------------------------------------------------------ */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}

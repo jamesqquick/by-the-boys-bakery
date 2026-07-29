@@ -1,0 +1,22 @@
+---
+import BakeryLayout from "../layouts/BakeryLayout.astro";
+import HeroSection from "../components/sections/HeroSection.astro";
+import TickerSection from "../components/sections/TickerSection.astro";
+import AboutSection from "../components/sections/AboutSection.astro";
+import MenuHighlights from "../components/sections/MenuHighlights.astro";
+import ValuesSection from "../components/sections/ValuesSection.astro";
+import CtaSection from "../components/sections/CtaSection.astro";
+---
+
+<BakeryLayout
+  title="By the Boys Bakery"
+  description="Home-based micro bakery in Germantown, TN. Freshly baked cookies and desserts in small batches."
+  currentPath="/"
+>
+  <HeroSection />
+  <TickerSection />
+  <AboutSection />
+  <MenuHighlights />
+  <ValuesSection />
+  <CtaSection />
+</BakeryLayout>

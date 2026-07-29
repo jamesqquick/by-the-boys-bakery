@@ -1,0 +1,85 @@
+---
+---
+
+<section class="cta">
+  <h2 class="cta-title">Want something delicious?</h2>
+  <p class="cta-desc">
+    Tell us the occasion, the flavor, the quantity. We'll let you know what we
+    can do. No payment upfront.
+  </p>
+  <a href="/inquiry" class="cta-btn">Submit an Inquiry</a>
+  <p class="cta-note">We'll get back to you within 48 hours.</p>
+</section>
+
+<style>
+  .cta {
+    background: var(--color-strawberry);
+    border-top: 4px solid var(--color-choco);
+    padding: 7rem 4rem;
+    text-align: center;
+  }
+
+  .cta-title {
+    font-family: var(--font-family-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: #fff;
+    margin-bottom: 1.25rem;
+  }
+
+  .cta-desc {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    background: #fff;
+    color: var(--color-choco);
+    border: 3px solid var(--color-choco);
+    box-shadow: var(--shadow-neo);
+    padding: 1.1rem 2.75rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .cta-btn:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: var(--shadow-neo-lg);
+  }
+
+  .cta-note {
+    margin-top: 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  /* ── Tablet ── */
+  @media (max-width: 1023px) {
+    .cta { padding: 5rem 2.5rem; }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 767px) {
+    .cta { padding: 3.5rem 1.5rem; }
+
+    .cta-desc {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .cta-btn {
+      padding: 0.9rem 2rem;
+      font-size: 1rem;
+      width: 100%;
+      max-width: 320px;
+    }
+  }
+</style>
