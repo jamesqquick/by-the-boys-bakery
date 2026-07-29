@@ -2,13 +2,13 @@
 	"$schema": "https://emdashcms.com/seed.schema.json",
 	"version": "1",
 	"meta": {
-		"name": "Starter",
-		"description": "A minimal EmDash starter with posts and pages",
-		"author": "EmDash"
+		"name": "By the Boys Bakery",
+		"description": "Home-based micro bakery in Germantown, TN",
+		"author": "By the Boys Bakery"
 	},
 	"settings": {
-		"title": "My Site",
-		"tagline": "Built with EmDash"
+		"title": "By the Boys Bakery",
+		"tagline": "Fresh-baked cookies and desserts in small batches. Germantown, TN."
 	},
 	"collections": [
 		{
@@ -166,11 +166,47 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "This is the about page. Edit it in the admin panel or replace this template with your own design.",
+									"text": "By the Boys Bakery is a home-based micro bakery run out of Germantown, TN. We bake cookies, brownies, cupcakes, and cakes in small batches — made to order, not mass-produced.",
 									"_key": "k1"
 								}
 							],
 							"_key": "k0"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Every order is baked fresh for your occasion. We take custom orders for birthdays, holidays, office events, and everything in between.",
+									"_key": "k3"
+								}
+							],
+							"_key": "k2"
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "How to order",
+									"_key": "k5"
+								}
+							],
+							"_key": "k4"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Fill out our inquiry form and we'll get back to you within 48 hours. We need at least 5–7 days notice to plan and bake your order.",
+									"_key": "k7"
+								}
+							],
+							"_key": "k6"
 						}
 					]
 				}
@@ -182,8 +218,8 @@
 				"slug": "welcome",
 				"status": "published",
 				"data": {
-					"title": "Welcome",
-					"excerpt": "Your first post. Replace this with your own content.",
+					"title": "We're Open for Orders",
+					"excerpt": "By the Boys Bakery is now taking custom orders for cookies, brownies, cupcakes, and cakes in Germantown, TN.",
 					"content": [
 						{
 							"_type": "block",
@@ -191,7 +227,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "This is a starter post. The templates in this project show the basic patterns for querying and rendering EmDash content. Replace them with your own design.",
+									"text": "We're officially open and taking orders! Whether you need a dozen cookies for a birthday, a tray of brownies for the office, or cupcakes for a baby shower — we've got you.",
 									"_key": "k1"
 								}
 							],
@@ -199,11 +235,11 @@
 						},
 						{
 							"_type": "block",
-							"style": "h2",
+							"style": "normal",
 							"children": [
 								{
 									"_type": "span",
-									"text": "What to do next",
+									"text": "Everything is baked fresh, in small batches, made to order. No preservatives, no sitting on a shelf. Just good stuff made with care.",
 									"_key": "k3"
 								}
 							],
@@ -211,15 +247,27 @@
 						},
 						{
 							"_type": "block",
-							"style": "normal",
+							"style": "h2",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Open the admin panel to add content, or edit the Astro pages in src/pages to change how content is displayed.",
+									"text": "How to place an order",
 									"_key": "k5"
 								}
 							],
 							"_key": "k4"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Head to the inquiry page, fill out the form, and we'll get back to you within 48 hours. We ask for at least 5–7 days notice so we can plan and bake everything fresh.",
+									"_key": "k7"
+								}
+							],
+							"_key": "k6"
 						}
 					]
 				},
