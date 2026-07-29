@@ -1,0 +1,49 @@
+emdash-env.d.ts
+  s_0dc4ee63bdc434::t_69447ddc120019 1-41
+package.json
+  s_4abd0d4baa20f6::t_885a589bef44b6 1-45
+pnpm-lock.yaml
+  s_4abd0d4baa20f6::t_75eff8d23689bc 1-9694
+src/components/InquiryForm.tsx
+  s_ec18dc17eed3f5::t_47d156cc650cdb 1-186
+src/components/ui/checkbox.tsx
+  s_4abd0d4baa20f6::t_ed2b2504c44f44 1-30
+src/components/ui/input.tsx
+  s_4abd0d4baa20f6::t_204444ca88e490 1-21
+src/components/ui/label.tsx
+  s_4abd0d4baa20f6::t_441d7983bb1fb6 1-22
+src/components/ui/textarea.tsx
+  s_4abd0d4baa20f6::t_f5bbbdea21ba0c 1-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "a004f8ddce0d032f3ea22246293a24b4f705837e",
+  "prompts": {},
+  "sessions": {
+    "s_0dc4ee63bdc434": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_06585b10bffesfuiaOhzj9eDEI",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "James Q Quick <james@learnwithjason.dev>"
+    },
+    "s_4abd0d4baa20f6": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_051ccdac2ffeGuT1NOIQbSHzZl",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "James Q Quick <james@learnwithjason.dev>"
+    },
+    "s_ec18dc17eed3f5": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0651a23e4ffeNKUfdqHCWde3B6",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "James Q Quick <james@learnwithjason.dev>"
+    }
+  }
+}
