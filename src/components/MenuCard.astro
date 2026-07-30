@@ -1,16 +1,17 @@
 ---
-import PlaceholderImg from "./PlaceholderImg.astro";
+import LocalImg from "./LocalImg.astro";
 
 interface Props {
   name: string;
   description: string;
+  image: string;
 }
 
-const { name, description } = Astro.props;
+const { name, description, image } = Astro.props;
 ---
 
 <div class="menu-card">
-  <PlaceholderImg aspectRatio="1/1" alt={name} class="menu-card-img" />
+  <LocalImg aspectRatio="1/1" src={image} alt={name} class="menu-card-img" />
   <div class="menu-card-body">
     <h3 class="menu-card-name">{name}</h3>
     <p class="menu-card-desc">{description}</p>
