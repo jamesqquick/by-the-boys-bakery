@@ -7,7 +7,11 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
 	output: "server",
-	adapter: cloudflare(),
+	adapter: cloudflare({
+		// Connects remote Cloudflare bindings (e.g. EMAIL) during local dev.
+		// No effect on production builds. Set to false to log instead of send.
+		remoteBindings: true,
+	}),
 	vite: {
 		plugins: [tailwindcss()],
 	},

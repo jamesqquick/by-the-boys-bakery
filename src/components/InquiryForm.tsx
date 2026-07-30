@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { actions, isInputError } from "astro:actions";
+import { withState } from "@astrojs/react/actions";
+import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +14,12 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 
+function defaultDate() {
+  const d = new Date();
+  d.setDate(d.getDate() + 7);
+  return d.toISOString().split("T")[0]; // YYYY-MM-DD
+}
+
 const TREATS = [
   { id: "cookies", label: "Cookies" },
   { id: "brownies", label: "Brownies" },
@@ -20,14 +28,12 @@ const TREATS = [
 ] as const;
 
 export default function InquiryForm() {
-  const [submitted, setSubmitted] = useState(false);
+  const [state, action, pending] = useActionState(
+    withState(actions.submitInquiry),
+    { data: undefined, error: undefined },
+  );
 
-  function handleSubmit(e: React.SyntheticEvent) {
-    e.preventDefault();
-    setSubmitted(true);
-  }
-
-  if (submitted) {
+  if (state.data?.success) {
     return (
       <div className="form-success">
         <h2 className="success-title">We got it!</h2>
@@ -38,8 +44,14 @@ export default function InquiryForm() {
     );
   }
 
+  const fieldErrors = isInputError(state.error) ? state.error.fields : {};
+  const generalError =
+    state.error && !isInputError(state.error)
+      ? (state.error.message ?? "Something went wrong. Please try again.")
+      : null;
+
   return (
-    <form className="inquiry-form" onSubmit={handleSubmit} noValidate>
+    <form className="inquiry-form" action={action}>
 
       {/* ── Section 1: Contact ── */}
       <div className="form-section">
@@ -49,13 +61,19 @@ export default function InquiryForm() {
             <Label htmlFor="name">
               Your Name <span className="required">*</span>
             </Label>
-            <Input id="name" name="name" placeholder="James Smith" required />
+            <Input id="name" name="name" placeholder="James Smith" required aria-describedby={fieldErrors.name ? "name-error" : undefined} />
+            {fieldErrors.name && (
+              <p id="name-error" className="field-error">{fieldErrors.name.join(", ")}</p>
+            )}
           </div>
           <div className="field">
             <Label htmlFor="email">
               Email Address <span className="required">*</span>
             </Label>
-            <Input id="email" name="email" type="email" placeholder="you@email.com" required />
+            <Input id="email" name="email" type="email" placeholder="you@email.com" required aria-describedby={fieldErrors.email ? "email-error" : undefined} />
+            {fieldErrors.email && (
+              <p id="email-error" className="field-error">{fieldErrors.email.join(", ")}</p>
+            )}
           </div>
         </div>
         <div className="field" style={{ marginTop: "1.25rem" }}>
@@ -75,8 +93,8 @@ export default function InquiryForm() {
             <Label htmlFor="occasion">
               Occasion <span className="required">*</span>
             </Label>
-            <Select name="occasion" required>
-              <SelectTrigger id="occasion">
+            <Select name="occasion" defaultValue="just-because" required>
+              <SelectTrigger id="occasion" aria-describedby={fieldErrors.occasion ? "occasion-error" : undefined}>
                 <SelectValue placeholder="Pick one..." />
               </SelectTrigger>
               <SelectContent>
@@ -90,13 +108,19 @@ export default function InquiryForm() {
                 <SelectItem value="other">Other</SelectItem>
               </SelectContent>
             </Select>
+            {fieldErrors.occasion && (
+              <p id="occasion-error" className="field-error">{fieldErrors.occasion.join(", ")}</p>
+            )}
           </div>
           <div className="field">
             <Label htmlFor="date">
               When do you need it by? <span className="required">*</span>
             </Label>
-            <Input id="date" name="date" type="date" required />
-            <p className="field-hint">We need at least 5 to 7 days notice to plan and bake.</p>
+            <Input id="date" name="date" type="date" defaultValue={defaultDate()} required aria-describedby={fieldErrors.date ? "date-error" : undefined} />
+            <p className="field-hint">We typically need at least 5 to 7 days notice to plan and bake.</p>
+            {fieldErrors.date && (
+              <p id="date-error" className="field-error">{fieldErrors.date.join(", ")}</p>
+            )}
           </div>
         </div>
       </div>
@@ -121,7 +145,7 @@ export default function InquiryForm() {
               Roughly how many people? <span className="required">*</span>
             </Label>
             <Select name="quantity" required>
-              <SelectTrigger id="quantity">
+              <SelectTrigger id="quantity" aria-describedby={fieldErrors.quantity ? "quantity-error" : undefined}>
                 <SelectValue placeholder="Pick one..." />
               </SelectTrigger>
               <SelectContent>
@@ -133,6 +157,9 @@ export default function InquiryForm() {
                 <SelectItem value="unsure">Not sure yet</SelectItem>
               </SelectContent>
             </Select>
+            {fieldErrors.quantity && (
+              <p id="quantity-error" className="field-error">{fieldErrors.quantity.join(", ")}</p>
+            )}
           </div>
           <div className="field">
             <Label htmlFor="budget">
@@ -173,12 +200,19 @@ export default function InquiryForm() {
 
       {/* ── Submit ── */}
       <div className="form-footer">
-        <p className="form-footer-note">
-          <strong>No payment yet.</strong> This is an inquiry. We'll reach out within
-          48 hours to confirm availability before anything is finalized.
-        </p>
-        <Button type="submit" variant="neo" size="lg" className="submit-btn">
-          Send My Inquiry
+        <div>
+          <p className="form-footer-note">
+            <strong>No payment yet.</strong> This is an inquiry. We'll reach out within
+            48 hours to confirm availability before anything is finalized.
+          </p>
+          {generalError && (
+            <p className="field-error" style={{ marginTop: "0.75rem" }}>
+              {generalError}
+            </p>
+          )}
+        </div>
+        <Button type="submit" variant="neo" size="lg" className="submit-btn" disabled={pending}>
+          {pending ? "Sending…" : "Send My Inquiry"}
         </Button>
       </div>
     </form>

@@ -1,6 +1,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "by-the-boys-bakery",
+	"account_id": "4426cbeacb457b1ca1b865d6c36ced0d",
 	"main": "./src/worker.ts",
 	"compatibility_date": "2026-02-24",
 	"compatibility_flags": ["nodejs_compat"],
@@ -14,6 +15,14 @@
 		{
 			"binding": "MEDIA",
 			"bucket_name": "by-the-boys-bakery-media",
+		},
+	],
+	"send_email": [
+		{
+			"name": "EMAIL",
+			// remote: true sends real emails in local dev via wrangler dev.
+			// Remove or set to false to simulate locally (logs only, nothing sent).
+			"remote": true,
 		},
 	],
 	// Worker Loader for plugin sandboxing
