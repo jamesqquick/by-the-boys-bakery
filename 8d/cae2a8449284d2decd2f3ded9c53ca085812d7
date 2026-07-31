@@ -1,0 +1,23 @@
+.emdash/schema.json
+  s_d41e346be51c7d::t_d3da0c5608cb0b 1-360
+.emdash/types.ts
+  s_d41e346be51c7d::t_7231fa0a820b91 1-101
+.gitignore
+  s_d41e346be51c7d::t_f272285e3f4e6a 16-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "8dcae2a8449284d2decd2f3ded9c53ca085812d7",
+  "prompts": {},
+  "sessions": {
+    "s_d41e346be51c7d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_04baab126ffesr71tWf83hn9FQ",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "James Q Quick <james@learnwithjason.dev>"
+    }
+  }
+}
