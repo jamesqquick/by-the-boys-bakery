@@ -1,6 +1,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "by-the-boys-bakery",
+	"workers_dev": false,
 	"account_id": "4426cbeacb457b1ca1b865d6c36ced0d",
 	"main": "./src/worker.ts",
 	"compatibility_date": "2026-02-24",
