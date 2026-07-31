@@ -13,3 +13,6 @@ data.db
 !.env.example
 .dev.vars
 .dev.vars.*
+
+# Local scratch / throwaway files
+tmp/

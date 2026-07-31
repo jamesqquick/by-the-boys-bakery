@@ -1,46 +1,58 @@
 ---
 import MenuCard from "../MenuCard.astro";
+import type { EmDashImage } from "../../utils/media";
 
-const treats = [
-  {
-    name: "Cookies",
-    description:
-      "Thick, bakery-style cookies with browned butter and big chocolate chunks.",
-    image: "/_emdash/api/media/file/01KYT23M6E4VDRH8EYCSNJVT46.jpg",
-  },
-  {
-    name: "Cakes",
-    description:
-      "Made-to-order layer cakes, decorated for birthdays, celebrations, or just because.",
-    image: "/_emdash/api/media/file/01KYT23NW0428HADV22W05NN42.jpg",
-  },
-  {
-    name: "Brownies",
-    description:
-      "Rich, fudgy brownies finished with a swirl of buttercream on top.",
-    image: "/_emdash/api/media/file/01KYT23QBJMWPG2DE4J10WWAW2.jpg",
-  },
-  {
-    name: "Cupcakes",
-    description:
-      "Fluffy cupcakes piled high with frosting. Works for birthdays, showers, or no reason at all.",
-    image: "/_emdash/api/media/file/01KYT23RZQKG685BFX1KBNGQYD.jpg",
-  },
+interface TreatEntry {
+  data: {
+    title: string;
+    description?: string;
+    image?: EmDashImage;
+  };
+}
+
+interface Props {
+  label?: string;
+  title?: string;
+  note?: string;
+  treats?: TreatEntry[];
+  edit?: Record<string, Record<string, unknown>>;
+}
+
+const fallbackTreats: TreatEntry[] = [
+  { data: { title: "Cookies", description: "Thick, bakery-style cookies with browned butter and big chocolate chunks." } },
+  { data: { title: "Cakes", description: "Made-to-order layer cakes, decorated for birthdays, celebrations, or just because." } },
+  { data: { title: "Brownies", description: "Rich, fudgy brownies finished with a swirl of buttercream on top." } },
+  { data: { title: "Cupcakes", description: "Fluffy cupcakes piled high with frosting. Works for birthdays, showers, or no reason at all." } },
 ];
+
+const {
+  label = "What We Make",
+  title = "Our Treats",
+  note = "See something you like? Submit an inquiry and we'll sort out the details.",
+  treats: treatsProp,
+  edit = {},
+} = Astro.props;
+
+const treats =
+  treatsProp && treatsProp.length > 0 ? treatsProp : fallbackTreats;
 ---
 
 <section id="treats" class="menu">
   <div class="menu-header">
     <div>
-      <span class="section-label">What We Make</span>
-      <h2 class="section-title">Our Treats</h2>
+      <span class="section-label" {...edit.treats_label}>{label}</span>
+      <h2 class="section-title" {...edit.treats_title}>{title}</h2>
     </div>
-    <p class="menu-note">
-      See something you like? Submit an inquiry and we'll sort out the details.
-    </p>
+    <p class="menu-note" {...edit.treats_note}>{note}</p>
   </div>
   <div class="menu-grid">
-    {treats.map((treat) => <MenuCard name={treat.name} description={treat.description} image={treat.image} />)}
+    {treats.map((treat) => (
+      <MenuCard
+        name={treat.data.title}
+        description={treat.data.description}
+        image={treat.data.image}
+      />
+    ))}
   </div>
 </section>
 

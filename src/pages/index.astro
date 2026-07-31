@@ -1,4 +1,6 @@
 ---
+import { getEmDashEntry, getEmDashCollection } from "emdash";
+import type { Homepage, Treat, Value } from "../../.emdash/types";
 import BakeryLayout from "../layouts/BakeryLayout.astro";
 import HeroSection from "../components/sections/HeroSection.astro";
 import TickerSection from "../components/sections/TickerSection.astro";
@@ -6,6 +8,26 @@ import AboutSection from "../components/sections/AboutSection.astro";
 import MenuHighlights from "../components/sections/MenuHighlights.astro";
 import ValuesSection from "../components/sections/ValuesSection.astro";
 import CtaSection from "../components/sections/CtaSection.astro";
+
+const { entry: home, cacheHint: homeHint } = await getEmDashEntry("homepage", "home");
+const { entries: treats, cacheHint: treatsHint } = await getEmDashCollection("treats", {
+  orderBy: { sort: "asc" },
+});
+const { entries: values, cacheHint: valuesHint } = await getEmDashCollection("values", {
+  orderBy: { sort: "asc" },
+});
+
+if (Astro.cache?.enabled) {
+  Astro.cache.set(homeHint);
+  Astro.cache.set(treatsHint);
+  Astro.cache.set(valuesHint);
+}
+
+const d = home?.data as Homepage | undefined;
+const treatEntries = treats as unknown as { data: Treat }[];
+const valueEntries = values as unknown as { data: Value }[];
+// Visual editing attributes (spread onto elements for click-to-edit).
+const edit = (home?.edit ?? {}) as Record<string, Record<string, unknown>>;
 ---
 
 <BakeryLayout
@@ -13,10 +35,50 @@ import CtaSection from "../components/sections/CtaSection.astro";
   description="Home-based micro bakery in Germantown, TN. Freshly baked cookies and desserts in small batches."
   currentPath="/"
 >
-  <HeroSection />
-  <TickerSection />
-  <AboutSection />
-  <MenuHighlights />
-  <ValuesSection />
-  <CtaSection />
+  <HeroSection
+    pill={d?.hero_pill}
+    title={d?.hero_title}
+    titleAccent={d?.hero_title_accent}
+    desc={d?.hero_desc}
+    ctaLabel={d?.hero_cta_label}
+    ctaHref={d?.hero_cta_href}
+    note={d?.hero_note}
+    image={d?.hero_image}
+    sticker1={d?.hero_sticker_1}
+    sticker2={d?.hero_sticker_2}
+    edit={edit}
+  />
+  <TickerSection items={d?.ticker_items} />
+  <AboutSection
+    label={d?.about_label}
+    title={d?.about_title}
+    titleAccent={d?.about_title_accent}
+    intro={d?.about_intro}
+    list={d?.about_list}
+    outro={d?.about_outro}
+    image={d?.about_image}
+    badge={d?.about_badge}
+    edit={edit}
+  />
+  <MenuHighlights
+    label={d?.treats_label}
+    title={d?.treats_title}
+    note={d?.treats_note}
+    treats={treatEntries}
+    edit={edit}
+  />
+  <ValuesSection
+    label={d?.values_label}
+    title={d?.values_title}
+    values={valueEntries}
+    edit={edit}
+  />
+  <CtaSection
+    title={d?.cta_title}
+    desc={d?.cta_desc}
+    ctaLabel={d?.cta_cta_label}
+    ctaHref={d?.cta_cta_href}
+    note={d?.cta_note}
+    edit={edit}
+  />
 </BakeryLayout>

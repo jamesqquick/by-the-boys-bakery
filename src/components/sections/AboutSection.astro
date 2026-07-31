@@ -1,38 +1,77 @@
 ---
 import LocalImg from "../LocalImg.astro";
+import { mediaSrc, type EmDashImage } from "../../utils/media";
+
+type ImageField = EmDashImage;
+
+interface Props {
+  label?: string;
+  title?: string;
+  titleAccent?: string;
+  intro?: string;
+  list?: unknown;
+  outro?: string;
+  image?: ImageField;
+  badge?: string;
+  edit?: Record<string, Record<string, unknown>>;
+}
+
+const {
+  label = "Meet the Bakers",
+  title = "James & the",
+  titleAccent = "Boys!",
+  intro = "Hi, I'm James. I live in Germantown, TN and I love baking. Every weekend my three nephews and I get in the kitchen together and make something good.\n\nWe call them the boys. They show up every Saturday, and before long neighbors started asking where the food was coming from.",
+  list: listRaw,
+  outro = "By the Boys Bakery started because good food is worth sharing. We'd love to bake something for you.",
+  image,
+  badge = "Made with Real Love",
+  edit = {},
+} = Astro.props;
+
+const fallbackList = [
+  "100% homemade, baked in our own kitchen",
+  "Small batches so every treat gets real attention",
+  "Made-to-order, never sitting on a shelf",
+  "Right here in Germantown, TN",
+];
+const list =
+  Array.isArray(listRaw) && listRaw.length > 0 ? (listRaw as string[]) : fallbackList;
+const introParagraphs = (intro ?? "")
+  .split(/\n\s*\n/)
+  .map((p) => p.trim())
+  .filter(Boolean);
+const aboutSrc = mediaSrc(image);
 ---
 
 <section id="about" class="about">
   <!-- Image side -->
   <div class="about-img-wrap">
-    <LocalImg aspectRatio="4/5" src="/_emdash/api/media/file/01KYT23JAKPFEP7D5746KDK98B.jpg" alt="James and the boys baking" class="about-img" />
-    <div class="about-badge">Made with<br />Real Love</div>
+    {aboutSrc ? (
+      <div {...edit.about_image}>
+        <LocalImg aspectRatio="4/5" src={aboutSrc} alt={image?.alt ?? "James and the boys baking"} class="about-img" />
+      </div>
+    ) : (
+      <div class="about-img" style="aspect-ratio: 4/5; background: var(--color-butter);" {...edit.about_image}></div>
+    )}
+    <div class="about-badge" {...edit.about_badge}>{badge}</div>
   </div>
 
   <!-- Content side -->
   <div class="about-content">
-    <span class="section-label">Meet the Bakers</span>
+    <span class="section-label" {...edit.about_label}>{label}</span>
     <h2 class="about-title">
-      James &amp; the <span class="pop">Boys!</span>
+      <span {...edit.about_title}>{title}</span>{" "}
+      <span class="pop" {...edit.about_title_accent}>{titleAccent}</span>
     </h2>
-    <p>
-      Hi, I'm James. I live in Germantown, TN and I love baking. Every weekend
-      my three nephews and I get in the kitchen together and make something good.
-    </p>
-    <p>
-      We call them the boys. They show up every Saturday, and before long
-      neighbors started asking where the food was coming from.
-    </p>
+    {introParagraphs.length > 0 && (
+      <div {...edit.about_intro}>
+        {introParagraphs.map((p) => <p>{p}</p>)}
+      </div>
+    )}
     <ul class="about-list">
-      <li>100% homemade, baked in our own kitchen</li>
-      <li>Small batches so every treat gets real attention</li>
-      <li>Made-to-order, never sitting on a shelf</li>
-      <li>Right here in Germantown, TN</li>
+      {list.map((item) => <li>{item}</li>)}
     </ul>
-    <p>
-      By the Boys Bakery started because good food is worth sharing. We'd love
-      to bake something for you.
-    </p>
+    <p {...edit.about_outro}>{outro}</p>
   </div>
 </section>
 
