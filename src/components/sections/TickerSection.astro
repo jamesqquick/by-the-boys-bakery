@@ -1,10 +1,17 @@
 ---
-const items = [
-  "Brown Butter Chocolate Chip Cookies",
-  "Chocolate Frosted Brownies",
-  "Pastel Frosted Cupcakes",
-  "Buttercream Sugar Cookie Sandwiches",
+interface Props {
+  items?: unknown;
+}
+
+const fallback = [
+  "Cookies",
+  "Brownies",
+  "Cupcakes",
+  "Cakes",
 ];
+
+const raw = Astro.props.items;
+const items = Array.isArray(raw) && raw.length > 0 ? (raw as string[]) : fallback;
 // Duplicate for seamless loop
 const tickerItems = [...items, ...items];
 ---
