@@ -1,17 +1,23 @@
 ---
 import LocalImg from "./LocalImg.astro";
+import { mediaSrc, type EmDashImage } from "../utils/media";
 
 interface Props {
   name: string;
-  description: string;
-  image: string;
+  description?: string;
+  image?: EmDashImage;
 }
 
 const { name, description, image } = Astro.props;
+const src = mediaSrc(image);
 ---
 
 <div class="menu-card">
-  <LocalImg aspectRatio="1/1" src={image} alt={name} class="menu-card-img" />
+  {src ? (
+    <LocalImg aspectRatio="1/1" src={src} alt={image?.alt ?? name} class="menu-card-img" />
+  ) : (
+    <div class="menu-card-img menu-card-img--empty" style="aspect-ratio: 1/1"></div>
+  )}
   <div class="menu-card-body">
     <h3 class="menu-card-name">{name}</h3>
     <p class="menu-card-desc">{description}</p>
@@ -35,6 +41,12 @@ const { name, description, image } = Astro.props;
 
   .menu-card-img {
     border-radius: 0;
+  }
+
+  .menu-card-img--empty {
+    width: 100%;
+    background: var(--color-sky);
+    border-bottom: 3px solid var(--color-choco);
   }
 
   .menu-card-body {

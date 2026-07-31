@@ -63,6 +63,66 @@
 					"searchable": true
 				}
 			]
+		},
+		{
+			"slug": "treats",
+			"label": "Treats",
+			"labelSingular": "Treat",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true },
+				{ "slug": "description", "label": "Description", "type": "text" },
+				{ "slug": "image", "label": "Image", "type": "image" },
+				{ "slug": "sort", "label": "Sort Order", "type": "integer" }
+			]
+		},
+		{
+			"slug": "values",
+			"label": "Values",
+			"labelSingular": "Value",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true },
+				{ "slug": "description", "label": "Description", "type": "text" },
+				{ "slug": "sort", "label": "Sort Order", "type": "integer" }
+			]
+		},
+		{
+			"slug": "homepage",
+			"label": "Homepage",
+			"labelSingular": "Homepage",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{ "slug": "hero_pill", "label": "Hero: Location Pill", "type": "string" },
+				{ "slug": "hero_title", "label": "Hero: Title", "type": "text" },
+				{ "slug": "hero_title_accent", "label": "Hero: Title Accent (colored word)", "type": "string" },
+				{ "slug": "hero_desc", "label": "Hero: Description", "type": "text" },
+				{ "slug": "hero_cta_label", "label": "Hero: CTA Label", "type": "string" },
+				{ "slug": "hero_cta_href", "label": "Hero: CTA Link", "type": "string" },
+				{ "slug": "hero_note", "label": "Hero: Note", "type": "string" },
+				{ "slug": "hero_image", "label": "Hero: Image", "type": "image" },
+				{ "slug": "hero_sticker_1", "label": "Hero: Sticker 1", "type": "string" },
+				{ "slug": "hero_sticker_2", "label": "Hero: Sticker 2", "type": "string" },
+				{ "slug": "ticker_items", "label": "Ticker: Items (list of strings)", "type": "json" },
+				{ "slug": "about_label", "label": "About: Label", "type": "string" },
+				{ "slug": "about_title", "label": "About: Title", "type": "string" },
+				{ "slug": "about_title_accent", "label": "About: Title Accent (colored word)", "type": "string" },
+				{ "slug": "about_intro", "label": "About Intro", "type": "text" },
+				{ "slug": "about_list", "label": "About: Bullet list (list of strings)", "type": "json" },
+				{ "slug": "about_outro", "label": "About: Closing paragraph", "type": "text" },
+				{ "slug": "about_image", "label": "About: Image", "type": "image" },
+				{ "slug": "about_badge", "label": "About: Badge text", "type": "string" },
+				{ "slug": "treats_label", "label": "Treats: Label", "type": "string" },
+				{ "slug": "treats_title", "label": "Treats: Title", "type": "string" },
+				{ "slug": "treats_note", "label": "Treats: Note", "type": "string" },
+				{ "slug": "values_label", "label": "Values: Label", "type": "string" },
+				{ "slug": "values_title", "label": "Values: Title", "type": "string" },
+				{ "slug": "cta_title", "label": "CTA: Title", "type": "string" },
+				{ "slug": "cta_desc", "label": "CTA: Description", "type": "text" },
+				{ "slug": "cta_cta_label", "label": "CTA: Button Label", "type": "string" },
+				{ "slug": "cta_cta_href", "label": "CTA: Button Link", "type": "string" },
+				{ "slug": "cta_note", "label": "CTA: Note", "type": "string" }
+			]
 		}
 	],
 	"taxonomies": [
@@ -274,6 +334,126 @@
 				"taxonomies": {
 					"category": ["general"],
 					"tag": ["starter", "example"]
+				}
+			}
+		],
+		"treats": [
+			{
+				"id": "cookies",
+				"slug": "cookies",
+				"status": "published",
+				"data": {
+					"title": "Cookies",
+					"description": "Thick, bakery-style cookies with browned butter and big chocolate chunks.",
+					"sort": 1
+				}
+			},
+			{
+				"id": "cakes",
+				"slug": "cakes",
+				"status": "published",
+				"data": {
+					"title": "Cakes",
+					"description": "Made-to-order layer cakes, decorated for birthdays, celebrations, or just because.",
+					"sort": 2
+				}
+			},
+			{
+				"id": "brownies",
+				"slug": "brownies",
+				"status": "published",
+				"data": {
+					"title": "Brownies",
+					"description": "Rich, fudgy brownies finished with a swirl of buttercream on top.",
+					"sort": 3
+				}
+			},
+			{
+				"id": "cupcakes",
+				"slug": "cupcakes",
+				"status": "published",
+				"data": {
+					"title": "Cupcakes",
+					"description": "Fluffy cupcakes piled high with frosting. Works for birthdays, showers, or no reason at all.",
+					"sort": 4
+				}
+			}
+		],
+		"values": [
+			{
+				"id": "truly-homemade",
+				"slug": "truly-homemade",
+				"status": "published",
+				"data": {
+					"title": "Truly Homemade",
+					"description": "We bake in our own home kitchen using real ingredients. No commercial kitchen. No preservatives.",
+					"sort": 1
+				}
+			},
+			{
+				"id": "local-to-germantown",
+				"slug": "local-to-germantown",
+				"status": "published",
+				"data": {
+					"title": "Local to Germantown",
+					"description": "We're your neighbors. A small, community-rooted bakery serving Germantown, TN.",
+					"sort": 2
+				}
+			},
+			{
+				"id": "made-with-purpose",
+				"slug": "made-with-purpose",
+				"status": "published",
+				"data": {
+					"title": "Made with Purpose",
+					"description": "Every order is a family affair. James and the boys bake every batch together. That's how they spend their weekends.",
+					"sort": 3
+				}
+			}
+		],
+		"homepage": [
+			{
+				"id": "home",
+				"slug": "home",
+				"status": "published",
+				"data": {
+					"hero_pill": "Germantown, TN",
+					"hero_title": "Homemade treats from",
+					"hero_title_accent": "the boys!",
+					"hero_desc": "By the Boys Bakery is a home-based micro bakery in Germantown, TN. James bakes cookies and desserts in small batches, fresh every time.",
+					"hero_cta_label": "Submit an Inquiry",
+					"hero_cta_href": "/inquiry",
+					"hero_note": "Not sure yet? Tell us the occasion and we'll figure it out.",
+					"hero_sticker_1": "Home Baked with Love",
+					"hero_sticker_2": "Small Batch From Scratch",
+					"ticker_items": [
+						"Cookies",
+						"Brownies",
+						"Cupcakes",
+						"Cakes"
+					],
+					"about_label": "Meet the Bakers",
+					"about_title": "James & the",
+					"about_title_accent": "Boys!",
+					"about_intro": "Hi, I'm James. I live in Germantown, TN and I love baking. Every weekend my three nephews and I get in the kitchen together and make something good.\n\nWe call them the boys. They show up every Saturday, and before long neighbors started asking where the food was coming from.",
+					"about_list": [
+						"100% homemade, baked in our own kitchen",
+						"Small batches so every treat gets real attention",
+						"Made-to-order, never sitting on a shelf",
+						"Right here in Germantown, TN"
+					],
+					"about_outro": "By the Boys Bakery started because good food is worth sharing. We'd love to bake something for you.",
+					"about_badge": "Made with Real Love",
+					"treats_label": "What We Make",
+					"treats_title": "Our Treats",
+					"treats_note": "See something you like? Submit an inquiry and we'll sort out the details.",
+					"values_label": "What Makes Us Different",
+					"values_title": "Why the Boys?",
+					"cta_title": "Want something delicious?",
+					"cta_desc": "Tell us the occasion, the flavor, the quantity. We'll let you know what we can do. No payment upfront.",
+					"cta_cta_label": "Submit an Inquiry",
+					"cta_cta_href": "/inquiry",
+					"cta_note": "We'll get back to you within 48 hours."
 				}
 			}
 		]

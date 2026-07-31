@@ -1,34 +1,46 @@
 ---
-const values = [
-  {
-    title: "Truly Homemade",
-    description:
-      "We bake in our own home kitchen using real ingredients. No commercial kitchen. No preservatives.",
-  },
-  {
-    title: "Local to Germantown",
-    description:
-      "We're your neighbors. A small, community-rooted bakery serving Germantown, TN.",
-  },
-  {
-    title: "Made with Purpose",
-    description:
-      "Every order is a family affair. James and the boys bake every batch together. That's how they spend their weekends.",
-  },
+interface ValueEntry {
+  data: {
+    title: string;
+    description?: string;
+  };
+}
+
+interface Props {
+  label?: string;
+  title?: string;
+  values?: ValueEntry[];
+  edit?: Record<string, Record<string, unknown>>;
+}
+
+const fallbackValues: ValueEntry[] = [
+  { data: { title: "Truly Homemade", description: "We bake in our own home kitchen using real ingredients. No commercial kitchen. No preservatives." } },
+  { data: { title: "Local to Germantown", description: "We're your neighbors. A small, community-rooted bakery serving Germantown, TN." } },
+  { data: { title: "Made with Purpose", description: "Every order is a family affair. James and the boys bake every batch together. That's how they spend their weekends." } },
 ];
+
+const {
+  label = "What Makes Us Different",
+  title = "Why the Boys?",
+  values: valuesProp,
+  edit = {},
+} = Astro.props;
+
+const values =
+  valuesProp && valuesProp.length > 0 ? valuesProp : fallbackValues;
 ---
 
 <section class="values">
   <div class="values-header">
-    <span class="values-label">What Makes Us Different</span>
-    <h2 class="values-title">Why the Boys?</h2>
+    <span class="values-label" {...edit.values_label}>{label}</span>
+    <h2 class="values-title" {...edit.values_title}>{title}</h2>
   </div>
   <div class="values-grid">
     {
       values.map((v) => (
         <div class="value-card">
-          <h3 class="value-title">{v.title}</h3>
-          <p class="value-desc">{v.description}</p>
+          <h3 class="value-title">{v.data.title}</h3>
+          <p class="value-desc">{v.data.description}</p>
         </div>
       ))
     }

@@ -1,30 +1,58 @@
 ---
 import LocalImg from "../LocalImg.astro";
+import { mediaSrc, type EmDashImage } from "../../utils/media";
+
+type ImageField = EmDashImage;
+
+interface Props {
+  pill?: string;
+  title?: string;
+  titleAccent?: string;
+  desc?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  note?: string;
+  image?: ImageField;
+  sticker1?: string;
+  sticker2?: string;
+  edit?: Record<string, Record<string, unknown>>;
+}
+
+const {
+  pill = "Germantown, TN",
+  title = "Homemade treats from",
+  titleAccent = "the boys!",
+  desc = "By the Boys Bakery is a home-based micro bakery in Germantown, TN. James bakes cookies and desserts in small batches, fresh every time.",
+  ctaLabel = "Submit an Inquiry",
+  ctaHref = "/inquiry",
+  note = "Not sure yet? Tell us the occasion and we'll figure it out.",
+  image,
+  sticker1 = "Home Baked with Love",
+  sticker2 = "Small Batch From Scratch",
+  edit = {},
+} = Astro.props;
+
+const heroSrc = mediaSrc(image);
 ---
 
 <section class="hero">
   <!-- Left: content -->
   <div class="hero-left">
-    <div class="hero-location-pill">Germantown, TN</div>
+    <div class="hero-location-pill" {...edit.hero_pill}>{pill}</div>
     <h1 class="hero-title">
-      Homemade<br />
-      treats from<br />
-      <span class="red">the boys!</span>
+      <span {...edit.hero_title}>{title}</span>{" "}
+      <span class="red" {...edit.hero_title_accent}>{titleAccent}</span>
     </h1>
-    <p class="hero-desc">
-      By the Boys Bakery is a <strong>home-based micro bakery</strong> in
-      Germantown, TN. James bakes cookies and desserts in small batches, fresh
-      every time.
-    </p>
-    <a href="/inquiry" class="hero-cta">Submit an Inquiry</a>
-    <p class="hero-note">Not sure yet? Tell us the occasion and we'll figure it out.</p>
+    <p class="hero-desc" {...edit.hero_desc}>{desc}</p>
+    <a href={ctaHref} class="hero-cta" {...edit.hero_cta_label}>{ctaLabel}</a>
+    <p class="hero-note" {...edit.hero_note}>{note}</p>
   </div>
 
   <!-- Right: image -->
-  <div class="hero-right">
-    <LocalImg fill src="/_emdash/api/media/file/01KYT23FK5RZNZZ8P5Z8XS9HFY.jpg" alt="Fresh baked cookies" />
-    <div class="sticker sticker-1">Home Baked<br />with Love</div>
-    <div class="sticker sticker-2">Small Batch<br />From Scratch</div>
+  <div class="hero-right" {...edit.hero_image}>
+    {heroSrc && <LocalImg fill src={heroSrc} alt={image?.alt ?? "Fresh baked treats"} />}
+    <div class="sticker sticker-1" {...edit.hero_sticker_1}>{sticker1}</div>
+    <div class="sticker sticker-2" {...edit.hero_sticker_2}>{sticker2}</div>
   </div>
 </section>
 

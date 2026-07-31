@@ -1,0 +1,360 @@
+{
+  "collections": [
+    {
+      "slug": "homepage",
+      "label": "Homepage",
+      "labelSingular": "Homepage",
+      "description": "Editable homepage content (single entry)",
+      "supports": [
+        "drafts",
+        "revisions"
+      ],
+      "fields": [
+        {
+          "slug": "hero_pill",
+          "label": "Hero: Location Pill",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "hero_title",
+          "label": "Hero: Title",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "hero_title_accent",
+          "label": "Hero: Title Accent (colored word)",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "hero_desc",
+          "label": "Hero: Description",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "hero_cta_label",
+          "label": "Hero: CTA Label",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "hero_cta_href",
+          "label": "Hero: CTA Link",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "hero_note",
+          "label": "Hero: Note",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "hero_image",
+          "label": "Hero: Image",
+          "type": "image",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "hero_sticker_1",
+          "label": "Hero: Sticker 1",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "hero_sticker_2",
+          "label": "Hero: Sticker 2",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "ticker_items",
+          "label": "Ticker: Items (list of strings)",
+          "type": "json",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "about_label",
+          "label": "About: Label",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "about_title",
+          "label": "About: Title",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "about_title_accent",
+          "label": "About: Title Accent (colored word)",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "about_list",
+          "label": "About: Bullet list (list of strings)",
+          "type": "json",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "about_outro",
+          "label": "About: Closing paragraph",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "about_image",
+          "label": "About: Image",
+          "type": "image",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "about_badge",
+          "label": "About: Badge text",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "treats_label",
+          "label": "Treats: Label",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "treats_title",
+          "label": "Treats: Title",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "treats_note",
+          "label": "Treats: Note",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "values_label",
+          "label": "Values: Label",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "values_title",
+          "label": "Values: Title",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "cta_title",
+          "label": "CTA: Title",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "cta_desc",
+          "label": "CTA: Description",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "cta_cta_label",
+          "label": "CTA: Button Label",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "cta_cta_href",
+          "label": "CTA: Button Link",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "cta_note",
+          "label": "CTA: Note",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "about_intro",
+          "label": "About Intro",
+          "type": "text",
+          "required": false,
+          "unique": false
+        }
+      ]
+    },
+    {
+      "slug": "pages",
+      "label": "Pages",
+      "labelSingular": "Page",
+      "supports": [
+        "drafts",
+        "revisions",
+        "search"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "required": false,
+          "unique": false
+        }
+      ]
+    },
+    {
+      "slug": "posts",
+      "label": "Posts",
+      "labelSingular": "Post",
+      "supports": [
+        "drafts",
+        "revisions",
+        "search",
+        "seo"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "featured_image",
+          "label": "Featured Image",
+          "type": "image",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "excerpt",
+          "label": "Excerpt",
+          "type": "text",
+          "required": false,
+          "unique": false
+        }
+      ]
+    },
+    {
+      "slug": "treats",
+      "label": "Treats",
+      "labelSingular": "Treats",
+      "description": "Menu highlight cards on the homepage",
+      "supports": [
+        "drafts",
+        "revisions"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "description",
+          "label": "Description",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "image",
+          "label": "Image",
+          "type": "image",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "sort",
+          "label": "Sort Order",
+          "type": "integer",
+          "required": false,
+          "unique": false
+        }
+      ]
+    },
+    {
+      "slug": "values",
+      "label": "Values",
+      "labelSingular": "Values",
+      "description": "Why the Boys value cards on the homepage",
+      "supports": [
+        "drafts",
+        "revisions"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "description",
+          "label": "Description",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "sort",
+          "label": "Sort Order",
+          "type": "integer",
+          "required": false,
+          "unique": false
+        }
+      ]
+    }
+  ],
+  "version": "7a46f248a08c37bc"
+}

@@ -1,14 +1,28 @@
 ---
+interface Props {
+  title?: string;
+  desc?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  note?: string;
+  edit?: Record<string, Record<string, unknown>>;
+}
+
+const {
+  title = "Want something delicious?",
+  desc = "Tell us the occasion, the flavor, the quantity. We'll let you know what we can do. No payment upfront.",
+  ctaLabel = "Submit an Inquiry",
+  ctaHref = "/inquiry",
+  note = "We'll get back to you within 48 hours.",
+  edit = {},
+} = Astro.props;
 ---
 
 <section class="cta">
-  <h2 class="cta-title">Want something delicious?</h2>
-  <p class="cta-desc">
-    Tell us the occasion, the flavor, the quantity. We'll let you know what we
-    can do. No payment upfront.
-  </p>
-  <a href="/inquiry" class="cta-btn">Submit an Inquiry</a>
-  <p class="cta-note">We'll get back to you within 48 hours.</p>
+  <h2 class="cta-title" {...edit.cta_title}>{title}</h2>
+  <p class="cta-desc" {...edit.cta_desc}>{desc}</p>
+  <a href={ctaHref} class="cta-btn" {...edit.cta_cta_label}>{ctaLabel}</a>
+  <p class="cta-note" {...edit.cta_note}>{note}</p>
 </section>
 
 <style>
