@@ -8,6 +8,7 @@ import AboutSection from "../components/sections/AboutSection.astro";
 import MenuHighlights from "../components/sections/MenuHighlights.astro";
 import ValuesSection from "../components/sections/ValuesSection.astro";
 import CtaSection from "../components/sections/CtaSection.astro";
+import GallerySection from "../components/sections/GallerySection.astro";
 
 const { entry: home, cacheHint: homeHint } = await getEmDashEntry("homepage", "home");
 const { entries: treats, cacheHint: treatsHint } = await getEmDashCollection("treats", {
@@ -73,6 +74,7 @@ const edit = (home?.edit ?? {}) as Record<string, Record<string, unknown>>;
     values={valueEntries}
     edit={edit}
   />
+  <GallerySection />
   <CtaSection
     title={d?.cta_title}
     desc={d?.cta_desc}

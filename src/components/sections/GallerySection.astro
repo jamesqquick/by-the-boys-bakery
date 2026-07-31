@@ -1,0 +1,245 @@
+---
+const photos = [
+  { src: "/gallery/IMG_0065.jpg",  alt: "Close-up chocolate chip cookies",          rot: "rot-r1" },
+  { src: "/gallery/IMG_1832.jpg",  alt: "The boys baking brownies",                  rot: "rot-l2" },
+  { src: "/gallery/IMG_2438.jpg",  alt: "Sea salt chocolate chip cookie",            rot: "rot-r2" },
+  { src: "/gallery/IMG_0125.jpg",  alt: "Easter cupcakes with pastel frosting",      rot: "rot-l1" },
+  { src: "/gallery/IMG_2445.jpg",  alt: "Strawberry chocolate cupcakes",             rot: "rot-r3" },
+  { src: "/gallery/IMG_1831.jpg",  alt: "Kid licking chocolate off a whisk",         rot: "rot-l3" },
+  { src: "/gallery/IMG_2285.jpg",  alt: "Stacked oatmeal cream sandwich cookies",   rot: "rot-r1" },
+  { src: "/gallery/IMG_0389.jpg",  alt: "Red velvet Oreo cookie with drizzle",       rot: "rot-l2" },
+  { src: "/gallery/IMG_2479.jpg",  alt: "Three-tier cupcake stand",                  rot: "rot-r2" },
+  { src: "/gallery/IMG_0165.jpg",  alt: "Easter cupcakes in kraft box",              rot: "rot-l1" },
+  { src: "/gallery/IMG_2308.jpg",  alt: "Christmas chocolate ganache cookies",       rot: "rot-r3" },
+  { src: "/gallery/IMG_1838.jpg",  alt: "Both boys working on cake pops",            rot: "rot-l3" },
+  { src: "/gallery/IMG_2615.jpg",  alt: "Monster cookie top-down",                   rot: "rot-r1" },
+  { src: "/gallery/IMG_0094.jpg",  alt: "Stacked dark chocolate rounds",             rot: "rot-l2" },
+  { src: "/gallery/IMG_2419.jpg",  alt: "Reese's peanut butter cookie cake sliced", rot: "rot-r2" },
+  { src: "/gallery/IMG_0174.jpg",  alt: "Easter brownies with pastel frosting",      rot: "rot-l1" },
+  { src: "/gallery/IMG_2391.jpg",  alt: "Pistachio brownie cups with Rolo",          rot: "rot-r3" },
+  { src: "/gallery/IMG_2041.jpg",  alt: "Salted choc chip cookies, warm light",     rot: "rot-l3" },
+  { src: "/gallery/IMG_0069.jpg",  alt: "Cookie broken open showing interior",       rot: "rot-r1" },
+  { src: "/gallery/IMG_2631.jpg",  alt: "Cookies in kraft window box",               rot: "rot-l2" },
+  { src: "/gallery/IMG_0361.jpg",  alt: "Strawberry cake with branded boxes",        rot: "rot-r2" },
+  { src: "/gallery/IMG_8375.jpg",  alt: "Dad and son smiling with baking trays",    rot: "rot-l1" },
+  { src: "/gallery/IMG_0367.jpg",  alt: "Variety plate of treats",                   rot: "rot-r3" },
+  { src: "/gallery/IMG_2654.jpg",  alt: "Cookie broken in half, gooey interior",    rot: "rot-l3" },
+];
+---
+
+<section id="gallery" class="gallery-section">
+  <!-- Header -->
+  <div class="gallery-header">
+    <span class="section-label">Fresh From the Kitchen</span>
+    <h2 class="gallery-title">
+      Real Food, Real <span class="pop">Love</span>
+    </h2>
+    <p class="gallery-subtitle">
+      No filters needed — just butter, sugar, and a whole lot of fun.
+    </p>
+  </div>
+
+  <!-- Masonry grid -->
+  <div class="gallery-grid">
+    {photos.map((photo, i) => (
+      <div class={`photo-card ${photo.rot}`} style={`--i: ${i}`}>
+        <div class="photo-frame">
+          <img
+            src={photo.src}
+            alt={photo.alt}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Footer squiggle note -->
+  <div class="gallery-footer">
+    <div class="gallery-note">
+      <svg width="40" height="20" viewBox="0 0 40 20" fill="none" aria-hidden="true">
+        <path d="M2 10 Q8 2 14 10 Q20 18 26 10 Q32 2 38 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      </svg>
+      Every batch made by hand, with love, right here in Germantown, TN
+      <svg width="40" height="20" viewBox="0 0 40 20" fill="none" aria-hidden="true">
+        <path d="M2 10 Q8 18 14 10 Q20 2 26 10 Q32 18 38 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ─── Section wrapper ─── */
+  .gallery-section {
+    background: var(--color-butter);
+    border-bottom: 4px solid var(--color-choco);
+    padding: 6rem 3rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle polka-dot background pattern */
+  .gallery-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, var(--color-choco) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+
+  /* ─── Header ─── */
+  .gallery-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+  }
+
+  .section-label {
+    display: inline-block;
+    background: var(--color-choco);
+    color: var(--color-butter);
+    padding: 0.35rem 0.9rem;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+
+  .gallery-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    color: var(--color-choco);
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+  }
+
+  .gallery-title .pop {
+    color: var(--color-strawberry);
+  }
+
+  .gallery-subtitle {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-muted-brown);
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  /* ─── Masonry grid ─── */
+  .gallery-grid {
+    columns: 3;
+    column-gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ─── Photo card (polaroid style) ─── */
+  .photo-card {
+    break-inside: avoid;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    width: 100%;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.25s ease;
+    cursor: zoom-in;
+  }
+
+  /* Rotation variants */
+  .rot-r1 { transform: rotate(1.5deg); }
+  .rot-r2 { transform: rotate(2.5deg); }
+  .rot-r3 { transform: rotate(0.8deg); }
+  .rot-l1 { transform: rotate(-1.5deg); }
+  .rot-l2 { transform: rotate(-2.5deg); }
+  .rot-l3 { transform: rotate(-0.8deg); }
+
+  .photo-card:hover {
+    transform: rotate(0deg) scale(1.04);
+    z-index: 10;
+    position: relative;
+  }
+
+  /* Polaroid frame */
+  .photo-frame {
+    background: #fff;
+    border: 3px solid var(--color-choco);
+    box-shadow: 5px 5px 0 var(--color-choco);
+    padding: 8px;
+    border-radius: 4px;
+  }
+
+  .photo-card:hover .photo-frame {
+    box-shadow: 8px 8px 0 var(--color-choco);
+  }
+
+  .photo-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
+  }
+
+  /* ─── Footer note ─── */
+  .gallery-footer {
+    text-align: center;
+    margin-top: 3rem;
+    position: relative;
+  }
+
+  .gallery-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--color-choco);
+    color: var(--color-butter);
+    padding: 0.6rem 1.4rem;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    border: 3px solid var(--color-choco);
+    box-shadow: 4px 4px 0 #8B6555;
+  }
+
+  .gallery-note svg {
+    flex-shrink: 0;
+    color: var(--color-butter);
+  }
+
+  /* ─── Tablet ─── */
+  @media (max-width: 1023px) {
+    .gallery-section {
+      padding: 5rem 2rem 4rem;
+    }
+    .gallery-grid {
+      columns: 2;
+    }
+  }
+
+  /* ─── Mobile ─── */
+  @media (max-width: 640px) {
+    .gallery-section {
+      padding: 3.5rem 1.25rem 3rem;
+    }
+    .gallery-grid {
+      columns: 2;
+      column-gap: 0.75rem;
+    }
+    .photo-card {
+      margin-bottom: 0.75rem;
+    }
+    /* Reduce rotation on mobile so nothing looks broken */
+    .rot-r1, .rot-r2, .rot-r3 { transform: rotate(1deg); }
+    .rot-l1, .rot-l2, .rot-l3 { transform: rotate(-1deg); }
+
+    .gallery-note {
+      font-size: 0.72rem;
+      padding: 0.5rem 1rem;
+      gap: 0.5rem;
+    }
+    .gallery-note svg { display: none; }
+  }
+</style>
