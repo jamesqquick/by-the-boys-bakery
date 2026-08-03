@@ -1,12 +1,12 @@
 ---
 import MenuCard from "../MenuCard.astro";
-import type { EmDashImage } from "../../utils/media";
+import type { MediaValue } from "emdash";
 
 interface TreatEntry {
   data: {
     title: string;
     description?: string;
-    image?: EmDashImage;
+    image?: MediaValue;
   };
 }
 
