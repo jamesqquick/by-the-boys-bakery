@@ -1,0 +1,19 @@
+src/components/sections/HeroSection.astro
+  s_c81539575233ce::t_532d17a64a8a08 2-3,13,49-51,146-156
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "4b773ecec0519691726a4b5a19c324bc5ebc9bab",
+  "prompts": {},
+  "sessions": {
+    "s_c81539575233ce": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_037e78481ffeI5T6VHr0t7bi0J",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "James Q Quick <james@learnwithjason.dev>"
+    }
+  }
+}
