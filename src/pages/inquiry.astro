@@ -176,13 +176,14 @@ import InquiryForm from "../components/InquiryForm";
   }
 
   .field-row.two-col {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
   .field {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    min-width: 0;
   }
 
   .field-hint {
@@ -406,7 +407,7 @@ import InquiryForm from "../components/InquiryForm";
 
     /* Two-col fields → single column */
     .field-row.two-col {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     /* Treat grid → single column */
