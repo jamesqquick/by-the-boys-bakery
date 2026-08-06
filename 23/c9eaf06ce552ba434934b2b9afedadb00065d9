@@ -1,0 +1,19 @@
+worker-configuration.d.ts
+  s_19703682f86931::t_cdb6a6eaa92768 2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "23c9eaf06ce552ba434934b2b9afedadb00065d9",
+  "prompts": {},
+  "sessions": {
+    "s_19703682f86931": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_027d9ac08ffexjqaqJnvcx5g6h",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "James Q Quick <james@learnwithjason.dev>"
+    }
+  }
+}
