@@ -1,8 +1,6 @@
 ---
-import LocalImg from "../LocalImg.astro";
-import { mediaSrc, type EmDashImage } from "../../utils/media";
-
-type ImageField = EmDashImage;
+import { Image } from "emdash/ui";
+import type { MediaValue } from "emdash";
 
 interface Props {
   pill?: string;
@@ -12,7 +10,7 @@ interface Props {
   ctaLabel?: string;
   ctaHref?: string;
   note?: string;
-  image?: ImageField;
+  image?: MediaValue;
   sticker1?: string;
   sticker2?: string;
   edit?: Record<string, Record<string, unknown>>;
@@ -31,8 +29,6 @@ const {
   sticker2 = "Small Batch From Scratch",
   edit = {},
 } = Astro.props;
-
-const heroSrc = mediaSrc(image);
 ---
 
 <section class="hero">
@@ -50,7 +46,9 @@ const heroSrc = mediaSrc(image);
 
   <!-- Right: image -->
   <div class="hero-right" {...edit.hero_image}>
-    {heroSrc && <LocalImg fill src={heroSrc} alt={image?.alt ?? "Fresh baked treats"} />}
+    {image && (
+      <Image image={image} alt={image?.alt ?? "Fresh baked treats"} class="hero-img" priority />
+    )}
     <div class="sticker sticker-1" {...edit.hero_sticker_1}>{sticker1}</div>
     <div class="sticker sticker-2" {...edit.hero_sticker_2}>{sticker2}</div>
   </div>
@@ -143,6 +141,17 @@ const heroSrc = mediaSrc(image);
     position: relative;
     overflow: hidden;
     background: var(--color-sky);
+  }
+
+  /* Image component renders in a child component, so the class it's given
+     lands outside this file's scoped styles — use :global to reach it. */
+  :global(.hero-img) {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .sticker {

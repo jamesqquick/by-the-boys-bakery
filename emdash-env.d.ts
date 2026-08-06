@@ -5,6 +5,46 @@
 
 import type { ContentBylineCredit, TaxonomyTerm, PortableTextBlock } from "emdash";
 
+export interface Homepage {
+  id: string;
+  slug: string | null;
+  status: string;
+  hero_pill?: string;
+  hero_title?: string;
+  hero_title_accent?: string;
+  hero_desc?: string;
+  hero_cta_label?: string;
+  hero_cta_href?: string;
+  hero_note?: string;
+  hero_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
+  hero_sticker_1?: string;
+  hero_sticker_2?: string;
+  ticker_items?: unknown;
+  about_label?: string;
+  about_title?: string;
+  about_title_accent?: string;
+  about_intro?: string;
+  about_list?: unknown;
+  about_outro?: string;
+  about_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
+  about_badge?: string;
+  treats_label?: string;
+  treats_title?: string;
+  treats_note?: string;
+  values_label?: string;
+  values_title?: string;
+  cta_title?: string;
+  cta_desc?: string;
+  cta_cta_label?: string;
+  cta_cta_href?: string;
+  cta_note?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
 export interface Page {
   id: string;
   slug: string | null;
@@ -33,9 +73,41 @@ export interface Post {
   terms?: Record<string, TaxonomyTerm[]>;
 }
 
+export interface Treat {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  description?: string;
+  image?: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
+  sort?: number;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface Value {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  description?: string;
+  sort?: number;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
 declare module "emdash" {
   interface EmDashCollections {
+    homepage: Homepage;
     pages: Page;
     posts: Post;
+    treats: Treat;
+    values: Value;
   }
 }

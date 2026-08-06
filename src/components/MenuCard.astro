@@ -1,22 +1,23 @@
 ---
-import LocalImg from "./LocalImg.astro";
-import { mediaSrc, type EmDashImage } from "../utils/media";
+import { Image } from "emdash/ui";
+import type { MediaValue } from "emdash";
 
 interface Props {
   name: string;
   description?: string;
-  image?: EmDashImage;
+  image?: MediaValue;
 }
 
 const { name, description, image } = Astro.props;
-const src = mediaSrc(image);
 ---
 
 <div class="menu-card">
-  {src ? (
-    <LocalImg aspectRatio="1/1" src={src} alt={image?.alt ?? name} class="menu-card-img" />
+  {image ? (
+    <div class="menu-card-img">
+      <Image image={image} alt={image?.alt ?? name} class="menu-card-img-media" />
+    </div>
   ) : (
-    <div class="menu-card-img menu-card-img--empty" style="aspect-ratio: 1/1"></div>
+    <div class="menu-card-img menu-card-img--empty"></div>
   )}
   <div class="menu-card-body">
     <h3 class="menu-card-name">{name}</h3>
@@ -40,13 +41,24 @@ const src = mediaSrc(image);
   }
 
   .menu-card-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    overflow: hidden;
     border-radius: 0;
   }
 
   .menu-card-img--empty {
-    width: 100%;
     background: var(--color-sky);
     border-bottom: 3px solid var(--color-choco);
+  }
+
+  /* Image component renders in a child component, so the class it's given
+     lands outside this file's scoped styles — use :global to reach it. */
+  :global(.menu-card-img-media) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .menu-card-body {

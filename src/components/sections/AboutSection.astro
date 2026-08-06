@@ -1,8 +1,6 @@
 ---
-import LocalImg from "../LocalImg.astro";
-import { mediaSrc, type EmDashImage } from "../../utils/media";
-
-type ImageField = EmDashImage;
+import { Image } from "emdash/ui";
+import type { MediaValue } from "emdash";
 
 interface Props {
   label?: string;
@@ -11,7 +9,7 @@ interface Props {
   intro?: string;
   list?: unknown;
   outro?: string;
-  image?: ImageField;
+  image?: MediaValue;
   badge?: string;
   edit?: Record<string, Record<string, unknown>>;
 }
@@ -40,18 +38,17 @@ const introParagraphs = (intro ?? "")
   .split(/\n\s*\n/)
   .map((p) => p.trim())
   .filter(Boolean);
-const aboutSrc = mediaSrc(image);
 ---
 
 <section id="about" class="about">
   <!-- Image side -->
   <div class="about-img-wrap">
-    {aboutSrc ? (
-      <div {...edit.about_image}>
-        <LocalImg aspectRatio="4/5" src={aboutSrc} alt={image?.alt ?? "James and the boys baking"} class="about-img" />
+    {image ? (
+      <div class="about-img" {...edit.about_image}>
+        <Image image={image} alt={image?.alt ?? "James and the boys baking"} class="about-img-media" />
       </div>
     ) : (
-      <div class="about-img" style="aspect-ratio: 4/5; background: var(--color-butter);" {...edit.about_image}></div>
+      <div class="about-img about-img--empty" {...edit.about_image}></div>
     )}
     <div class="about-badge" {...edit.about_badge}>{badge}</div>
   </div>
@@ -95,10 +92,24 @@ const aboutSrc = mediaSrc(image);
   }
 
   .about-img {
+    aspect-ratio: 4/5;
     border-radius: var(--radius-card);
     border: 3px solid var(--color-choco);
     box-shadow: var(--shadow-neo);
     overflow: hidden;
+  }
+
+  .about-img--empty {
+    background: var(--color-butter);
+  }
+
+  /* Image component renders in a child component, so the class it's given
+     lands outside this file's scoped styles — use :global to reach it. */
+  :global(.about-img-media) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .about-badge {
