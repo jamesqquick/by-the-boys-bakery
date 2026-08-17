@@ -27,9 +27,17 @@ const TREATS = [
   { id: "cakes", label: "Cakes" },
 ] as const;
 
+type InquiryResult = Awaited<ReturnType<typeof actions.submitInquiry>>;
+type InquiryState = InquiryResult | { data: undefined; error: undefined };
+
+const submitInquiry = withState(actions.submitInquiry) as (
+  state: InquiryState,
+  formData: FormData,
+) => Promise<InquiryState>;
+
 export default function InquiryForm() {
-  const [state, action, pending] = useActionState(
-    withState(actions.submitInquiry),
+  const [state, action, pending] = useActionState<InquiryState, FormData>(
+    submitInquiry,
     { data: undefined, error: undefined },
   );
 
