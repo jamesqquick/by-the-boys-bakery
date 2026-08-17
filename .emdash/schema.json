@@ -4,7 +4,6 @@
       "slug": "homepage",
       "label": "Homepage",
       "labelSingular": "Homepage",
-      "description": "Editable homepage content (single entry)",
       "supports": [
         "drafts",
         "revisions"
@@ -109,6 +108,13 @@
           "unique": false
         },
         {
+          "slug": "about_intro",
+          "label": "About Intro",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
           "slug": "about_list",
           "label": "About: Bullet list (list of strings)",
           "type": "json",
@@ -207,9 +213,9 @@
           "unique": false
         },
         {
-          "slug": "about_intro",
-          "label": "About Intro",
-          "type": "text",
+          "slug": "metadata_image",
+          "label": "Metadata Image",
+          "type": "image",
           "required": false,
           "unique": false
         }
@@ -236,6 +242,13 @@
           "slug": "content",
           "label": "Content",
           "type": "portableText",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "metadata_image",
+          "label": "Metadata Image",
+          "type": "image",
           "required": false,
           "unique": false
         }
@@ -279,14 +292,20 @@
           "type": "text",
           "required": false,
           "unique": false
+        },
+        {
+          "slug": "metadata_image",
+          "label": "Metadata Image",
+          "type": "image",
+          "required": false,
+          "unique": false
         }
       ]
     },
     {
       "slug": "treats",
       "label": "Treats",
-      "labelSingular": "Treats",
-      "description": "Menu highlight cards on the homepage",
+      "labelSingular": "Treat",
       "supports": [
         "drafts",
         "revisions"
@@ -325,8 +344,7 @@
     {
       "slug": "values",
       "label": "Values",
-      "labelSingular": "Values",
-      "description": "Why the Boys value cards on the homepage",
+      "labelSingular": "Value",
       "supports": [
         "drafts",
         "revisions"
@@ -356,5 +374,5 @@
       ]
     }
   ],
-  "version": "7a46f248a08c37bc"
+  "version": "dfa566eeda14bc30"
 }

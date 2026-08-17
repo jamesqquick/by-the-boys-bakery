@@ -3,6 +3,7 @@ import { getEmDashEntry, getSeoMeta, decodeSlug, getSiteSettings } from "emdash"
 import { PortableText } from "emdash/ui";
 import Base from "../layouts/Base.astro";
 import { resolveStarterSiteIdentity } from "../utils/site-identity";
+import { getMetadataImage } from "../lib/metadata";
 
 const slug = decodeSlug(Astro.params.slug);
 
@@ -23,6 +24,7 @@ const seo = getSeoMeta(page, {
 	siteTitle,
 	siteUrl: Astro.url.origin,
 	path: `/${slug}`,
+	defaultOgImage: getMetadataImage(page.data, Astro.url.origin) ?? undefined,
 });
 ---
 
@@ -31,6 +33,7 @@ const seo = getSeoMeta(page, {
 	pageTitle={seo.ogTitle}
 	description={seo.description}
 	canonical={seo.canonical}
+	image={seo.ogImage}
 	content={{ collection: "pages", id: page.data.id, slug }}
 >
 	<article>

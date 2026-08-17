@@ -9,6 +9,7 @@ import MenuHighlights from "../components/sections/MenuHighlights.astro";
 import ValuesSection from "../components/sections/ValuesSection.astro";
 import CtaSection from "../components/sections/CtaSection.astro";
 import GallerySection from "../components/sections/GallerySection.astro";
+import { getMetadataImage } from "../lib/metadata";
 
 const { entry: home, cacheHint: homeHint } = await getEmDashEntry("homepage", "home");
 const { entries: treats, cacheHint: treatsHint } = await getEmDashCollection("treats", {
@@ -34,6 +35,7 @@ const edit = (home?.edit ?? {}) as Record<string, Record<string, unknown>>;
 <BakeryLayout
   title="By the Boys Bakery"
   description="Home-based micro bakery in Germantown, TN. Freshly baked cookies and desserts in small batches."
+  image={getMetadataImage(d, Astro.url.origin)}
   currentPath="/"
 >
   <HeroSection

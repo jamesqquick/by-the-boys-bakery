@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { getMenu, getSiteSettings } from "emdash";
+import { getEmDashEntry, getMenu, getSiteSettings } from "emdash";
 import {
 	WidgetArea,
 	EmDashHead,
@@ -10,6 +10,7 @@ import {
 import { createPublicPageContext } from "emdash/page";
 import LiveSearch from "emdash/ui/search";
 import { resolveStarterSiteIdentity } from "../utils/site-identity";
+import { getMetadataImage } from "../lib/metadata";
 
 interface Props {
 	title: string;
@@ -25,6 +26,13 @@ const { title, pageTitle, description, image, canonical, content } = Astro.props
 const { siteTitle, siteTagline, siteLogo } = resolveStarterSiteIdentity(await getSiteSettings());
 const fullTitle = title.includes(siteTitle) ? title : `${title} — ${siteTitle}`;
 const pageDescription = description ?? siteTagline;
+let metadataImage = image;
+
+if (!metadataImage) {
+	const { entry: homepage, cacheHint } = await getEmDashEntry("homepage", "home");
+	if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+	metadataImage = getMetadataImage(homepage?.data, Astro.url.origin);
+}
 
 const menu = await getMenu("primary");
 
@@ -36,7 +44,7 @@ const pageCtx = createPublicPageContext({
 	pageTitle: pageTitle ?? title,
 	description: pageDescription,
 	canonical,
-	image,
+	image: metadataImage,
 	content,
 	siteName: siteTitle,
 });

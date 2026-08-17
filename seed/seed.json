@@ -30,6 +30,11 @@
 					"type": "image"
 				},
 				{
+					"slug": "metadata_image",
+					"label": "Metadata Image",
+					"type": "image"
+				},
+				{
 					"slug": "content",
 					"label": "Content",
 					"type": "portableText",
@@ -55,6 +60,11 @@
 					"type": "string",
 					"required": true,
 					"searchable": true
+				},
+				{
+					"slug": "metadata_image",
+					"label": "Metadata Image",
+					"type": "image"
 				},
 				{
 					"slug": "content",
@@ -101,6 +111,7 @@
 				{ "slug": "hero_cta_href", "label": "Hero: CTA Link", "type": "string" },
 				{ "slug": "hero_note", "label": "Hero: Note", "type": "string" },
 				{ "slug": "hero_image", "label": "Hero: Image", "type": "image" },
+				{ "slug": "metadata_image", "label": "Metadata Image", "type": "image" },
 				{ "slug": "hero_sticker_1", "label": "Hero: Sticker 1", "type": "string" },
 				{ "slug": "hero_sticker_2", "label": "Hero: Sticker 2", "type": "string" },
 				{ "slug": "ticker_items", "label": "Ticker: Items (list of strings)", "type": "json" },
@@ -417,6 +428,7 @@
 				"slug": "home",
 				"status": "published",
 				"data": {
+					"metadata_image": "https://bytheboysbakery.com/metadata-card.png",
 					"hero_pill": "Germantown, TN",
 					"hero_title": "Homemade treats from",
 					"hero_title_accent": "the boys!",

@@ -2,19 +2,28 @@
 import "../styles/app.css";
 import { EmDashHead, EmDashBodyStart, EmDashBodyEnd } from "emdash/ui";
 import { createPublicPageContext } from "emdash/page";
-import { getSiteSettings } from "emdash";
+import { getEmDashEntry, getSiteSettings } from "emdash";
 import SiteNav from "../components/layout/SiteNav.astro";
 import SiteFooter from "../components/layout/SiteFooter.astro";
+import { getMetadataImage } from "../lib/metadata";
 
 interface Props {
   title: string;
   description?: string | null;
+  image?: string | null;
   currentPath?: string;
 }
 
-const { title, description, currentPath } = Astro.props;
+const { title, description, image, currentPath } = Astro.props;
 const settings = await getSiteSettings();
 const siteTitle = settings?.title ?? "By the Boys Bakery";
+let metadataImage = image;
+
+if (!metadataImage) {
+  const { entry: homepage, cacheHint } = await getEmDashEntry("homepage", "home");
+  if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+  metadataImage = getMetadataImage(homepage?.data, Astro.url.origin);
+}
 
 const pageCtx = createPublicPageContext({
   Astro,
@@ -23,6 +32,7 @@ const pageCtx = createPublicPageContext({
   title: `${title} | ${siteTitle}`,
   pageTitle: title,
   description: description ?? undefined,
+  image: metadataImage,
   siteName: siteTitle,
 });
 ---

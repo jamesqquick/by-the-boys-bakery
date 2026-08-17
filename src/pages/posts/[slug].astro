@@ -3,6 +3,7 @@ import { getEmDashEntry, getSeoMeta, decodeSlug, getSiteSettings } from "emdash"
 import { Image, PortableText, WidgetArea } from "emdash/ui";
 import Base from "../../layouts/Base.astro";
 import { resolveStarterSiteIdentity } from "../../utils/site-identity";
+import { getMetadataImage } from "../../lib/metadata";
 
 const slug = decodeSlug(Astro.params.slug);
 
@@ -24,6 +25,7 @@ const seo = getSeoMeta(post, {
 	siteTitle,
 	siteUrl: Astro.url.origin,
 	path: `/posts/${slug}`,
+	defaultOgImage: getMetadataImage(post.data, Astro.url.origin) ?? undefined,
 });
 
 // Taxonomy terms are already hydrated onto the entry by getEmDashEntry.
