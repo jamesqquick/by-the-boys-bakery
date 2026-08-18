@@ -1,0 +1,27 @@
+pnpm-lock.yaml
+  s_5ed1296f8415e0::t_223b319243049c 78-80,2532-2537,2588-2616,2706-2709,2789-2792,3117-3119,3139-3142,4241-4243,4268-4270,4275-4277,4338-4340,4353-4356,4613-4653,4771-4775,7385-7391,7453-7493,7597-7598,7769-7770,8127-8130,8143-8144,9371-9372,9392-9393,9396-9397,9465-9466,9476-9477,9649-9675,9793-9797
+src/components/InquiryForm.tsx
+  s_5ed1296f8415e0::t_7ff47ab986edc4 16,50-51,63-69,71-86,89-91,97-104,106-108,115-123,125-127,136-142,148-150,157-163,178-180,187-198,200-202,210-212,214-217,221-226,238-244,248-250,259-261,266,269-272,290-292,301,310-312,320-326
+src/components/InquiryForm.webmcp.test.ts
+  s_5ed1296f8415e0::t_ca7cf5b53e4ced 1-69
+src/lib/inquiry-webmcp.test.ts
+  s_5ed1296f8415e0::t_ee4e1134990320 1-83
+src/lib/inquiry-webmcp.ts
+  s_5ed1296f8415e0::t_6cf33d8412f1e0 1-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "2ce81949d05e9c8c38ceaa6a9555d0f2666afb3b",
+  "prompts": {},
+  "sessions": {
+    "s_5ed1296f8415e0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fefa7fa98ffefe2cHRY5uMZoNl",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "James Q Quick <james@learnwithjason.dev>"
+    }
+  }
+}
