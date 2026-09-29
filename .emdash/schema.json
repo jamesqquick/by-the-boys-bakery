@@ -66,6 +66,13 @@
           "unique": false
         },
         {
+          "slug": "metadata_image",
+          "label": "Metadata Image",
+          "type": "image",
+          "required": false,
+          "unique": false
+        },
+        {
           "slug": "hero_sticker_1",
           "label": "Hero: Sticker 1",
           "type": "string",
@@ -211,13 +218,6 @@
           "type": "string",
           "required": false,
           "unique": false
-        },
-        {
-          "slug": "metadata_image",
-          "label": "Metadata Image",
-          "type": "image",
-          "required": false,
-          "unique": false
         }
       ]
     },
@@ -239,16 +239,16 @@
           "unique": false
         },
         {
-          "slug": "content",
-          "label": "Content",
-          "type": "portableText",
+          "slug": "metadata_image",
+          "label": "Metadata Image",
+          "type": "image",
           "required": false,
           "unique": false
         },
         {
-          "slug": "metadata_image",
-          "label": "Metadata Image",
-          "type": "image",
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
           "required": false,
           "unique": false
         }
@@ -280,6 +280,13 @@
           "unique": false
         },
         {
+          "slug": "metadata_image",
+          "label": "Metadata Image",
+          "type": "image",
+          "required": false,
+          "unique": false
+        },
+        {
           "slug": "content",
           "label": "Content",
           "type": "portableText",
@@ -292,11 +299,152 @@
           "type": "text",
           "required": false,
           "unique": false
+        }
+      ]
+    },
+    {
+      "slug": "pricing_items",
+      "label": "Pricing Items",
+      "labelSingular": "Pricing Item",
+      "supports": [
+        "drafts",
+        "revisions"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "unique": false
         },
         {
-          "slug": "metadata_image",
-          "label": "Metadata Image",
-          "type": "image",
+          "slug": "subtitle",
+          "label": "Subtitle",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "description",
+          "label": "Description",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "sort",
+          "label": "Sort Order",
+          "type": "integer",
+          "required": false,
+          "unique": false
+        }
+      ]
+    },
+    {
+      "slug": "pricing_options",
+      "label": "Pricing Options",
+      "labelSingular": "Pricing Option",
+      "supports": [
+        "drafts",
+        "revisions"
+      ],
+      "fields": [
+        {
+          "slug": "label",
+          "label": "Label",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "item",
+          "label": "Pricing Item",
+          "type": "reference",
+          "required": true,
+          "unique": false,
+          "options": {
+            "collection": "pricing_items"
+          }
+        },
+        {
+          "slug": "amount",
+          "label": "Amount",
+          "type": "number",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "sort",
+          "label": "Sort Order",
+          "type": "integer",
+          "required": false,
+          "unique": false
+        }
+      ]
+    },
+    {
+      "slug": "pricing_page",
+      "label": "Pricing Page",
+      "labelSingular": "Pricing Page",
+      "supports": [
+        "drafts",
+        "revisions"
+      ],
+      "fields": [
+        {
+          "slug": "eyebrow",
+          "label": "Eyebrow",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "description",
+          "label": "Description",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "cta_label",
+          "label": "CTA Label",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "cta_href",
+          "label": "CTA Link",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "list_title",
+          "label": "List Title",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "list_note",
+          "label": "List Note",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "closing_note",
+          "label": "Closing Note",
+          "type": "text",
           "required": false,
           "unique": false
         }
@@ -374,5 +522,5 @@
       ]
     }
   ],
-  "version": "dfa566eeda14bc30"
+  "version": "8da6977124cf5c0a"
 }

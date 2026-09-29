@@ -28,6 +28,13 @@ const { currentPath = "/" } = Astro.props;
   <ul class="nav-links">
     <li><a href="/" class:list={[{ active: currentPath === "/" }]}>Home</a></li>
     <li><a href="/#treats">Our Treats</a></li>
+    <li>
+      <a
+        href="/pricing"
+        class:list={[{ active: currentPath === "/pricing" }]}
+        aria-current={currentPath === "/pricing" ? "page" : undefined}
+      >Pricing</a>
+    </li>
     <li><a href="/#about">About</a></li>
     <li><a href="/inquiry" class="nav-cta">Place an Inquiry</a></li>
   </ul>
@@ -183,7 +190,10 @@ const { currentPath = "/" } = Astro.props;
 
   .nav-links a:hover,
   .nav-links a.active {
-    color: var(--color-strawberry);
+    color: var(--color-choco);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.35rem;
   }
 
   .nav-cta {
