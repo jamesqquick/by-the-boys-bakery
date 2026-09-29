@@ -1,0 +1,23 @@
+src/components/layout/SiteNav.astro
+  s_980a499f352e01::t_fd76253b0c1138 31
+src/components/sections/PricingSection.astro
+  s_980a499f352e01::t_6f16bc0ffbf85b 2-3,10-28,31-44,64-80,82-101,103-148,150,157-158,185,220,240,319,360
+src/pages/index.astro
+  s_980a499f352e01::t_c44d0a699682e9 3-10,16,29-40,46-48,54-63,106-111
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "7be19ad2274f1c092a6d7c66bc1cddda0a030692",
+  "prompts": {},
+  "sessions": {
+    "s_980a499f352e01": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f164269f2ffeSLx2lz2SeUJFaf",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "James Q Quick <james@learnwithjason.dev>"
+    }
+  }
+}
