@@ -1,0 +1,21 @@
+.emdash/schema.json
+  s_d5c202f9b20179::t_fb34c95625af65 68-74,242-244,249-251,282-288,302-319,322-447,525
+.emdash/types.ts
+  s_d5c202f9b20179::t_f2afc0a99483ae 18,53,67,70-118
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "27c9b6aa68014061e7ed68136e52922f08f3e5e6",
+  "prompts": {},
+  "sessions": {
+    "s_d5c202f9b20179": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f163e2344ffeaEbkPfB0QmhiBq",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "James Q Quick <james@learnwithjason.dev>"
+    }
+  }
+}
