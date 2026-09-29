@@ -1,11 +1,19 @@
 ---
 import { getEmDashEntry, getEmDashCollection } from "emdash";
-import type { Homepage, Treat, Value } from "../../.emdash/types";
+import type {
+  Homepage,
+  PricingItem,
+  PricingOption,
+  PricingPage,
+  Treat,
+  Value,
+} from "../../.emdash/types";
 import BakeryLayout from "../layouts/BakeryLayout.astro";
 import HeroSection from "../components/sections/HeroSection.astro";
 import TickerSection from "../components/sections/TickerSection.astro";
 import AboutSection from "../components/sections/AboutSection.astro";
 import MenuHighlights from "../components/sections/MenuHighlights.astro";
+import PricingSection from "../components/sections/PricingSection.astro";
 import ValuesSection from "../components/sections/ValuesSection.astro";
 import CtaSection from "../components/sections/CtaSection.astro";
 import GallerySection from "../components/sections/GallerySection.astro";
@@ -18,16 +26,41 @@ const { entries: treats, cacheHint: treatsHint } = await getEmDashCollection("tr
 const { entries: values, cacheHint: valuesHint } = await getEmDashCollection("values", {
   orderBy: { sort: "asc" },
 });
+const [
+  { entry: pricingPage, error: pricingPageError, cacheHint: pricingPageHint },
+  { entries: pricingItems, error: pricingItemsError, cacheHint: pricingItemsHint },
+  { entries: pricingOptions, error: pricingOptionsError, cacheHint: pricingOptionsHint },
+] = await Promise.all([
+  getEmDashEntry("pricing_page", "pricing"),
+  getEmDashCollection("pricing_items", { orderBy: { sort: "asc" } }),
+  getEmDashCollection("pricing_options", { orderBy: { sort: "asc" } }),
+]);
+
+const pricingError = pricingPageError ?? pricingItemsError ?? pricingOptionsError;
+if (pricingError) throw pricingError;
 
 if (Astro.cache?.enabled) {
   Astro.cache.set(homeHint);
   Astro.cache.set(treatsHint);
   Astro.cache.set(valuesHint);
+  Astro.cache.set(pricingPageHint);
+  Astro.cache.set(pricingItemsHint);
+  Astro.cache.set(pricingOptionsHint);
 }
 
 const d = home?.data as Homepage | undefined;
 const treatEntries = treats as unknown as { data: Treat }[];
 const valueEntries = values as unknown as { data: Value }[];
+const pricingPageData = pricingPage?.data as PricingPage | undefined;
+const pricingPageEdit = (pricingPage?.edit ?? {}) as Record<string, Record<string, unknown>>;
+const pricingItemEntries = pricingItems as unknown as {
+  data: PricingItem;
+  edit: Record<string, Record<string, unknown>>;
+}[];
+const pricingOptionEntries = pricingOptions as unknown as {
+  data: PricingOption;
+  edit: Record<string, Record<string, unknown>>;
+}[];
 // Visual editing attributes (spread onto elements for click-to-edit).
 const edit = (home?.edit ?? {}) as Record<string, Record<string, unknown>>;
 ---
@@ -69,6 +102,12 @@ const edit = (home?.edit ?? {}) as Record<string, Record<string, unknown>>;
     note={d?.treats_note}
     treats={treatEntries}
     edit={edit}
+  />
+  <PricingSection
+    page={pricingPageData}
+    pageEdit={pricingPageEdit}
+    pricingItems={pricingItemEntries}
+    pricingOptions={pricingOptionEntries}
   />
   <ValuesSection
     label={d?.values_label}

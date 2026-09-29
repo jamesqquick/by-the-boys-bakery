@@ -1,46 +1,50 @@
 ---
-import { getEmDashCollection, getEmDashEntry, sanitizeHref } from "emdash";
-import type { PricingItem, PricingOption, PricingPage } from "../../.emdash/types";
-import BakeryLayout from "../layouts/BakeryLayout.astro";
+import { sanitizeHref } from "emdash";
+import type { PricingItem, PricingOption, PricingPage } from "../../../.emdash/types";
 
 type EditableEntry<T> = {
   data: T;
   edit: Record<string, Record<string, unknown>>;
 };
 
-const { entry: pricingPage, error: pageError, cacheHint: pageHint } = await getEmDashEntry(
-  "pricing_page",
-  "pricing",
-);
-const { entries: items, error: itemsError, cacheHint: itemsHint } = await getEmDashCollection(
-  "pricing_items",
-  { orderBy: { sort: "asc" } },
-);
-const { entries: options, error: optionsError, cacheHint: optionsHint } = await getEmDashCollection(
-  "pricing_options",
-  { orderBy: { sort: "asc" } },
-);
+type PricingPageContent = Pick<PricingPage, "title"> &
+  Partial<
+    Pick<
+      PricingPage,
+      | "eyebrow"
+      | "description"
+      | "cta_label"
+      | "cta_href"
+      | "list_title"
+      | "list_note"
+      | "closing_note"
+    >
+  >;
 
-const contentError = pageError ?? itemsError ?? optionsError;
-if (contentError) throw contentError;
-
-if (!pricingPage) {
-  return Astro.redirect("/404");
+interface Props {
+  page?: PricingPageContent;
+  pageEdit?: Record<string, Record<string, unknown>>;
+  pricingItems?: EditableEntry<PricingItem>[];
+  pricingOptions?: EditableEntry<PricingOption>[];
 }
 
-if (Astro.cache?.enabled) {
-  Astro.cache.set(pageHint);
-  Astro.cache.set(itemsHint);
-  Astro.cache.set(optionsHint);
-}
-
-const page = pricingPage.data as unknown as PricingPage;
-const pageEdit = pricingPage.edit as Record<string, Record<string, unknown>>;
+const {
+  page: pageProp,
+  pageEdit = {},
+  pricingItems = [],
+  pricingOptions = [],
+} = Astro.props;
+const page = pageProp ?? {
+  eyebrow: "The Good Stuff",
+  title: "Simple prices.",
+  description: "Pricing is being updated. Send us the details and we will help you plan your order.",
+  cta_label: "Start an Inquiry",
+  cta_href: "/inquiry",
+  list_title: "Pick a favorite",
+};
 const ctaHref = sanitizeHref(page.cta_href);
 const hasCtaLink = Boolean(page.cta_href && ctaHref !== "#");
 const listTitle = page.list_title || "Pricing";
-const pricingItems = items as unknown as EditableEntry<PricingItem>[];
-const pricingOptions = options as unknown as EditableEntry<PricingOption>[];
 const optionsByItem = new Map<string, EditableEntry<PricingOption>[]>();
 
 for (const option of pricingOptions) {
@@ -57,105 +61,101 @@ const priceFormatter = new Intl.NumberFormat("en-US", {
 });
 ---
 
-<BakeryLayout
-  title="Pricing"
-  description="Friendly pricing for cupcakes, cookies, brownies, and cakes from By the Boys Bakery in Germantown, TN."
-  currentPath="/pricing"
->
-  <div class="pricing-layout">
-    <header class="pricing-intro">
-      {page.eyebrow && (
-        <span class="pricing-eyebrow" {...pageEdit.eyebrow}>{page.eyebrow}</span>
-      )}
-      <h1 {...pageEdit.title}>{page.title}</h1>
-      {page.description && <p {...pageEdit.description}>{page.description}</p>}
-      {page.cta_label && hasCtaLink && (
-        <a
-          href={ctaHref}
-          class="btn btn-secondary pricing-cta"
-          {...pageEdit.cta_href}
-        >
-          <span {...pageEdit.cta_label}>{page.cta_label}</span>
-        </a>
-      )}
-    </header>
-
-    <section class="pricing-list" aria-labelledby="pricing-heading">
-      <div class="pricing-list-header">
-        <h2 id="pricing-heading" {...pageEdit.list_title}>{listTitle}</h2>
-        {page.list_note && <span {...pageEdit.list_note}>{page.list_note}</span>}
-      </div>
-
-      {pricingItems.length > 0 ? (
-        pricingItems.map((item) => {
-          const itemOptions = optionsByItem.get(item.data.id) ?? [];
-          const hasLabeledOptions = itemOptions.some((option) => option.data.label);
-
-          return (
-            <article class="pricing-item">
-              <h3 {...item.edit.title}>{item.data.title}</h3>
-              <div class="pricing-item-copy">
-                {item.data.subtitle && (
-                  <strong {...item.edit.subtitle}>{item.data.subtitle}</strong>
-                )}
-                {item.data.description && (
-                  <p {...item.edit.description}>{item.data.description}</p>
-                )}
-              </div>
-              {itemOptions.length > 0 ? (
-                <div
-                  class:list={[
-                    "price",
-                    { "price-options": itemOptions.length > 1 || hasLabeledOptions },
-                  ]}
-                >
-                  {itemOptions.map((option) => (
-                    <span>
-                      {option.data.label && (
-                        <strong {...option.edit.label}>{option.data.label}</strong>
-                      )}
-                      <span {...option.edit.amount}>
-                        {priceFormatter.format(option.data.amount)}
-                      </span>
-                    </span>
-                  ))}
-                </div>
-              ) : hasCtaLink ? (
-                <a
-                  href={ctaHref}
-                  class="price price-inquiry"
-                  aria-label={`Ask us about ${item.data.title}`}
-                >Ask us</a>
-              ) : (
-                <span class="price price-inquiry">Ask us</span>
-              )}
-            </article>
-          );
-        })
-      ) : (
-        <div class="pricing-empty">
-          <h3>Planning something sweet?</h3>
-          <p>Pricing is being updated. Send us the details and we will help you plan your order.</p>
-          {page.cta_label && hasCtaLink && (
-            <a href={ctaHref} class="btn btn-secondary" {...pageEdit.cta_href}>
-              <span {...pageEdit.cta_label}>{page.cta_label}</span>
-            </a>
-          )}
-        </div>
-      )}
-
-      {page.closing_note && (
-        <p class="pricing-note" {...pageEdit.closing_note}>{page.closing_note}</p>
-      )}
-    </section>
+<section id="pricing" class="pricing-layout" aria-labelledby="pricing-title">
+  <div class="pricing-intro">
+    {page.eyebrow && (
+      <span class="pricing-eyebrow" {...pageEdit.eyebrow}>{page.eyebrow}</span>
+    )}
+    <h2 id="pricing-title" {...pageEdit.title}>{page.title}</h2>
+    {page.description && <p {...pageEdit.description}>{page.description}</p>}
+    {page.cta_label && hasCtaLink && (
+      <a
+        href={ctaHref}
+        class="btn btn-secondary pricing-cta"
+        {...pageEdit.cta_href}
+      >
+        <span {...pageEdit.cta_label}>{page.cta_label}</span>
+      </a>
+    )}
   </div>
-</BakeryLayout>
+
+  <div class="pricing-list" aria-labelledby="pricing-heading">
+    <div class="pricing-list-header">
+      <h3 id="pricing-heading" {...pageEdit.list_title}>{listTitle}</h3>
+      {page.list_note && <span {...pageEdit.list_note}>{page.list_note}</span>}
+    </div>
+
+    {pricingItems.length > 0 ? (
+      pricingItems.map((item) => {
+        const itemOptions = optionsByItem.get(item.data.id) ?? [];
+        const hasLabeledOptions = itemOptions.some((option) => option.data.label);
+
+        return (
+          <article class="pricing-item">
+            <h4 {...item.edit.title}>{item.data.title}</h4>
+            <div class="pricing-item-copy">
+              {item.data.subtitle && (
+                <strong {...item.edit.subtitle}>{item.data.subtitle}</strong>
+              )}
+              {item.data.description && (
+                <p {...item.edit.description}>{item.data.description}</p>
+              )}
+            </div>
+            {itemOptions.length > 0 ? (
+              <div
+                class:list={[
+                  "price",
+                  { "price-options": itemOptions.length > 1 || hasLabeledOptions },
+                ]}
+              >
+                {itemOptions.map((option) => (
+                  <span>
+                    {option.data.label && (
+                      <strong {...option.edit.label}>{option.data.label}</strong>
+                    )}
+                    <span {...option.edit.amount}>
+                      {priceFormatter.format(option.data.amount)}
+                    </span>
+                  </span>
+                ))}
+              </div>
+            ) : hasCtaLink ? (
+              <a
+                href={ctaHref}
+                class="price price-inquiry"
+                aria-label={`Ask us about ${item.data.title}`}
+              >Ask us</a>
+            ) : (
+              <span class="price price-inquiry">Ask us</span>
+            )}
+          </article>
+        );
+      })
+    ) : (
+      <div class="pricing-empty">
+        <h4>Planning something sweet?</h4>
+        <p>Pricing is being updated. Send us the details and we will help you plan your order.</p>
+        {page.cta_label && hasCtaLink && (
+          <a href={ctaHref} class="btn btn-secondary" {...pageEdit.cta_href}>
+            <span {...pageEdit.cta_label}>{page.cta_label}</span>
+          </a>
+        )}
+      </div>
+    )}
+
+    {page.closing_note && (
+      <p class="pricing-note" {...pageEdit.closing_note}>{page.closing_note}</p>
+    )}
+  </div>
+</section>
 
 <style>
   .pricing-layout {
     display: grid;
     grid-template-columns: minmax(320px, 0.78fr) minmax(0, 1.22fr);
     min-height: calc(100vh - 77px);
+    border-top: 4px solid var(--color-choco);
+    scroll-margin-top: 5rem;
   }
 
   .pricing-intro {
@@ -182,7 +182,7 @@ const priceFormatter = new Intl.NumberFormat("en-US", {
     text-transform: uppercase;
   }
 
-  .pricing-intro h1 {
+  .pricing-intro h2 {
     margin: 1.2rem 0 1.5rem;
     color: var(--color-cream);
     font-size: clamp(4rem, 8vw, 7.5rem);
@@ -217,7 +217,7 @@ const priceFormatter = new Intl.NumberFormat("en-US", {
     border-bottom: 3px solid var(--color-choco);
   }
 
-  .pricing-list-header h2 {
+  .pricing-list-header h3 {
     font-size: 2.3rem;
   }
 
@@ -237,7 +237,7 @@ const priceFormatter = new Intl.NumberFormat("en-US", {
     border-bottom: 3px solid var(--color-choco);
   }
 
-  .pricing-item h3 {
+  .pricing-item h4 {
     font-size: clamp(1.9rem, 3vw, 2.8rem);
   }
 
@@ -316,7 +316,7 @@ const priceFormatter = new Intl.NumberFormat("en-US", {
     box-shadow: var(--shadow-neo);
   }
 
-  .pricing-empty h3 {
+  .pricing-empty h4 {
     font-size: 2rem;
   }
 
@@ -357,7 +357,7 @@ const priceFormatter = new Intl.NumberFormat("en-US", {
       border-bottom: 3px solid var(--color-choco);
     }
 
-    .pricing-intro h1 {
+    .pricing-intro h2 {
       font-size: clamp(3.8rem, 19vw, 5.5rem);
     }
 

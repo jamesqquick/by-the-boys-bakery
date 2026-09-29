@@ -28,13 +28,7 @@ const { currentPath = "/" } = Astro.props;
   <ul class="nav-links">
     <li><a href="/" class:list={[{ active: currentPath === "/" }]}>Home</a></li>
     <li><a href="/#treats">Our Treats</a></li>
-    <li>
-      <a
-        href="/pricing"
-        class:list={[{ active: currentPath === "/pricing" }]}
-        aria-current={currentPath === "/pricing" ? "page" : undefined}
-      >Pricing</a>
-    </li>
+    <li><a href="/#pricing">Pricing</a></li>
     <li><a href="/#about">About</a></li>
     <li><a href="/inquiry" class="nav-cta">Place an Inquiry</a></li>
   </ul>
