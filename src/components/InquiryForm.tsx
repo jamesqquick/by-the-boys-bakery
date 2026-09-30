@@ -1,6 +1,7 @@
 import { actions, isInputError } from "astro:actions";
 import { withState } from "@astrojs/react/actions";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
+import { Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,20 +13,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
+import { formatInquiryPrice, type InquiryPackage } from "@/lib/inquiry-pricing";
 
 function defaultDate() {
   const d = new Date();
   d.setDate(d.getDate() + 7);
   return d.toISOString().split("T")[0]; // YYYY-MM-DD
 }
-
-const TREATS = [
-  { id: "cookies", label: "Cookies" },
-  { id: "brownies", label: "Brownies" },
-  { id: "cupcakes", label: "Cupcakes" },
-  { id: "cakes", label: "Cakes" },
-] as const;
 
 type InquiryResult = Awaited<ReturnType<typeof actions.submitInquiry>>;
 type InquiryState = InquiryResult | { data: undefined; error: undefined };
@@ -35,10 +29,35 @@ const submitInquiry = withState(actions.submitInquiry) as (
   formData: FormData,
 ) => Promise<InquiryState>;
 
-export default function InquiryForm() {
+export default function InquiryForm({ packages }: { packages: InquiryPackage[] }) {
   const [state, action, pending] = useActionState<InquiryState, FormData>(
     submitInquiry,
     { data: undefined, error: undefined },
+  );
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const stepQuantity = (key: string, delta: number) => {
+    setQuantities((current) => ({
+      ...current,
+      [key]: Math.max(0, Math.min(50, (current[key] ?? 0) + delta)),
+    }));
+  };
+  const selected = packages.filter((item) => (quantities[item.key] ?? 0) > 0);
+  const order = selected.map((item) => ({
+    key: item.key,
+    quantity: quantities[item.key],
+    unitAmount: item.amount,
+  }));
+  const totalCents = selected.reduce(
+    (sum, item) => sum + Math.round(item.amount * 100) * quantities[item.key],
+    0,
+  );
+  const groups = Array.from(new Set(packages.map((item) => item.itemId))).map(
+    (itemId) => ({
+      itemId,
+      title: packages.find((item) => item.itemId === itemId)!.title,
+      description: packages.find((item) => item.itemId === itemId)?.description,
+      options: packages.filter((item) => item.itemId === itemId),
+    }),
   );
 
   if (state.data?.success) {
@@ -60,6 +79,7 @@ export default function InquiryForm() {
 
   return (
     <form className="inquiry-form" action={action}>
+      <input type="hidden" name="order" value={JSON.stringify(order)} />
 
       {/* ── Section 1: Contact ── */}
       <div className="form-section">
@@ -121,37 +141,7 @@ export default function InquiryForm() {
             )}
           </div>
           <div className="field">
-            <Label htmlFor="date">
-              When do you need it by? <span className="required">*</span>
-            </Label>
-            <Input id="date" name="date" type="date" defaultValue={defaultDate()} required aria-describedby={fieldErrors.date ? "date-error" : undefined} />
-            <p className="field-hint">We typically need at least 5 to 7 days notice to plan and bake.</p>
-            {fieldErrors.date && (
-              <p id="date-error" className="field-error">{fieldErrors.date.join(", ")}</p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Section 3: What you want ── */}
-      <div className="form-section">
-        <p className="form-section-label" data-step="3">What You're Looking For</p>
-        <div className="field" style={{ marginBottom: "1.5rem" }}>
-          <Label>Which treats interest you? <span className="optional">(check all that apply)</span></Label>
-          <div className="treat-grid">
-            {TREATS.map((treat) => (
-              <label key={treat.id} className="treat-option">
-                <Checkbox name="treats" value={treat.id} className="treat-checkbox" />
-                <span className="treat-name">{treat.label}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-        <div className="field-row two-col">
-          <div className="field">
-            <Label htmlFor="quantity">
-              Roughly how many people? <span className="required">*</span>
-            </Label>
+            <Label htmlFor="quantity">How many people? <span className="required">*</span></Label>
             <Select name="quantity" required>
               <SelectTrigger id="quantity" aria-describedby={fieldErrors.quantity ? "quantity-error" : undefined}>
                 <SelectValue placeholder="Pick one..." />
@@ -159,9 +149,8 @@ export default function InquiryForm() {
               <SelectContent>
                 <SelectItem value="1-4">Just me / my household (1-4)</SelectItem>
                 <SelectItem value="5-10">Small group (5-10)</SelectItem>
-                <SelectItem value="11-25">Party (11-25)</SelectItem>
-                <SelectItem value="26-50">Larger event (26-50)</SelectItem>
-                <SelectItem value="50+">Big event (50+)</SelectItem>
+                <SelectItem value="11-24">Party (11-24)</SelectItem>
+                <SelectItem value="25+">Large event (25+)</SelectItem>
                 <SelectItem value="unsure">Not sure yet</SelectItem>
               </SelectContent>
             </Select>
@@ -169,25 +158,90 @@ export default function InquiryForm() {
               <p id="quantity-error" className="field-error">{fieldErrors.quantity.join(", ")}</p>
             )}
           </div>
-          <div className="field">
-            <Label htmlFor="budget">
-              Rough budget?{" "}
-              <span className="optional">(helps us plan)</span>
-            </Label>
-            <Select name="budget">
-              <SelectTrigger id="budget">
-                <SelectValue placeholder="Pick one..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="under-30">Under $30</SelectItem>
-                <SelectItem value="30-60">$30 to $60</SelectItem>
-                <SelectItem value="60-100">$60 to $100</SelectItem>
-                <SelectItem value="100-200">$100 to $200</SelectItem>
-                <SelectItem value="200+">$200+</SelectItem>
-                <SelectItem value="unsure">No idea, you tell me!</SelectItem>
-              </SelectContent>
-            </Select>
+        </div>
+        <div className="field" style={{ marginTop: "1.5rem" }}>
+          <Label htmlFor="date">
+            When do you need it by? <span className="required">*</span>
+          </Label>
+          <Input id="date" name="date" type="date" defaultValue={defaultDate()} required aria-describedby={fieldErrors.date ? "date-error" : undefined} />
+          <p className="field-hint">We typically need at least 5 to 7 days notice to plan and bake.</p>
+          {fieldErrors.date && (
+            <p id="date-error" className="field-error">{fieldErrors.date.join(", ")}</p>
+          )}
+        </div>
+      </div>
+
+      {/* ── Section 3: What you want ── */}
+      <div className="form-section">
+        <p className="form-section-label" data-step="3">Choose Your Treats</p>
+        <p className="field-hint" style={{ marginBottom: "1.25rem" }}>
+          Enter how many of each package you'd like. Leave everything at zero for a custom request.
+        </p>
+        {groups.length > 0 ? (
+          <div className="package-list">
+            {groups.map((group) => (
+              <div key={group.itemId} className="package-group">
+                <h3>{group.title}</h3>
+                {group.description && <p>{group.description}</p>}
+                {group.options.map((item) => (
+                  <div key={item.key} className="package-option">
+                    <Label htmlFor={`package-${item.key}`}>
+                      <span>{item.label}</span>
+                      <span className="package-price">{formatInquiryPrice(item.amount)}</span>
+                    </Label>
+                    <div className="package-stepper">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon-lg"
+                        aria-label={`Decrease ${group.title} ${item.label} quantity`}
+                        disabled={(quantities[item.key] ?? 0) === 0}
+                        onClick={() => stepQuantity(item.key, -1)}
+                      >
+                        <Minus aria-hidden="true" />
+                      </Button>
+                      <Input
+                        id={`package-${item.key}`}
+                        type="number"
+                        min={0}
+                        max={50}
+                        step={1}
+                        inputMode="numeric"
+                        value={quantities[item.key] ?? 0}
+                        onChange={(event) => {
+                          const value = event.currentTarget.valueAsNumber;
+                          setQuantities((current) => ({
+                            ...current,
+                            [item.key]: Number.isFinite(value) ? Math.max(0, Math.min(50, Math.floor(value))) : 0,
+                          }));
+                        }}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon-lg"
+                        aria-label={`Increase ${group.title} ${item.label} quantity`}
+                        disabled={(quantities[item.key] ?? 0) === 50}
+                        onClick={() => stepQuantity(item.key, 1)}
+                      >
+                        <Plus aria-hidden="true" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
+        ) : (
+          <p className="field-hint">Package pricing is being updated. Tell us what you'd like in the notes below.</p>
+        )}
+        <div className="estimate" aria-live="polite">
+          {selected.length > 0 ? (
+            <div className="estimate-total"><span>Estimated total</span><span>{formatInquiryPrice(totalCents / 100)}</span></div>
+          ) : (
+            <strong>No packages selected yet</strong>
+          )}
+          <p>Custom designs and extras may change the final quote. We'll confirm the price before anything is finalized.</p>
         </div>
       </div>
 
@@ -196,12 +250,13 @@ export default function InquiryForm() {
         <p className="form-section-label" data-step="4">Anything Else?</p>
         <div className="field">
           <Label htmlFor="notes">
-            Message / Notes <span className="optional">(optional)</span>
+            Message / Notes <span className="optional">{selected.length === 0 ? "(required for custom requests)" : "(optional)"}</span>
           </Label>
           <Textarea
             id="notes"
             name="notes"
             placeholder="Allergies, flavor preferences, special requests, theme colors, questions, anything you want us to know!"
+            required={selected.length === 0}
           />
         </div>
       </div>

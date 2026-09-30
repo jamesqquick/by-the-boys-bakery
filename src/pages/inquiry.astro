@@ -1,11 +1,33 @@
 ---
+import { getEmDashCollection } from "emdash";
+import type { PricingItem, PricingOption } from "../../.emdash/types";
 import BakeryLayout from "../layouts/BakeryLayout.astro";
 import InquiryForm from "../components/InquiryForm";
+import { makeInquiryPackages } from "../lib/inquiry-pricing";
+
+const [
+  { entries: items, error: itemsError, cacheHint: itemsHint },
+  { entries: options, error: optionsError, cacheHint: optionsHint },
+] = await Promise.all([
+  getEmDashCollection("pricing_items", { status: "published", orderBy: { sort: "asc" } }),
+  getEmDashCollection("pricing_options", { status: "published", orderBy: { sort: "asc" } }),
+]);
+
+if (itemsError || optionsError) throw itemsError ?? optionsError;
+if (Astro.cache?.enabled) {
+  Astro.cache.set(itemsHint);
+  Astro.cache.set(optionsHint);
+}
+
+const packages = makeInquiryPackages(
+  items.map((item) => item.data as PricingItem),
+  options.map((option) => option.data as PricingOption),
+);
 ---
 
 <BakeryLayout
   title="Place an Inquiry"
-  description="Tell us the occasion, flavor, and quantity. We'll let you know what we can make."
+  description="Choose your treats, see an estimated subtotal, and tell us what you'd like baked."
   currentPath="/inquiry"
 >
   <!-- Page header -->
@@ -14,8 +36,8 @@ import InquiryForm from "../components/InquiryForm";
       <span class="page-eyebrow">Let's Make Something</span>
       <h1>Place an Inquiry</h1>
       <p class="page-header-desc">
-        Fill out the form and we'll get back to you within 48 hours. Tell us
-        what you need and we'll take it from there.
+        Pick your packages to see an estimate, or tell us about a custom request.
+        We'll get back to you within 48 hours to confirm the details.
       </p>
     </div>
     <div class="page-header-aside">
@@ -31,7 +53,7 @@ import InquiryForm from "../components/InquiryForm";
 
   <!-- Form -->
   <div class="form-wrap">
-    <InquiryForm client:load />
+    <InquiryForm packages={packages} client:load />
   </div>
 </BakeryLayout>
 
@@ -239,58 +261,143 @@ import InquiryForm from "../components/InquiryForm";
     margin-left: 4px;
   }
 
-  /* Treat checkbox grid */
-  .treat-grid {
+  .package-list {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    margin-top: 0.5rem;
+    gap: 1rem;
   }
 
-  .treat-option {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.75rem 1rem;
+  .package-group {
+    padding: 1.25rem;
     background: var(--color-cream);
     border: 3px solid var(--color-choco);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background 0.15s, box-shadow 0.15s;
-    user-select: none;
+    border-radius: 16px;
   }
 
-  .treat-option:hover {
+  .package-group h3 {
+    font-family: var(--font-family-display);
+    font-size: 1.5rem;
+  }
+
+  .package-group > p {
+    margin: 0.25rem 0 1rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-muted);
+  }
+
+  .package-option {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-top: 2px solid var(--color-choco);
+    font-weight: 800;
+  }
+
+  .package-option label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.125rem 0.65rem;
+    margin-bottom: 0;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  .package-option .package-price {
+    white-space: nowrap;
+    font-weight: 800;
+  }
+
+  .package-stepper {
+    display: grid;
+    grid-template-columns: 2.75rem 3rem 2.75rem;
+    border: 3px solid var(--color-choco);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .package-option .package-stepper input {
+    width: 100%;
+    height: 2.75rem;
+    padding: 0.25rem 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    appearance: textfield;
+    text-align: center;
+  }
+
+  .package-option .package-stepper input::-webkit-inner-spin-button,
+  .package-option .package-stepper input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .package-option .package-stepper input:focus {
+    box-shadow: none;
+  }
+
+  .package-option .package-stepper input:focus-visible {
+    outline: 2px solid var(--color-strawberry);
+    outline-offset: -2px;
+  }
+
+  .package-stepper button {
+    width: 100%;
+    min-width: 0;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
     background: var(--color-butter);
+    color: var(--color-choco);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .package-stepper button:first-child {
+    border-right: 2px solid var(--color-choco);
+  }
+
+  .package-stepper button:last-child {
+    border-left: 2px solid var(--color-choco);
+  }
+
+  .package-stepper button:focus-visible {
+    outline: 2px solid var(--color-strawberry);
+    outline-offset: -3px;
+  }
+
+  .package-stepper button:not(:disabled):hover {
+    background: var(--color-sky);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .estimate {
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    border: 3px solid var(--color-choco);
+    border-radius: 16px;
+    background: var(--color-sky);
     box-shadow: var(--shadow-neo-sm);
   }
 
-  .treat-checkbox {
-    width: 18px !important;
-    height: 18px !important;
-    flex-shrink: 0;
-    border: 3px solid var(--color-choco) !important;
-    border-radius: 4px !important;
-    accent-color: var(--color-strawberry);
-  }
-
-  .treat-text {
+  .estimate-total {
     display: flex;
-    flex-direction: column;
-  }
-
-  .treat-name {
-    font-size: 0.88rem;
+    justify-content: space-between;
+    gap: 1rem;
     font-weight: 900;
-    color: var(--color-choco);
-    line-height: 1.2;
+    font-size: 1.25rem;
   }
 
-  .treat-sub {
-    font-size: 0.72rem;
+  .estimate p {
+    margin-top: 0.5rem;
+    color: var(--color-choco);
+    font-size: 0.82rem;
     font-weight: 700;
-    color: var(--color-muted);
-    margin-top: 0.1rem;
   }
 
   /* Form footer */
@@ -410,11 +517,6 @@ import InquiryForm from "../components/InquiryForm";
       grid-template-columns: minmax(0, 1fr);
     }
 
-    /* Treat grid → single column */
-    .treat-grid {
-      grid-template-columns: 1fr;
-    }
-
     /* Form footer: stack vertically */
     .form-footer {
       flex-direction: column;
@@ -433,6 +535,16 @@ import InquiryForm from "../components/InquiryForm";
 
     .form-success {
       padding: 2.5rem 1.5rem;
+    }
+  }
+
+  @media (max-width: 359px) {
+    .package-option {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .package-option .package-stepper {
+      justify-self: end;
     }
   }
 
