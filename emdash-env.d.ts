@@ -17,6 +17,7 @@ export interface Homepage {
   hero_cta_href?: string;
   hero_note?: string;
   hero_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
+  metadata_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
   hero_sticker_1?: string;
   hero_sticker_2?: string;
   ticker_items?: unknown;
@@ -38,7 +39,6 @@ export interface Homepage {
   cta_cta_label?: string;
   cta_cta_href?: string;
   cta_note?: string;
-  metadata_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;
@@ -51,8 +51,8 @@ export interface Page {
   slug: string | null;
   status: string;
   title: string;
-  content?: PortableTextBlock[];
   metadata_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
+  content?: PortableTextBlock[];
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;
@@ -66,9 +66,58 @@ export interface Post {
   status: string;
   title: string;
   featured_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
+  metadata_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
   content?: PortableTextBlock[];
   excerpt?: string;
-  metadata_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface PricingItem {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  subtitle?: string;
+  description?: string;
+  sort?: number;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface PricingOption {
+  id: string;
+  slug: string | null;
+  status: string;
+  label?: string;
+  item: string;
+  amount: number;
+  sort?: number;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface PricingPage {
+  id: string;
+  slug: string | null;
+  status: string;
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  cta_label?: string;
+  cta_href?: string;
+  list_title?: string;
+  list_note?: string;
+  closing_note?: string;
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;
@@ -110,6 +159,9 @@ declare module "emdash" {
     homepage: Homepage;
     pages: Page;
     posts: Post;
+    pricing_items: PricingItem;
+    pricing_options: PricingOption;
+    pricing_page: PricingPage;
     treats: Treat;
     values: Value;
   }

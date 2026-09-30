@@ -98,6 +98,52 @@
 			]
 		},
 		{
+			"slug": "pricing_page",
+			"label": "Pricing Page",
+			"labelSingular": "Pricing Page",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{ "slug": "eyebrow", "label": "Eyebrow", "type": "string" },
+				{ "slug": "title", "label": "Title", "type": "string", "required": true },
+				{ "slug": "description", "label": "Description", "type": "text" },
+				{ "slug": "cta_label", "label": "CTA Label", "type": "string" },
+				{ "slug": "cta_href", "label": "CTA Link", "type": "string" },
+				{ "slug": "list_title", "label": "List Title", "type": "string" },
+				{ "slug": "list_note", "label": "List Note", "type": "string" },
+				{ "slug": "closing_note", "label": "Closing Note", "type": "text" }
+			]
+		},
+		{
+			"slug": "pricing_items",
+			"label": "Pricing Items",
+			"labelSingular": "Pricing Item",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true },
+				{ "slug": "subtitle", "label": "Subtitle", "type": "string" },
+				{ "slug": "description", "label": "Description", "type": "text" },
+				{ "slug": "sort", "label": "Sort Order", "type": "integer" }
+			]
+		},
+		{
+			"slug": "pricing_options",
+			"label": "Pricing Options",
+			"labelSingular": "Pricing Option",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{
+					"slug": "item",
+					"label": "Pricing Item",
+					"type": "reference",
+					"required": true,
+					"options": { "collection": "pricing_items" }
+				},
+				{ "slug": "label", "label": "Label", "type": "string" },
+				{ "slug": "amount", "label": "Amount", "type": "number", "required": true },
+				{ "slug": "sort", "label": "Sort Order", "type": "integer" }
+			]
+		},
+		{
 			"slug": "homepage",
 			"label": "Homepage",
 			"labelSingular": "Homepage",
@@ -419,6 +465,123 @@
 					"title": "Made with Purpose",
 					"description": "Every order is a family affair. James and the boys bake every batch together. That's how they spend their weekends.",
 					"sort": 3
+				}
+			}
+		],
+		"pricing_page": [
+			{
+				"id": "pricing-page",
+				"slug": "pricing",
+				"status": "published",
+				"data": {
+					"eyebrow": "The Good Stuff",
+					"title": "Simple prices.",
+					"description": "These prices are intentionally friendly. By the Boys Bakery is a small hobby bakery, made for fun, family, and sharing good food. Prices mainly help cover ingredients, packaging, and supplies.",
+					"cta_label": "Start an Inquiry",
+					"cta_href": "/inquiry",
+					"list_title": "Pick a favorite",
+					"list_note": "Simple decoration included",
+					"closing_note": "Looking for a detailed design, specialty filling, fondant, or a character cake? Send an inquiry and we will let you know what is possible."
+				}
+			}
+		],
+		"pricing_items": [
+			{
+				"id": "pricing-item-cupcakes",
+				"slug": "cupcakes",
+				"status": "published",
+				"data": {
+					"title": "Cupcakes",
+					"subtitle": "12 regular or 24 mini cupcakes",
+					"description": "Includes one cake flavor, one frosting flavor, and a simple topping such as sprinkles, crumbs, drizzle, or candy.",
+					"sort": 1
+				}
+			},
+			{
+				"id": "pricing-item-cookies",
+				"slug": "cookies",
+				"status": "published",
+				"data": {
+					"title": "Cookies",
+					"subtitle": "Per dozen",
+					"description": "Includes standard bakery-style cookies with mix-ins such as chocolate chips, M&M's, peanut butter, pretzels, or seasonal add-ins.",
+					"sort": 2
+				}
+			},
+			{
+				"id": "pricing-item-brownies",
+				"slug": "brownies",
+				"status": "published",
+				"data": {
+					"title": "Brownies",
+					"subtitle": "Per dozen",
+					"description": "Includes fudgy brownies with a simple topping or buttercream.",
+					"sort": 3
+				}
+			},
+			{
+				"id": "pricing-item-cakes",
+				"slug": "cakes",
+				"status": "published",
+				"data": {
+					"title": "Cakes",
+					"subtitle": "Two layers, simple decoration",
+					"description": "Includes cake, frosting, and simple decoration. More detailed designs, specialty fillings, fondant, or character cakes may need a separate quote.",
+					"sort": 4
+				}
+			}
+		],
+		"pricing_options": [
+			{
+				"id": "pricing-option-cupcakes",
+				"slug": "cupcakes-base",
+				"status": "published",
+				"data": {
+					"item": "$ref:pricing-item-cupcakes",
+					"amount": 28,
+					"sort": 1
+				}
+			},
+			{
+				"id": "pricing-option-cookies",
+				"slug": "cookies-base",
+				"status": "published",
+				"data": {
+					"item": "$ref:pricing-item-cookies",
+					"amount": 28,
+					"sort": 1
+				}
+			},
+			{
+				"id": "pricing-option-brownies",
+				"slug": "brownies-base",
+				"status": "published",
+				"data": {
+					"item": "$ref:pricing-item-brownies",
+					"amount": 28,
+					"sort": 1
+				}
+			},
+			{
+				"id": "pricing-option-cake-6-inch",
+				"slug": "cake-6-inch",
+				"status": "published",
+				"data": {
+					"item": "$ref:pricing-item-cakes",
+					"label": "6-inch",
+					"amount": 30,
+					"sort": 1
+				}
+			},
+			{
+				"id": "pricing-option-cake-8-inch",
+				"slug": "cake-8-inch",
+				"status": "published",
+				"data": {
+					"item": "$ref:pricing-item-cakes",
+					"label": "8-inch",
+					"amount": 40,
+					"sort": 2
 				}
 			}
 		],
