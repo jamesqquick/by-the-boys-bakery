@@ -1,0 +1,21 @@
+src/lib/inquiry-pricing.test.mjs
+  s_571f6f75e6e543::t_4571fd35ce4496 1-63
+src/lib/inquiry-pricing.ts
+  s_571f6f75e6e543::t_65d62f653d0e11 1-117
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "6a141f69064d4dbf7c644322eb9a6091241fafd7",
+  "prompts": {},
+  "sessions": {
+    "s_571f6f75e6e543": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f0ce8014dffejUS1UONq3eCR2m",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "James Q Quick <james@learnwithjason.dev>"
+    }
+  }
+}
