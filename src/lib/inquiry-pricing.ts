@@ -1,7 +1,7 @@
 import type { PricingItem, PricingOption } from "../../.emdash/types";
 
 type Item = Pick<PricingItem, "id" | "slug" | "title" | "subtitle" | "description">;
-type Option = Pick<PricingOption, "id" | "item" | "label" | "amount">;
+type Option = Pick<PricingOption, "id" | "label" | "amount"> & { itemId: string | null };
 
 export type InquiryPackage = {
   key: string;
@@ -27,10 +27,10 @@ export class InquiryPricingError extends Error {
 export function makeInquiryPackages(items: Item[], options: Option[]): InquiryPackage[] {
   const optionsByItem = new Map<string, Option[]>();
   for (const option of options) {
-    if (!Number.isFinite(option.amount) || option.amount < 0) continue;
-    const itemOptions = optionsByItem.get(option.item) ?? [];
+    if (!option.itemId || !Number.isFinite(option.amount) || option.amount < 0) continue;
+    const itemOptions = optionsByItem.get(option.itemId) ?? [];
     itemOptions.push(option);
-    optionsByItem.set(option.item, itemOptions);
+    optionsByItem.set(option.itemId, itemOptions);
   }
 
   return items.flatMap((item) =>

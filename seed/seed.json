@@ -136,7 +136,7 @@
 					"label": "Pricing Item",
 					"type": "reference",
 					"required": true,
-					"options": { "collection": "pricing_items" }
+					"validation": { "targetCollection": "pricing_items" }
 				},
 				{ "slug": "label", "label": "Label", "type": "string" },
 				{ "slug": "amount", "label": "Amount", "type": "number", "required": true },

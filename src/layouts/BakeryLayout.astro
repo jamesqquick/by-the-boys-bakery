@@ -1,5 +1,5 @@
 ---
-import "../styles/app.css";
+import appStylesUrl from "../styles/app.css?url";
 import { EmDashHead, EmDashBodyStart, EmDashBodyEnd } from "emdash/ui";
 import { createPublicPageContext } from "emdash/page";
 import { getEmDashEntry, getSiteSettings } from "emdash";
@@ -48,6 +48,7 @@ const pageCtx = createPublicPageContext({
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
     <EmDashHead page={pageCtx} />
+    <link rel="stylesheet" href={appStylesUrl} />
   </head>
   <body>
     <EmDashBodyStart page={pageCtx} />

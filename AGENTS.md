@@ -7,6 +7,8 @@ npx emdash dev        # Start dev server (runs migrations, seeds, generates type
 npx emdash types      # Regenerate TypeScript types from schema
 ```
 
+This checkout uses Cloudflare D1/R2 with `remoteBindings: true`. Do not run `npx emdash dev` or another command that applies migrations/seeds unless the target database is explicitly confirmed; use a local-only binding configuration for local CMS work.
+
 The admin UI is at `http://localhost:4321/_emdash/admin`.
 
 ## Key Files

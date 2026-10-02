@@ -1,27 +1,29 @@
 ---
 import { getEmDashCollection } from "emdash";
-import type { PricingItem, PricingOption } from "../../.emdash/types";
+import type { PricingItem } from "../../.emdash/types";
+import { getPricingOptions } from "../lib/pricing-options";
 import BakeryLayout from "../layouts/BakeryLayout.astro";
 import InquiryForm from "../components/InquiryForm";
 import { makeInquiryPackages } from "../lib/inquiry-pricing";
 
 const [
   { entries: items, error: itemsError, cacheHint: itemsHint },
-  { entries: options, error: optionsError, cacheHint: optionsHint },
+  optionsResult,
 ] = await Promise.all([
   getEmDashCollection("pricing_items", { status: "published", orderBy: { sort: "asc" } }),
-  getEmDashCollection("pricing_options", { status: "published", orderBy: { sort: "asc" } }),
+  getPricingOptions("published"),
 ]);
+const { entries: options, error: optionsError, cacheHints: optionsHints } = optionsResult;
 
 if (itemsError || optionsError) throw itemsError ?? optionsError;
 if (Astro.cache?.enabled) {
   Astro.cache.set(itemsHint);
-  Astro.cache.set(optionsHint);
+  for (const hint of optionsHints) Astro.cache.set(hint);
 }
 
 const packages = makeInquiryPackages(
   items.map((item) => item.data as PricingItem),
-  options.map((option) => option.data as PricingOption),
+  options.map((option) => option.data),
 );
 ---
 

@@ -2,7 +2,8 @@ import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro/zod";
 import { env } from "cloudflare:workers";
 import { getEmDashCollection } from "emdash";
-import type { PricingItem, PricingOption } from "../../.emdash/types";
+import type { PricingItem } from "../../.emdash/types";
+import { getPricingOptions } from "../lib/pricing-options";
 import {
 	formatInquiryPrice,
 	InquiryPricingError,
@@ -27,7 +28,7 @@ export const server = {
 			const { name, email, phone, occasion, date, quantity, order, notes } = input;
 			const [itemsResult, optionsResult] = await Promise.all([
 				getEmDashCollection("pricing_items", { status: "published", orderBy: { sort: "asc" } }),
-				getEmDashCollection("pricing_options", { status: "published", orderBy: { sort: "asc" } }),
+				getPricingOptions("published"),
 			]);
 			if (itemsResult.error || optionsResult.error) {
 				throw new ActionError({
@@ -42,7 +43,7 @@ export const server = {
 					order,
 					makeInquiryPackages(
 						itemsResult.entries.map((item) => item.data as PricingItem),
-						optionsResult.entries.map((option) => option.data as PricingOption),
+						optionsResult.entries.map((option) => option.data),
 					),
 					notes ?? "",
 				);

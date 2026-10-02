@@ -1,5 +1,5 @@
 ---
-import "../styles/global.css";
+import globalStylesUrl from "../styles/global.css?url";
 import { getEmDashEntry, getMenu, getSiteSettings } from "emdash";
 import {
 	WidgetArea,
@@ -59,6 +59,7 @@ const pageCtx = createPublicPageContext({
 		{pageDescription && <meta name="description" content={pageDescription} />}
 		{canonical && <link rel="canonical" href={canonical} />}
 		<EmDashHead page={pageCtx} />
+		<link rel="stylesheet" href={globalStylesUrl} />
 	</head>
 	<body>
 		<EmDashBodyStart page={pageCtx} />

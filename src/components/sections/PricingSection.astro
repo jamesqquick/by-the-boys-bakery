@@ -1,6 +1,7 @@
 ---
 import { sanitizeHref } from "emdash";
-import type { PricingItem, PricingOption, PricingPage } from "../../../.emdash/types";
+import type { PricingItem, PricingPage } from "../../../.emdash/types";
+import type { EditablePricingOption } from "../../lib/pricing-options";
 
 type EditableEntry<T> = {
   data: T;
@@ -25,7 +26,7 @@ interface Props {
   page?: PricingPageContent;
   pageEdit?: Record<string, Record<string, unknown>>;
   pricingItems?: EditableEntry<PricingItem>[];
-  pricingOptions?: EditableEntry<PricingOption>[];
+  pricingOptions?: EditablePricingOption[];
 }
 
 const {
@@ -45,12 +46,13 @@ const page = pageProp ?? {
 const ctaHref = sanitizeHref(page.cta_href);
 const hasCtaLink = Boolean(page.cta_href && ctaHref !== "#");
 const listTitle = page.list_title || "Pricing";
-const optionsByItem = new Map<string, EditableEntry<PricingOption>[]>();
+const optionsByItem = new Map<string, EditablePricingOption[]>();
 
 for (const option of pricingOptions) {
-  const itemOptions = optionsByItem.get(option.data.item) ?? [];
+  if (!option.data.itemId) continue;
+  const itemOptions = optionsByItem.get(option.data.itemId) ?? [];
   itemOptions.push(option);
-  optionsByItem.set(option.data.item, itemOptions);
+  optionsByItem.set(option.data.itemId, itemOptions);
 }
 
 const priceFormatter = new Intl.NumberFormat("en-US", {

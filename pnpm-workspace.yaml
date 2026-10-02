@@ -14,3 +14,6 @@ minimumReleaseAgeExclude:
   - emdash
   - "@emdash-cms/*"
 blockExoticSubdeps: true
+
+overrides:
+  "@napi-rs/wasm-runtime": ^1.2.4
