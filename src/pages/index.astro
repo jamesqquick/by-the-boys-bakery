@@ -2,7 +2,6 @@
 import { getEmDashEntry, getEmDashCollection } from "emdash";
 import type {
   Homepage,
-  PricingItem,
   PricingPage,
   Treat,
   Value,
@@ -16,8 +15,11 @@ import PricingSection from "../components/sections/PricingSection.astro";
 import ValuesSection from "../components/sections/ValuesSection.astro";
 import CtaSection from "../components/sections/CtaSection.astro";
 import GallerySection from "../components/sections/GallerySection.astro";
+import CampaignPromo from "../components/campaigns/CampaignPromo.astro";
 import { getMetadataImage } from "../lib/metadata";
 import { getPricingOptions } from "../lib/pricing-options";
+import type { CatalogProduct } from "../lib/seasonal-campaigns";
+import { getPromotedCampaign } from "../lib/seasonal-campaigns";
 
 const { entry: home, cacheHint: homeHint } = await getEmDashEntry("homepage", "home");
 const { entries: treats, cacheHint: treatsHint } = await getEmDashCollection("treats", {
@@ -40,6 +42,7 @@ const {
   error: pricingOptionsError,
   cacheHints: pricingOptionsHints,
 } = pricingOptionsResult;
+const { campaign: promotedCampaign, cacheHints: campaignHints } = await getPromotedCampaign();
 
 const pricingError = pricingPageError ?? pricingItemsError ?? pricingOptionsError;
 if (pricingError) throw pricingError;
@@ -51,6 +54,7 @@ if (Astro.cache?.enabled) {
   Astro.cache.set(pricingPageHint);
   Astro.cache.set(pricingItemsHint);
   for (const hint of pricingOptionsHints) Astro.cache.set(hint);
+  for (const hint of campaignHints) Astro.cache.set(hint);
 }
 
 const d = home?.data as Homepage | undefined;
@@ -59,9 +63,12 @@ const valueEntries = values as unknown as { data: Value }[];
 const pricingPageData = pricingPage?.data as PricingPage | undefined;
 const pricingPageEdit = (pricingPage?.edit ?? {}) as Record<string, Record<string, unknown>>;
 const pricingItemEntries = pricingItems as unknown as {
-  data: PricingItem;
+  data: CatalogProduct;
   edit: Record<string, Record<string, unknown>>;
 }[];
+const standardPricingItems = pricingItemEntries.filter(
+  (item) => item.data.show_in_standard_catalog !== false,
+);
 // Visual editing attributes (spread onto elements for click-to-edit).
 const edit = (home?.edit ?? {}) as Record<string, Record<string, unknown>>;
 ---
@@ -86,6 +93,7 @@ const edit = (home?.edit ?? {}) as Record<string, Record<string, unknown>>;
     edit={edit}
   />
   <TickerSection items={d?.ticker_items} />
+  {promotedCampaign && <CampaignPromo campaign={promotedCampaign} />}
   <AboutSection
     label={d?.about_label}
     title={d?.about_title}
@@ -107,7 +115,7 @@ const edit = (home?.edit ?? {}) as Record<string, Record<string, unknown>>;
   <PricingSection
     page={pricingPageData}
     pageEdit={pricingPageEdit}
-    pricingItems={pricingItemEntries}
+    pricingItems={standardPricingItems}
     pricingOptions={pricingOptions}
   />
   <ValuesSection

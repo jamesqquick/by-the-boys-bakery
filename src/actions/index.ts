@@ -2,8 +2,9 @@ import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro/zod";
 import { env } from "cloudflare:workers";
 import { getEmDashCollection } from "emdash";
-import type { PricingItem } from "../../.emdash/types";
 import { getPricingOptions } from "../lib/pricing-options";
+import type { CatalogProduct } from "../lib/seasonal-campaigns";
+import { getActiveCampaign, getCampaignProducts } from "../lib/seasonal-campaigns";
 import {
 	formatInquiryPrice,
 	InquiryPricingError,
@@ -23,18 +24,60 @@ export const server = {
 			quantity: z.string().min(1, "Quantity is required"),
 			order: z.string().max(5000),
 			notes: z.string().nullable().optional(),
+			campaign: z.string().max(100).nullable().optional(),
 		}),
 		handler: async (input) => {
-			const { name, email, phone, occasion, date, quantity, order, notes } = input;
-			const [itemsResult, optionsResult] = await Promise.all([
-				getEmDashCollection("pricing_items", { status: "published", orderBy: { sort: "asc" } }),
-				getPricingOptions("published"),
-			]);
-			if (itemsResult.error || optionsResult.error) {
+			const { name, email, phone, occasion, date, quantity, order, notes, campaign } = input;
+			const optionsResult = await getPricingOptions("published");
+			if (optionsResult.error) {
 				throw new ActionError({
 					code: "INTERNAL_SERVER_ERROR",
 					message: "Pricing is unavailable right now. Please try again shortly.",
 				});
+			}
+
+			let items: CatalogProduct[];
+			let campaignTitle: string | undefined;
+
+			if (campaign) {
+				const campaignResult = await getActiveCampaign(campaign);
+				if (campaignResult.error) {
+					throw new ActionError({
+						code: "INTERNAL_SERVER_ERROR",
+						message: "Seasonal pricing is unavailable right now. Please try again shortly.",
+					});
+				}
+				if (!campaignResult.campaign) {
+					throw new ActionError({
+						code: "BAD_REQUEST",
+						message: "This seasonal special is no longer accepting requests.",
+					});
+				}
+
+				const productsResult = await getCampaignProducts(campaignResult.campaign.data.id);
+				if (productsResult.error) {
+					throw new ActionError({
+						code: "INTERNAL_SERVER_ERROR",
+						message: "Seasonal pricing is unavailable right now. Please try again shortly.",
+					});
+				}
+
+				campaignTitle = campaignResult.campaign.data.title;
+				items = productsResult.products.map((product) => product.data);
+			} else {
+				const itemsResult = await getEmDashCollection("pricing_items", {
+					status: "published",
+					orderBy: { sort: "asc" },
+				});
+				if (itemsResult.error) {
+					throw new ActionError({
+						code: "INTERNAL_SERVER_ERROR",
+						message: "Pricing is unavailable right now. Please try again shortly.",
+					});
+				}
+				items = itemsResult.entries
+					.map((item) => item.data as CatalogProduct)
+					.filter((item) => item.show_in_standard_catalog !== false);
 			}
 
 			let pricedOrder;
@@ -42,7 +85,7 @@ export const server = {
 				pricedOrder = priceInquiry(
 					order,
 					makeInquiryPackages(
-						itemsResult.entries.map((item) => item.data as PricingItem),
+						items,
 						optionsResult.entries.map((option) => option.data),
 					),
 					notes ?? "",
@@ -54,13 +97,17 @@ export const server = {
 				throw error;
 			}
 
-			const lines = pricedOrder.lines.map((line) =>
-				`${line.title} — ${line.label}: ${line.quantity} × ${formatInquiryPrice(line.amount)} = ${formatInquiryPrice(line.lineTotal)}`,
+			const lines = pricedOrder.lines.map((line) => line.amount === null
+				? `${line.title} — ${line.label}: ${line.quantity} × quote required`
+				: `${line.title} — ${line.label}: ${line.quantity} × ${formatInquiryPrice(line.amount)} = ${formatInquiryPrice(line.lineTotal ?? 0)}`,
 			);
+			const hasQuotedItems = pricedOrder.lines.some((line) => line.amount === null);
 			const estimate = pricedOrder.lines.length > 0
-				? formatInquiryPrice(pricedOrder.total)
+				? pricedOrder.total > 0
+					? `${formatInquiryPrice(pricedOrder.total)}${hasQuotedItems ? " plus quoted items" : ""}`
+					: "Quote to follow"
 				: "Custom request — quote to follow";
-			const subject = `New Inquiry from ${name} — ${occasion} on ${date}`;
+			const subject = `New${campaignTitle ? ` ${campaignTitle}` : ""} Inquiry from ${name} — ${occasion} on ${date}`;
 
 			const html = `
 				<h2 style="font-family:sans-serif;color:#3b1f0c;">New Bakery Inquiry</h2>
@@ -68,6 +115,7 @@ export const server = {
 					${row("Name", name)}
 					${row("Email", email)}
 					${phone ? row("Phone", phone) : ""}
+					${campaignTitle ? row("Seasonal campaign", campaignTitle) : ""}
 					${row("Occasion", occasion)}
 					${row("Date needed", date)}
 					${row("Guests", quantity)}
@@ -84,6 +132,7 @@ export const server = {
 				`Name: ${name}`,
 				`Email: ${email}`,
 				phone ? `Phone: ${phone}` : null,
+				campaignTitle ? `Seasonal campaign: ${campaignTitle}` : null,
 				`Occasion: ${occasion}`,
 				`Date needed: ${date}`,
 				`Guests: ${quantity}`,
@@ -103,6 +152,7 @@ export const server = {
 					name,
 					email,
 					phone,
+					campaign: campaignTitle,
 					occasion,
 					date,
 					lines,

@@ -9,12 +9,12 @@ export type InquiryPackage = {
   title: string;
   label: string;
   description?: string;
-  amount: number;
+  amount: number | null;
 };
 
 export type PricedInquiryLine = InquiryPackage & {
   quantity: number;
-  lineTotal: number;
+  lineTotal: number | null;
 };
 
 export class InquiryPricingError extends Error {
@@ -33,8 +33,20 @@ export function makeInquiryPackages(items: Item[], options: Option[]): InquiryPa
     optionsByItem.set(option.itemId, itemOptions);
   }
 
-  return items.flatMap((item) =>
-    (optionsByItem.get(item.id) ?? []).flatMap((option) => {
+  return items.flatMap<InquiryPackage>((item) => {
+    const itemOptions = optionsByItem.get(item.id) ?? [];
+    if (itemOptions.length === 0) {
+      return [{
+        key: `quote:${item.id}`,
+        itemId: item.id,
+        title: item.title,
+        label: item.subtitle || "Custom quote",
+        description: item.description,
+        amount: null,
+      }];
+    }
+
+    return itemOptions.flatMap((option) => {
       const base = {
         itemId: item.id,
         title: item.title,
@@ -50,8 +62,8 @@ export function makeInquiryPackages(items: Item[], options: Option[]): InquiryPa
       }
 
       return [{ ...base, key: option.id, label: option.label || item.subtitle || "Package" }];
-    }),
-  );
+    });
+  });
 }
 
 export function formatInquiryPrice(amount: number): string {
@@ -90,8 +102,7 @@ export function priceInquiry(
     }
     const { key, quantity, unitAmount } = line;
     if (typeof key !== "string" || selected.has(key) ||
-        !Number.isInteger(quantity) || quantity < 1 || quantity > 50 ||
-        typeof unitAmount !== "number" || !Number.isFinite(unitAmount)) {
+        !Number.isInteger(quantity) || quantity < 1 || quantity > 50) {
       throw new InquiryPricingError("Please choose a quantity from 1 to 50 for each package.");
     }
 
@@ -99,14 +110,18 @@ export function priceInquiry(
     if (!item) {
       throw new InquiryPricingError("An item is no longer available. Please refresh and try again.");
     }
-    if (Math.round(unitAmount * 100) !== Math.round(item.amount * 100)) {
+    const priceMatches = item.amount === null
+      ? unitAmount === null
+      : typeof unitAmount === "number" && Number.isFinite(unitAmount) &&
+        Math.round(unitAmount * 100) === Math.round(item.amount * 100);
+    if (!priceMatches) {
       throw new InquiryPricingError("Prices have changed. Please refresh to see the current estimate.");
     }
 
     selected.add(key);
-    const lineCents = Math.round(item.amount * 100) * quantity;
+    const lineCents = item.amount === null ? 0 : Math.round(item.amount * 100) * quantity;
     totalCents += lineCents;
-    lines.push({ ...item, quantity, lineTotal: lineCents / 100 });
+    lines.push({ ...item, quantity, lineTotal: item.amount === null ? null : lineCents / 100 });
   }
 
   if (lines.length === 0 && !notes.trim()) {

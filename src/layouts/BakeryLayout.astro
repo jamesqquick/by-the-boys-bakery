@@ -5,7 +5,9 @@ import { createPublicPageContext } from "emdash/page";
 import { getEmDashEntry, getSiteSettings } from "emdash";
 import SiteNav from "../components/layout/SiteNav.astro";
 import SiteFooter from "../components/layout/SiteFooter.astro";
+import CampaignBanner from "../components/campaigns/CampaignBanner.astro";
 import { getMetadataImage } from "../lib/metadata";
+import { getPromotedCampaign } from "../lib/seasonal-campaigns";
 
 interface Props {
   title: string;
@@ -18,6 +20,11 @@ const { title, description, image, currentPath } = Astro.props;
 const settings = await getSiteSettings();
 const siteTitle = settings?.title ?? "By the Boys Bakery";
 let metadataImage = image;
+const { campaign: promotedCampaign, cacheHints: campaignHints } = await getPromotedCampaign();
+
+if (Astro.cache?.enabled) {
+  for (const hint of campaignHints) Astro.cache.set(hint);
+}
 
 if (!metadataImage) {
   const { entry: homepage, cacheHint } = await getEmDashEntry("homepage", "home");
@@ -52,6 +59,7 @@ const pageCtx = createPublicPageContext({
   </head>
   <body>
     <EmDashBodyStart page={pageCtx} />
+    <CampaignBanner campaign={promotedCampaign} />
     <SiteNav currentPath={currentPath} />
     <main>
       <slot />

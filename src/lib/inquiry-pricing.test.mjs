@@ -12,10 +12,10 @@ const items = [
   { id: "cake-id", slug: "cakes", title: "Cakes", sort: 3 },
 ];
 const options = [
-  { id: "cupcake-option", item: "cupcake-id", amount: 28, sort: 1 },
-  { id: "cookie-option", item: "cookie-id", amount: 28, sort: 1 },
-  { id: "cake-6", item: "cake-id", label: "6-inch", amount: 30, sort: 1 },
-  { id: "cake-8", item: "cake-id", label: "8-inch", amount: 40, sort: 2 },
+  { id: "cupcake-option", itemId: "cupcake-id", amount: 28, sort: 1 },
+  { id: "cookie-option", itemId: "cookie-id", amount: 28, sort: 1 },
+  { id: "cake-6", itemId: "cake-id", label: "6-inch", amount: 30, sort: 1 },
+  { id: "cake-8", itemId: "cake-id", label: "8-inch", amount: 40, sort: 2 },
 ];
 
 const packages = makeInquiryPackages(items, options);

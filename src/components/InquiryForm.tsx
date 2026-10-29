@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { formatInquiryPrice, type InquiryPackage } from "@/lib/inquiry-pricing";
+import "@/styles/inquiry.css";
 
 function defaultDate() {
   const d = new Date();
@@ -29,7 +30,12 @@ const submitInquiry = withState(actions.submitInquiry) as (
   formData: FormData,
 ) => Promise<InquiryState>;
 
-export default function InquiryForm({ packages }: { packages: InquiryPackage[] }) {
+interface InquiryFormProps {
+  packages: InquiryPackage[];
+  campaign?: { slug: string; title: string };
+}
+
+export default function InquiryForm({ packages, campaign }: InquiryFormProps) {
   const [state, action, pending] = useActionState<InquiryState, FormData>(
     submitInquiry,
     { data: undefined, error: undefined },
@@ -48,9 +54,10 @@ export default function InquiryForm({ packages }: { packages: InquiryPackage[] }
     unitAmount: item.amount,
   }));
   const totalCents = selected.reduce(
-    (sum, item) => sum + Math.round(item.amount * 100) * quantities[item.key],
+    (sum, item) => sum + (item.amount === null ? 0 : Math.round(item.amount * 100) * quantities[item.key]),
     0,
   );
+  const hasQuoteOnlyItems = selected.some((item) => item.amount === null);
   const groups = Array.from(new Set(packages.map((item) => item.itemId))).map(
     (itemId) => ({
       itemId,
@@ -65,7 +72,8 @@ export default function InquiryForm({ packages }: { packages: InquiryPackage[] }
       <div className="form-success">
         <h2 className="success-title">We got it!</h2>
         <p className="success-body">
-          James will get back to you within 48 hours to go over what we can make.
+          This is a request, not a confirmed order. James will get back to you within 48 hours
+          to confirm availability, details, and final pricing.
         </p>
       </div>
     );
@@ -80,6 +88,7 @@ export default function InquiryForm({ packages }: { packages: InquiryPackage[] }
   return (
     <form className="inquiry-form" action={action}>
       <input type="hidden" name="order" value={JSON.stringify(order)} />
+      {campaign && <input type="hidden" name="campaign" value={campaign.slug} />}
 
       {/* ── Section 1: Contact ── */}
       <div className="form-section">
@@ -121,7 +130,7 @@ export default function InquiryForm({ packages }: { packages: InquiryPackage[] }
             <Label htmlFor="occasion">
               Occasion <span className="required">*</span>
             </Label>
-            <Select name="occasion" defaultValue="just-because" required>
+            <Select name="occasion" defaultValue={campaign ? "holiday" : "just-because"} required>
               <SelectTrigger id="occasion" aria-describedby={fieldErrors.occasion ? "occasion-error" : undefined}>
                 <SelectValue placeholder="Pick one..." />
               </SelectTrigger>
@@ -187,7 +196,9 @@ export default function InquiryForm({ packages }: { packages: InquiryPackage[] }
                   <div key={item.key} className="package-option">
                     <Label htmlFor={`package-${item.key}`}>
                       <span>{item.label}</span>
-                      <span className="package-price">{formatInquiryPrice(item.amount)}</span>
+                      <span className="package-price">
+                        {item.amount === null ? "Quote after review" : formatInquiryPrice(item.amount)}
+                      </span>
                     </Label>
                     <div className="package-stepper">
                       <Button
@@ -237,7 +248,13 @@ export default function InquiryForm({ packages }: { packages: InquiryPackage[] }
         )}
         <div className="estimate" aria-live="polite">
           {selected.length > 0 ? (
-            <div className="estimate-total"><span>Estimated total</span><span>{formatInquiryPrice(totalCents / 100)}</span></div>
+            <div className="estimate-total">
+              <span>{hasQuoteOnlyItems ? "Estimated priced subtotal" : "Estimated total"}</span>
+              <span>
+                {totalCents > 0 ? formatInquiryPrice(totalCents / 100) : "Quote after review"}
+                {hasQuoteOnlyItems && totalCents > 0 ? " + quoted items" : ""}
+              </span>
+            </div>
           ) : (
             <strong>No packages selected yet</strong>
           )}
@@ -266,7 +283,7 @@ export default function InquiryForm({ packages }: { packages: InquiryPackage[] }
         <div>
           <p className="form-footer-note">
             <strong>No payment yet.</strong> This is an inquiry. We'll reach out within
-            48 hours to confirm availability before anything is finalized.
+            48 hours to confirm availability and final pricing. Submitting this request does not confirm an order.
           </p>
           {generalError && (
             <p className="field-error" style={{ marginTop: "0.75rem" }}>
