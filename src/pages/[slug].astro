@@ -2,8 +2,13 @@
 import { getEmDashEntry, getSeoMeta, decodeSlug, getSiteSettings } from "emdash";
 import { PortableText } from "emdash/ui";
 import Base from "../layouts/Base.astro";
+import CampaignLandingPage from "../components/campaigns/CampaignLandingPage.astro";
+import type { Page } from "../../.emdash/types";
+import { makeInquiryPackages } from "../lib/inquiry-pricing";
 import { resolveStarterSiteIdentity } from "../utils/site-identity";
 import { getMetadataImage } from "../lib/metadata";
+import { getPricingOptions } from "../lib/pricing-options";
+import { getActiveCampaign, getCampaignProducts } from "../lib/seasonal-campaigns";
 
 const slug = decodeSlug(Astro.params.slug);
 
@@ -11,34 +16,80 @@ if (!slug) {
 	return Astro.redirect("/404");
 }
 
-const { entry: page, cacheHint } = await getEmDashEntry("pages", slug);
+const campaignResult = await getActiveCampaign(slug);
+if (Astro.cache?.enabled) {
+	for (const hint of campaignResult.cacheHints) Astro.cache.set(hint);
+}
+if (campaignResult.error) throw campaignResult.error;
 
-if (!page) {
-	return Astro.redirect("/404");
+let campaignPage;
+if (campaignResult.campaign) {
+	const [productsResult, optionsResult] = await Promise.all([
+		getCampaignProducts(campaignResult.campaign.data.id),
+		getPricingOptions("published"),
+	]);
+	if (productsResult.error || optionsResult.error) {
+		throw productsResult.error ?? optionsResult.error;
+	}
+	if (Astro.cache?.enabled) {
+		for (const hint of productsResult.cacheHints) Astro.cache.set(hint);
+		for (const hint of optionsResult.cacheHints) Astro.cache.set(hint);
+	}
+
+	const productIds = new Set(productsResult.products.map((product) => product.data.id));
+	const pricingOptions = optionsResult.entries.filter(
+		(option) => option.data.itemId && productIds.has(option.data.itemId),
+	);
+	campaignPage = {
+		campaign: campaignResult.campaign,
+		products: productsResult.products,
+		pricingOptions,
+		packages: makeInquiryPackages(
+			productsResult.products.map((product) => product.data),
+			pricingOptions.map((option) => option.data),
+		),
+	};
+} else if (campaignResult.exists) {
+	Astro.response.status = 404;
+	return Astro.rewrite("/404");
 }
 
-if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
-const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
+let page;
+let seo;
+if (!campaignPage) {
+	const pageResult = await getEmDashEntry("pages", slug);
+	page = pageResult.entry;
+	if (!page) {
+		return Astro.redirect("/404");
+	}
 
-const seo = getSeoMeta(page, {
-	siteTitle,
-	siteUrl: Astro.url.origin,
-	path: `/${slug}`,
-	defaultOgImage: getMetadataImage(page.data, Astro.url.origin) ?? undefined,
-});
+	if (Astro.cache?.enabled) Astro.cache.set(pageResult.cacheHint);
+	const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
+	seo = getSeoMeta(page, {
+		siteTitle,
+		siteUrl: Astro.url.origin,
+		path: `/${slug}`,
+		defaultOgImage: getMetadataImage(page.data, Astro.url.origin) ?? undefined,
+	});
+}
+
+const pageData = page?.data as Page | undefined;
 ---
 
-<Base
-	title={seo.title}
-	pageTitle={seo.ogTitle}
-	description={seo.description}
-	canonical={seo.canonical}
-	image={seo.ogImage}
-	content={{ collection: "pages", id: page.data.id, slug }}
->
-	<article>
-		<h1 {...page.edit.title}>{page.data.title}</h1>
-
-		<PortableText value={page.data.content} />
-	</article>
-</Base>
+{campaignPage ? (
+	<CampaignLandingPage {...campaignPage} />
+) : page && pageData && seo ? (
+	<Base
+		title={seo.title}
+		pageTitle={seo.ogTitle}
+		description={seo.description}
+		canonical={seo.canonical}
+		image={seo.ogImage}
+		content={{ collection: "pages", id: pageData.id, slug }}
+	>
+		<article>
+			<h1 {...page.edit.title}>{pageData.title}</h1>
+			<PortableText value={pageData.content} />
+		</article>
+	</Base>
+) : null}

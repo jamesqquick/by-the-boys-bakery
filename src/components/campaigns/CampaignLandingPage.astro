@@ -1,0 +1,157 @@
+---
+import { Image, PortableText } from "emdash/ui";
+import type { EditablePricingOption } from "../../lib/pricing-options";
+import type { InquiryPackage } from "../../lib/inquiry-pricing";
+import type { EditableCampaign, EditableCampaignProduct } from "../../lib/seasonal-campaigns";
+import { getCampaignTheme } from "../../lib/seasonal-campaigns";
+import { getMetadataImage } from "../../lib/metadata";
+import BakeryLayout from "../../layouts/BakeryLayout.astro";
+import InquiryForm from "../InquiryForm";
+import CampaignProductGrid from "./CampaignProductGrid.astro";
+
+interface Props {
+  campaign: EditableCampaign;
+  products: EditableCampaignProduct[];
+  pricingOptions: EditablePricingOption[];
+  packages: InquiryPackage[];
+}
+
+const { campaign, products, pricingOptions, packages } = Astro.props;
+const theme = getCampaignTheme(campaign.data.theme);
+const endsAt = campaign.data.end_at ? new Date(campaign.data.end_at) : null;
+const endLabel = endsAt && Number.isFinite(endsAt.getTime())
+  ? new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric" }).format(endsAt)
+  : null;
+---
+
+<BakeryLayout
+  title={campaign.data.title}
+  description={campaign.data.summary}
+  image={getMetadataImage(campaign.data, Astro.url.origin)}
+  currentPath={`/${campaign.id}`}
+>
+  <article class="campaign-page" data-campaign-theme={theme}>
+    <header class:list={["campaign-hero", { "campaign-hero-full": !campaign.data.hero_image }]}>
+      <div class="campaign-hero-copy">
+        <span class="campaign-eyebrow" {...campaign.edit.eyebrow}>
+          {campaign.data.eyebrow || "Limited-time menu"}
+        </span>
+        <h1 {...campaign.edit.title}>{campaign.data.title}</h1>
+        {campaign.data.summary && <p {...campaign.edit.summary}>{campaign.data.summary}</p>}
+        <a class="btn campaign-hero-cta" href="#request">Build your request</a>
+        {endLabel && <small>Requests open through {endLabel}, subject to availability.</small>}
+      </div>
+      {campaign.data.hero_image && (
+        <div class="campaign-hero-image" {...campaign.edit.hero_image}>
+          <Image image={campaign.data.hero_image} />
+        </div>
+      )}
+    </header>
+
+    <section class="campaign-menu" aria-labelledby="campaign-menu-title">
+      <div class="campaign-section-heading">
+        <span>Seasonal selection</span>
+        <h2 id="campaign-menu-title" {...campaign.edit.products_title}>
+          {campaign.data.products_title || "Pick your treats"}
+        </h2>
+        {campaign.data.products_note && <p {...campaign.edit.products_note}>{campaign.data.products_note}</p>}
+      </div>
+      {products.length > 0 ? (
+        <CampaignProductGrid products={products} pricingOptions={pricingOptions} />
+      ) : (
+        <p class="campaign-empty">The seasonal menu is being finalized. Check back soon.</p>
+      )}
+    </section>
+
+    {campaign.data.content && campaign.data.content.length > 0 && (
+      <section class="campaign-details" {...campaign.edit.content}>
+        <PortableText value={campaign.data.content} />
+      </section>
+    )}
+
+    <section id="request" class="campaign-request" aria-labelledby="campaign-request-title">
+      <div class="campaign-request-heading">
+        <span>Request, not checkout</span>
+        <h2 id="campaign-request-title" {...campaign.edit.inquiry_title}>
+          {campaign.data.inquiry_title || `Request ${campaign.data.title}`}
+        </h2>
+        <p {...campaign.edit.inquiry_description}>
+          {campaign.data.inquiry_description || "Choose quantities for an estimate. Submitting this form does not confirm an order, availability, or final price."}
+        </p>
+      </div>
+      <InquiryForm
+        packages={packages}
+        campaign={{ slug: campaign.id, title: campaign.data.title }}
+        client:load
+      />
+    </section>
+  </article>
+</BakeryLayout>
+
+<style>
+  .campaign-page {
+    --campaign-accent: var(--color-butter);
+    --campaign-secondary: var(--color-sky);
+    --campaign-surface: var(--color-cream);
+    --campaign-paper: #fffdf8;
+    --campaign-ink: var(--color-choco);
+    color: var(--campaign-ink);
+  }
+
+  .campaign-page[data-campaign-theme="halloween"] { --campaign-accent: #f59a3c; --campaign-secondary: #a889c2; --campaign-surface: #fff0c7; --campaign-paper: #fff8e8; --campaign-ink: #28162d; }
+  .campaign-page[data-campaign-theme="christmas"] { --campaign-accent: #f2aaa4; --campaign-secondary: #b7d9a6; --campaign-surface: #f3f0df; --campaign-paper: #fffdf4; --campaign-ink: #193d2c; }
+  .campaign-page[data-campaign-theme="valentines"] { --campaign-accent: #f6b5c6; --campaign-secondary: #f5a9bd; --campaign-surface: #ffe1e8; --campaign-paper: #fff7f8; --campaign-ink: #5b1832; }
+  .campaign-page[data-campaign-theme="spring"] { --campaign-accent: #f1cf58; --campaign-secondary: #a9dfbd; --campaign-surface: #e9f6e7; --campaign-paper: #fffef1; --campaign-ink: #25452f; }
+
+  .campaign-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
+    min-height: 650px;
+    background: var(--campaign-surface);
+    border-bottom: 4px solid var(--campaign-ink);
+  }
+
+  .campaign-hero-full { grid-template-columns: 1fr; }
+  .campaign-hero-copy { display: flex; align-items: flex-start; justify-content: center; flex-direction: column; padding: 5rem 4rem; }
+  .campaign-eyebrow { padding: 0.35rem 0.9rem; background: var(--campaign-secondary); border: 3px solid var(--campaign-ink); border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; }
+  .campaign-hero h1 { max-width: 850px; margin: 1.5rem 0; color: var(--campaign-ink); font-size: clamp(4rem, 9vw, 8rem); }
+  .campaign-hero p { max-width: 60ch; color: var(--campaign-ink); font-size: 1.12rem; font-weight: 700; }
+  .campaign-hero-cta { margin-top: 2rem; background: var(--campaign-accent); border-color: var(--campaign-ink); color: var(--campaign-ink); box-shadow: 4px 4px 0 var(--campaign-ink); }
+  .campaign-hero small { margin-top: 1rem; font-weight: 800; }
+  .campaign-hero-image { min-height: 500px; overflow: hidden; border-left: 4px solid var(--campaign-ink); }
+  .campaign-hero-image :global(img) { width: 100%; height: 100%; object-fit: cover; }
+
+  .campaign-menu { padding: 6rem 4rem 7rem; background: var(--campaign-secondary); }
+  .campaign-section-heading { max-width: 760px; margin-bottom: 3rem; }
+  .campaign-section-heading > span,
+  .campaign-request-heading > span { display: inline-block; margin-bottom: 0.8rem; font-size: 0.72rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; }
+  .campaign-section-heading h2,
+  .campaign-request-heading h2 { color: var(--campaign-ink); font-size: clamp(3rem, 6vw, 5.5rem); }
+  .campaign-section-heading p,
+  .campaign-request-heading p { max-width: 65ch; margin-top: 1rem; color: var(--campaign-ink); font-weight: 700; }
+  .campaign-empty { padding: 2rem; background: var(--campaign-paper); border: 3px solid var(--campaign-ink); border-radius: 18px; font-weight: 800; }
+
+  .campaign-details { max-width: 900px; margin: 0 auto; padding: 6rem 2rem; }
+  .campaign-details :global(h2),
+  .campaign-details :global(h3) { margin: 2.5rem 0 1rem; color: var(--campaign-ink); }
+  .campaign-details :global(p) { margin-block: 1rem; color: var(--campaign-ink); }
+
+  .campaign-request { padding: 6rem 2rem 8rem; background: var(--campaign-surface); border-top: 4px solid var(--campaign-ink); }
+  .campaign-request-heading { max-width: 860px; margin: 0 auto 2.5rem; text-align: center; }
+  .campaign-request-heading p { margin-inline: auto; }
+  .campaign-request :global(.inquiry-form) { max-width: 860px; margin: 0 auto; background: var(--campaign-paper); border-color: var(--campaign-ink); }
+
+  @media (max-width: 900px) {
+    .campaign-hero { grid-template-columns: 1fr; min-height: 0; }
+    .campaign-hero-copy { padding: 4rem 2rem; }
+    .campaign-hero-image { min-height: 380px; border-top: 4px solid var(--campaign-ink); border-left: 0; }
+    .campaign-menu { padding: 4rem 2rem 5rem; }
+  }
+
+  @media (max-width: 600px) {
+    .campaign-hero-copy { padding: 3rem 1.25rem; }
+    .campaign-hero h1 { font-size: clamp(3rem, 18vw, 5rem); }
+    .campaign-menu { padding: 3rem 1rem 4rem; }
+    .campaign-request { padding: 4rem 1rem 5rem; }
+  }
+</style>

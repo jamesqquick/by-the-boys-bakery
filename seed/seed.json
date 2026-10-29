@@ -115,13 +115,20 @@
 		},
 		{
 			"slug": "pricing_items",
-			"label": "Pricing Items",
-			"labelSingular": "Pricing Item",
+			"label": "Products",
+			"labelSingular": "Product",
 			"supports": ["drafts", "revisions"],
 			"fields": [
 				{ "slug": "title", "label": "Title", "type": "string", "required": true },
 				{ "slug": "subtitle", "label": "Subtitle", "type": "string" },
 				{ "slug": "description", "label": "Description", "type": "text" },
+				{ "slug": "image", "label": "Image", "type": "image" },
+				{
+					"slug": "show_in_standard_catalog",
+					"label": "Show in Standard Catalog",
+					"type": "boolean",
+					"defaultValue": true
+				},
 				{ "slug": "sort", "label": "Sort Order", "type": "integer" }
 			]
 		},
@@ -140,6 +147,65 @@
 				},
 				{ "slug": "label", "label": "Label", "type": "string" },
 				{ "slug": "amount", "label": "Amount", "type": "number", "required": true },
+				{ "slug": "sort", "label": "Sort Order", "type": "integer" }
+			]
+		},
+		{
+			"slug": "campaigns",
+			"label": "Seasonal Campaigns",
+			"labelSingular": "Seasonal Campaign",
+			"urlPattern": "/{slug}",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true },
+				{ "slug": "eyebrow", "label": "Eyebrow", "type": "string" },
+				{ "slug": "summary", "label": "Summary", "type": "text" },
+				{ "slug": "content", "label": "Additional Content", "type": "portableText" },
+				{ "slug": "hero_image", "label": "Hero Image", "type": "image" },
+				{ "slug": "metadata_image", "label": "Metadata Image", "type": "image" },
+				{ "slug": "enabled", "label": "Enabled", "type": "boolean", "defaultValue": false },
+				{ "slug": "start_at", "label": "Starts At", "type": "datetime" },
+				{ "slug": "end_at", "label": "Ends At", "type": "datetime" },
+				{
+					"slug": "theme",
+					"label": "Theme",
+					"type": "select",
+					"defaultValue": "standard",
+					"validation": {
+						"options": ["standard", "halloween", "christmas", "valentines", "spring"]
+					}
+				},
+				{ "slug": "products_title", "label": "Products Section Title", "type": "string" },
+				{ "slug": "products_note", "label": "Products Section Note", "type": "text" },
+				{ "slug": "homepage_title", "label": "Homepage Promotion Title", "type": "string" },
+				{ "slug": "homepage_description", "label": "Homepage Promotion Description", "type": "text" },
+				{ "slug": "homepage_cta_label", "label": "Homepage Button Label", "type": "string" },
+				{ "slug": "banner_text", "label": "Banner Text", "type": "string" },
+				{ "slug": "banner_cta_label", "label": "Banner Link Label", "type": "string" },
+				{ "slug": "inquiry_title", "label": "Inquiry Section Title", "type": "string" },
+				{ "slug": "inquiry_description", "label": "Inquiry Section Description", "type": "text" }
+			]
+		},
+		{
+			"slug": "campaign_products",
+			"label": "Campaign Products",
+			"labelSingular": "Campaign Product",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{
+					"slug": "campaign",
+					"label": "Campaign",
+					"type": "reference",
+					"required": true,
+					"validation": { "targetCollection": "campaigns" }
+				},
+				{
+					"slug": "product",
+					"label": "Product",
+					"type": "reference",
+					"required": true,
+					"validation": { "targetCollection": "pricing_items" }
+				},
 				{ "slug": "sort", "label": "Sort Order", "type": "integer" }
 			]
 		},
@@ -494,6 +560,7 @@
 					"title": "Cupcakes",
 					"subtitle": "12 regular or 24 mini cupcakes",
 					"description": "Includes one cake flavor, one frosting flavor, and a simple topping such as sprinkles, crumbs, drizzle, or candy.",
+					"show_in_standard_catalog": true,
 					"sort": 1
 				}
 			},
@@ -505,6 +572,7 @@
 					"title": "Cookies",
 					"subtitle": "Per dozen",
 					"description": "Includes standard bakery-style cookies with mix-ins such as chocolate chips, M&M's, peanut butter, pretzels, or seasonal add-ins.",
+					"show_in_standard_catalog": true,
 					"sort": 2
 				}
 			},
@@ -516,6 +584,7 @@
 					"title": "Brownies",
 					"subtitle": "Per dozen",
 					"description": "Includes fudgy brownies with a simple topping or buttercream.",
+					"show_in_standard_catalog": true,
 					"sort": 3
 				}
 			},
@@ -527,6 +596,7 @@
 					"title": "Cakes",
 					"subtitle": "Two layers, simple decoration",
 					"description": "Includes cake, frosting, and simple decoration. More detailed designs, specialty fillings, fondant, or character cakes may need a separate quote.",
+					"show_in_standard_catalog": true,
 					"sort": 4
 				}
 			}
@@ -581,6 +651,51 @@
 					"item": "$ref:pricing-item-cakes",
 					"label": "8-inch",
 					"amount": 40,
+					"sort": 2
+				}
+			}
+		],
+		"campaigns": [
+			{
+				"id": "campaign-halloween",
+				"slug": "halloween",
+				"status": "published",
+				"data": {
+					"title": "Halloween Treats",
+					"eyebrow": "Limited-time bakes",
+					"summary": "A spooky batch of cookies, cupcakes, and party treats made for Halloween gatherings.",
+					"enabled": false,
+					"theme": "halloween",
+					"products_title": "Pick your treats",
+					"products_note": "Available for a limited time while the campaign is active.",
+					"homepage_title": "Halloween treats are here",
+					"homepage_description": "Browse this season's limited menu and send us your request before the calendar fills up.",
+					"homepage_cta_label": "See Halloween Treats",
+					"banner_text": "Halloween orders are open for a limited time.",
+					"banner_cta_label": "View the menu",
+					"inquiry_title": "Request your Halloween treats",
+					"inquiry_description": "Choose quantities for an estimate. This request does not confirm your order, availability, or final price."
+				}
+			}
+		],
+		"campaign_products": [
+			{
+				"id": "campaign-product-halloween-cookies",
+				"slug": "halloween-cookies",
+				"status": "published",
+				"data": {
+					"campaign": "$ref:campaign-halloween",
+					"product": "$ref:pricing-item-cookies",
+					"sort": 1
+				}
+			},
+			{
+				"id": "campaign-product-halloween-cupcakes",
+				"slug": "halloween-cupcakes",
+				"status": "published",
+				"data": {
+					"campaign": "$ref:campaign-halloween",
+					"product": "$ref:pricing-item-cupcakes",
 					"sort": 2
 				}
 			}

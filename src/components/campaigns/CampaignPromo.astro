@@ -1,0 +1,110 @@
+---
+import { Image } from "emdash/ui";
+import type { EditableCampaign } from "../../lib/seasonal-campaigns";
+import { getCampaignTheme } from "../../lib/seasonal-campaigns";
+
+interface Props {
+  campaign: EditableCampaign;
+}
+
+const { campaign } = Astro.props;
+const theme = getCampaignTheme(campaign.data.theme);
+---
+
+<section class="campaign-promo" data-campaign-theme={theme} aria-labelledby="campaign-promo-title">
+  <div class="campaign-promo-copy">
+    <span {...campaign.edit.eyebrow}>{campaign.data.eyebrow || "For a limited time"}</span>
+    <h2 id="campaign-promo-title" {...campaign.edit.homepage_title}>
+      {campaign.data.homepage_title || campaign.data.title}
+    </h2>
+    <p {...campaign.edit.homepage_description}>
+      {campaign.data.homepage_description || campaign.data.summary}
+    </p>
+    <a class="btn campaign-promo-cta" href={`/${campaign.id}`} {...campaign.edit.homepage_cta_label}>
+      {campaign.data.homepage_cta_label || "See the seasonal menu"}
+    </a>
+  </div>
+  {campaign.data.hero_image && (
+    <div class="campaign-promo-image" {...campaign.edit.hero_image}>
+      <Image image={campaign.data.hero_image} />
+    </div>
+  )}
+</section>
+
+<style>
+  .campaign-promo {
+    --campaign-accent: var(--color-butter);
+    --campaign-surface: var(--color-sky);
+    --campaign-ink: var(--color-choco);
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+    min-height: 520px;
+    background: var(--campaign-surface);
+    border-block: 4px solid var(--campaign-ink);
+    color: var(--campaign-ink);
+  }
+
+  .campaign-promo[data-campaign-theme="halloween"] { --campaign-accent: #f59a3c; --campaign-surface: #fff0c7; --campaign-ink: #28162d; }
+  .campaign-promo[data-campaign-theme="christmas"] { --campaign-accent: #f2aaa4; --campaign-surface: #dbe8cb; --campaign-ink: #193d2c; }
+  .campaign-promo[data-campaign-theme="valentines"] { --campaign-accent: #f6b5c6; --campaign-surface: #ffe1e8; --campaign-ink: #5b1832; }
+  .campaign-promo[data-campaign-theme="spring"] { --campaign-accent: #f1cf58; --campaign-surface: #d9f0dc; --campaign-ink: #25452f; }
+
+  .campaign-promo-copy {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    padding: 5rem 4rem;
+  }
+
+  .campaign-promo-copy > span {
+    padding: 0.35rem 0.9rem;
+    background: var(--campaign-accent);
+    border: 3px solid var(--campaign-ink);
+    border-radius: var(--radius-pill);
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .campaign-promo h2 {
+    max-width: 760px;
+    margin: 1.4rem 0 1.1rem;
+    color: var(--campaign-ink);
+    font-size: clamp(3rem, 6vw, 6rem);
+  }
+
+  .campaign-promo p {
+    max-width: 58ch;
+    color: var(--campaign-ink);
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  .campaign-promo-cta {
+    margin-top: 2rem;
+    background: var(--campaign-accent);
+    border-color: var(--campaign-ink);
+    color: var(--campaign-ink);
+    box-shadow: 4px 4px 0 var(--campaign-ink);
+  }
+
+  .campaign-promo-image {
+    min-height: 420px;
+    overflow: hidden;
+    border-left: 3px solid var(--campaign-ink);
+  }
+
+  .campaign-promo-image :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 860px) {
+    .campaign-promo { grid-template-columns: 1fr; }
+    .campaign-promo-copy { padding: 4rem 2rem; }
+    .campaign-promo-image { min-height: 320px; border-top: 3px solid var(--campaign-ink); border-left: 0; }
+  }
+</style>
