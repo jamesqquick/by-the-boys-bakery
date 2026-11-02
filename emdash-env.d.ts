@@ -5,6 +5,50 @@
 
 import type { BylineSummary, ContentBylineCredit, TaxonomyTerm, PortableTextBlock, ReferencePage } from "emdash";
 
+export interface CampaignProduct {
+  id: string;
+  slug: string | null;
+  status: string;
+  sort?: number;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  byline?: BylineSummary | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface Campaign {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  eyebrow?: string;
+  summary?: string;
+  content?: PortableTextBlock[];
+  hero_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown>; darkVariant?: { id: string; src?: string; alt?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> } };
+  metadata_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown>; darkVariant?: { id: string; src?: string; alt?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> } };
+  enabled?: boolean;
+  start_at?: string;
+  end_at?: string;
+  theme?: "standard" | "halloween" | "christmas" | "valentines" | "spring";
+  products_title?: string;
+  products_note?: string;
+  homepage_title?: string;
+  homepage_description?: string;
+  homepage_cta_label?: string;
+  banner_text?: string;
+  banner_cta_label?: string;
+  inquiry_title?: string;
+  inquiry_description?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  byline?: BylineSummary | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
 export interface Homepage {
   id: string;
   slug: string | null;
@@ -87,6 +131,8 @@ export interface PricingItem {
   subtitle?: string;
   description?: string;
   sort?: number;
+  image?: { id: string; src?: string; alt?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown>; darkVariant?: { id: string; src?: string; alt?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> } };
+  show_in_standard_catalog?: boolean;
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;
@@ -161,12 +207,19 @@ export interface Value {
   terms?: Record<string, TaxonomyTerm[]>;
 }
 
+export interface CampaignProductReferences {
+  campaign: ReferencePage<Campaign>;
+  product: ReferencePage<PricingItem>;
+}
+
 export interface PricingOptionReferences {
   item: ReferencePage<PricingItem>;
 }
 
 declare module "emdash" {
   interface EmDashCollections {
+    campaign_products: CampaignProduct;
+    campaigns: Campaign;
     homepage: Homepage;
     pages: Page;
     posts: Post;
@@ -177,6 +230,7 @@ declare module "emdash" {
     values: Value;
   }
   interface EmDashCollectionReferences {
+    campaign_products: CampaignProductReferences;
     pricing_options: PricingOptionReferences;
   }
 }

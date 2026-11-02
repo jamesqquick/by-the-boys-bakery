@@ -4,13 +4,17 @@ import { d1, r2 } from "@emdash-cms/cloudflare";
 import { defineConfig } from "astro/config";
 import emdash from "emdash/astro";
 import tailwindcss from "@tailwindcss/vite";
+import { homedir } from "node:os";
+import { join } from "node:path";
+
+const localStatePath = process.env.EMDASH_LOCAL_STATE_PATH ??
+	join(homedir(), ".local", "share", "by-the-boys-bakery", "wrangler");
 
 export default defineConfig({
 	output: "server",
 	adapter: cloudflare({
-		// Connects remote Cloudflare bindings (e.g. EMAIL) during local dev.
-		// No effect on production builds. Set to false to log instead of send.
-		remoteBindings: true,
+		remoteBindings: false,
+		persistState: { path: localStatePath },
 	}),
 	vite: {
 		plugins: [tailwindcss()],
