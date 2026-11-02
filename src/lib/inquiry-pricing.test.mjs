@@ -48,6 +48,13 @@ test("allows a custom-only inquiry with notes and no subtotal", () => {
   });
 });
 
+test("requires at least one package for seasonal inquiries", () => {
+  assert.throws(
+    () => priceInquiry("[]", packages, "Please add a gift note", false),
+    (error) => error instanceof InquiryPricingError && error.message === "Choose at least one seasonal item.",
+  );
+});
+
 test("rejects an empty inquiry, duplicate lines, tampered prices, and unavailable choices", () => {
   for (const [lines, notes] of [
     [[], ""],

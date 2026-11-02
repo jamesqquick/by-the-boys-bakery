@@ -13,7 +13,6 @@ const theme = getCampaignTheme(campaign.data.theme);
 
 <section class="campaign-promo" data-campaign-theme={theme} aria-labelledby="campaign-promo-title">
   <div class="campaign-promo-copy">
-    <span {...campaign.edit.eyebrow}>{campaign.data.eyebrow || "For a limited time"}</span>
     <h2 id="campaign-promo-title" {...campaign.edit.homepage_title}>
       {campaign.data.homepage_title || campaign.data.title}
     </h2>
@@ -57,20 +56,9 @@ const theme = getCampaignTheme(campaign.data.theme);
     padding: 5rem 4rem;
   }
 
-  .campaign-promo-copy > span {
-    padding: 0.35rem 0.9rem;
-    background: var(--campaign-accent);
-    border: 3px solid var(--campaign-ink);
-    border-radius: var(--radius-pill);
-    font-size: 0.72rem;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
   .campaign-promo h2 {
     max-width: 760px;
-    margin: 1.4rem 0 1.1rem;
+    margin: 0 0 1.1rem;
     color: var(--campaign-ink);
     font-size: clamp(3rem, 6vw, 6rem);
   }

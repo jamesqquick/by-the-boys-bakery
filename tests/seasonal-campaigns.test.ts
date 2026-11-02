@@ -12,6 +12,8 @@ function campaign(overrides: Partial<Campaign> = {}): Campaign {
     status: "published",
     title: "Special",
     enabled: true,
+    show_on_homepage: true,
+    show_banner: true,
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
     updatedAt: new Date("2026-01-01T00:00:00.000Z"),
     publishedAt: new Date("2026-01-01T00:00:00.000Z"),
@@ -45,7 +47,7 @@ test("promotion selection chooses the active campaign with the latest end date",
     end_at: new Date("2026-12-25T23:59:59.000Z"),
   });
 
-  assert.equal(selectPromotedCampaign([halloween, christmas], now)?.id, "christmas");
+  assert.equal(selectPromotedCampaign([halloween, christmas], "homepage", now)?.id, "christmas");
 });
 
 test("a campaign without an end date wins as an indefinite campaign", () => {
@@ -55,7 +57,7 @@ test("a campaign without an end date wins as an indefinite campaign", () => {
   });
   const indefinite = campaign({ id: "indefinite" });
 
-  assert.equal(selectPromotedCampaign([dated, indefinite], now)?.id, "indefinite");
+  assert.equal(selectPromotedCampaign([dated, indefinite], "homepage", now)?.id, "indefinite");
 });
 
 test("promotion selection uses the latest update as a deterministic tie breaker", () => {
@@ -70,5 +72,25 @@ test("promotion selection uses the latest update as a deterministic tie breaker"
     updatedAt: new Date("2026-10-02T00:00:00.000Z"),
   });
 
-  assert.equal(selectPromotedCampaign([first, second], now)?.id, "second");
+  assert.equal(selectPromotedCampaign([first, second], "homepage", now)?.id, "second");
+});
+
+test("homepage and banner placements are controlled independently", () => {
+  const homepage = campaign({
+    id: "homepage",
+    show_on_homepage: true,
+    show_banner: false,
+  });
+  const banner = campaign({
+    id: "banner",
+    show_on_homepage: false,
+    show_banner: true,
+  });
+
+  assert.equal(selectPromotedCampaign([homepage, banner], "homepage", now)?.id, "homepage");
+  assert.equal(selectPromotedCampaign([homepage, banner], "banner", now)?.id, "banner");
+  assert.equal(
+    selectPromotedCampaign([campaign({ show_on_homepage: false })], "homepage", now),
+    undefined,
+  );
 });

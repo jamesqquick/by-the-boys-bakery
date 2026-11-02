@@ -5,30 +5,19 @@
 
 import type { BylineSummary, ContentBylineCredit, TaxonomyTerm, PortableTextBlock, ReferencePage } from "emdash";
 
-export interface CampaignProduct {
-  id: string;
-  slug: string | null;
-  status: string;
-  sort?: number;
-  createdAt: Date;
-  updatedAt: Date;
-  publishedAt: Date | null;
-  byline?: BylineSummary | null;
-  bylines?: ContentBylineCredit[];
-  terms?: Record<string, TaxonomyTerm[]>;
-}
-
 export interface Campaign {
   id: string;
   slug: string | null;
   status: string;
   title: string;
-  eyebrow?: string;
   summary?: string;
   content?: PortableTextBlock[];
   hero_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown>; darkVariant?: { id: string; src?: string; alt?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> } };
   metadata_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown>; darkVariant?: { id: string; src?: string; alt?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> } };
+  hero_cta_label?: string;
   enabled?: boolean;
+  show_on_homepage?: boolean;
+  show_banner?: boolean;
   start_at?: string;
   end_at?: string;
   theme?: "standard" | "halloween" | "christmas" | "valentines" | "spring";
@@ -207,9 +196,8 @@ export interface Value {
   terms?: Record<string, TaxonomyTerm[]>;
 }
 
-export interface CampaignProductReferences {
-  campaign: ReferencePage<Campaign>;
-  product: ReferencePage<PricingItem>;
+export interface CampaignReferences {
+  products: ReferencePage<PricingItem>;
 }
 
 export interface PricingOptionReferences {
@@ -218,7 +206,6 @@ export interface PricingOptionReferences {
 
 declare module "emdash" {
   interface EmDashCollections {
-    campaign_products: CampaignProduct;
     campaigns: Campaign;
     homepage: Homepage;
     pages: Page;
@@ -230,7 +217,7 @@ declare module "emdash" {
     values: Value;
   }
   interface EmDashCollectionReferences {
-    campaign_products: CampaignProductReferences;
+    campaigns: CampaignReferences;
     pricing_options: PricingOptionReferences;
   }
 }

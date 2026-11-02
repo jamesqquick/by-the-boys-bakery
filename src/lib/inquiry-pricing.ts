@@ -79,6 +79,7 @@ export function priceInquiry(
   rawOrder: string,
   packages: InquiryPackage[],
   notes: string,
+  allowCustomRequest = true,
 ): { lines: PricedInquiryLine[]; total: number } {
   let requested: unknown;
   try {
@@ -124,8 +125,12 @@ export function priceInquiry(
     lines.push({ ...item, quantity, lineTotal: item.amount === null ? null : lineCents / 100 });
   }
 
-  if (lines.length === 0 && !notes.trim()) {
-    throw new InquiryPricingError("Choose a package or tell us about your custom request in the notes.");
+  if (lines.length === 0 && (!allowCustomRequest || !notes.trim())) {
+    throw new InquiryPricingError(
+      allowCustomRequest
+        ? "Choose a package or tell us about your custom request in the notes."
+        : "Choose at least one seasonal item.",
+    );
   }
 
   return { lines, total: totalCents / 100 };

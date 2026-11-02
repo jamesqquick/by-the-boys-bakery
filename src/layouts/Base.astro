@@ -29,7 +29,7 @@ const { siteTitle, siteTagline, siteLogo } = resolveStarterSiteIdentity(await ge
 const fullTitle = title.includes(siteTitle) ? title : `${title} — ${siteTitle}`;
 const pageDescription = description ?? siteTagline;
 let metadataImage = image;
-const { campaign: promotedCampaign, cacheHints: campaignHints } = await getPromotedCampaign();
+const { campaign: promotedCampaign, cacheHints: campaignHints } = await getPromotedCampaign("banner");
 
 if (Astro.cache?.enabled) {
 	for (const hint of campaignHints) Astro.cache.set(hint);

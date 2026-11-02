@@ -3,18 +3,21 @@ import type { CacheHint, MediaValue, PortableTextBlock } from "emdash";
 import type { PricingItem } from "../../.emdash/types";
 
 export type CampaignTheme = "standard" | "halloween" | "christmas" | "valentines" | "spring";
+export type CampaignPlacement = "homepage" | "banner";
 
 export type Campaign = {
   id: string;
   slug: string | null;
   status: string;
   title: string;
-  eyebrow?: string;
   summary?: string;
   content?: PortableTextBlock[];
   hero_image?: MediaValue;
   metadata_image?: MediaValue;
+  hero_cta_label?: string;
   enabled?: boolean;
+  show_on_homepage?: boolean;
+  show_banner?: boolean;
   start_at?: Date;
   end_at?: Date;
   theme?: CampaignTheme;
@@ -37,16 +40,6 @@ export type CatalogProduct = PricingItem & {
   show_in_standard_catalog?: boolean;
 };
 
-export type CampaignProduct = {
-  id: string;
-  slug: string | null;
-  status: string;
-  sort?: number;
-  createdAt: Date;
-  updatedAt: Date;
-  publishedAt: Date | null;
-};
-
 type CampaignDate = Date | string | null | undefined;
 
 export type EditableCampaign = {
@@ -59,7 +52,6 @@ export type EditableCampaignProduct = {
   id: string;
   data: CatalogProduct;
   edit: Record<string, Record<string, unknown>>;
-  sort: number;
 };
 
 function toTimestamp(value: CampaignDate): number | null {
@@ -81,10 +73,14 @@ export function isCampaignActive(campaign: Campaign, now = new Date()): boolean 
 
 export function selectPromotedCampaign(
   campaigns: Campaign[],
+  placement: CampaignPlacement,
   now = new Date(),
 ): Campaign | undefined {
   return campaigns
-    .filter((campaign) => isCampaignActive(campaign, now))
+    .filter((campaign) =>
+      isCampaignActive(campaign, now) &&
+      (placement === "homepage" ? campaign.show_on_homepage === true : campaign.show_banner === true)
+    )
     .toSorted((a, b) => {
       const aEndsAt = toTimestamp(a.end_at) ?? Number.POSITIVE_INFINITY;
       const bEndsAt = toTimestamp(b.end_at) ?? Number.POSITIVE_INFINITY;
@@ -94,7 +90,10 @@ export function selectPromotedCampaign(
     })[0];
 }
 
-export async function getPromotedCampaign(now = new Date()): Promise<{
+export async function getPromotedCampaign(
+  placement: CampaignPlacement,
+  now = new Date(),
+): Promise<{
   campaign?: EditableCampaign;
   cacheHints: CacheHint[];
 }> {
@@ -106,6 +105,7 @@ export async function getPromotedCampaign(now = new Date()): Promise<{
 
   const selected = selectPromotedCampaign(
     result.entries.map((entry) => entry.data as Campaign),
+    placement,
     now,
   );
   if (!selected) return { cacheHints };
@@ -151,60 +151,39 @@ export async function getActiveCampaign(
   };
 }
 
-export async function getCampaignProducts(campaignId: string): Promise<{
+export async function getCampaignProducts(campaignSlug: string): Promise<{
   products: EditableCampaignProduct[];
   error?: Error;
   cacheHints: CacheHint[];
 }> {
-  const assignments = await getEmDashCollection<"campaign_products", CampaignProduct>("campaign_products", {
-    status: "published",
-    orderBy: { sort: "asc" },
-  });
-  const cacheHints = [assignments.cacheHint];
-  if (assignments.error) {
-    return { products: [], error: assignments.error, cacheHints };
-  }
-
-  const resolved = await Promise.all(
-    assignments.entries.map((assignment) =>
-      getEmDashEntry<
-        "campaign_products",
-        CampaignProduct,
-        { campaign: true; product: true }
-      >("campaign_products", assignment.id, {
-          references: { campaign: true, product: true },
-        }),
-    ),
-  );
-  cacheHints.push(...resolved.map((result) => result.cacheHint));
-
-  const error = resolved.find((result) => result.error)?.error;
-  if (error) return { products: [], error, cacheHints };
-
-  const seen = new Set<string>();
   const products: EditableCampaignProduct[] = [];
+  const cacheHints: CacheHint[] = [];
+  let cursor: string | undefined;
 
-  for (const result of resolved) {
-    if (!result.entry) continue;
-    const campaign = result.entry.references?.campaign.entries[0];
-    const product = result.entry.references?.product.entries[0];
-    const campaignData = campaign?.data as Campaign | undefined;
-    const productData = product?.data as CatalogProduct | undefined;
-    if (!campaignData || campaignData.id !== campaignId || !product || productData?.status !== "published") {
-      continue;
-    }
-    if (seen.has(productData.id)) continue;
-
-    seen.add(productData.id);
-    products.push({
-      id: product.id,
-      data: productData,
-      edit: product.edit as Record<string, Record<string, unknown>>,
-      sort: result.entry.data.sort ?? 0,
+  do {
+    const result = await getEmDashEntry<
+      "campaigns",
+      Campaign,
+      { products: { limit?: number; cursor?: string } }
+    >("campaigns", campaignSlug, {
+      references: { products: { limit: 100, cursor } },
     });
-  }
+    cacheHints.push(result.cacheHint);
+    if (result.error) {
+      return { products: [], error: result.error, cacheHints };
+    }
 
-  products.sort((a, b) => a.sort - b.sort);
+    const page = result.entry?.references?.products;
+    if (!page) break;
+
+    products.push(...page.entries.map((product) => ({
+      id: product.id,
+      data: product.data as CatalogProduct,
+      edit: product.edit as Record<string, Record<string, unknown>>,
+    })));
+    cursor = page.nextCursor;
+  } while (cursor);
+
   return { products, cacheHints };
 }
 

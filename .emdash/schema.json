@@ -1,6 +1,191 @@
 {
   "collections": [
     {
+      "slug": "campaigns",
+      "label": "Seasonal Campaigns",
+      "labelSingular": "Seasonal Campaign",
+      "supports": [
+        "drafts",
+        "revisions"
+      ],
+      "hidden": false,
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "summary",
+          "label": "Summary",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "content",
+          "label": "Additional Content",
+          "type": "portableText",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "hero_image",
+          "label": "Hero Image",
+          "type": "image",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "metadata_image",
+          "label": "Metadata Image",
+          "type": "image",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "hero_cta_label",
+          "label": "Hero Button Label",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "enabled",
+          "label": "Enabled",
+          "type": "boolean",
+          "required": false,
+          "unique": false,
+          "defaultValue": false
+        },
+        {
+          "slug": "show_on_homepage",
+          "label": "Show Homepage Promotion",
+          "type": "boolean",
+          "required": false,
+          "unique": false,
+          "defaultValue": false
+        },
+        {
+          "slug": "show_banner",
+          "label": "Show Site-wide Banner",
+          "type": "boolean",
+          "required": false,
+          "unique": false,
+          "defaultValue": false
+        },
+        {
+          "slug": "start_at",
+          "label": "Starts At",
+          "type": "datetime",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "end_at",
+          "label": "Ends At",
+          "type": "datetime",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "theme",
+          "label": "Theme",
+          "type": "select",
+          "required": false,
+          "unique": false,
+          "defaultValue": "standard",
+          "validation": {
+            "options": [
+              "standard",
+              "halloween",
+              "christmas",
+              "valentines",
+              "spring"
+            ]
+          }
+        },
+        {
+          "slug": "products",
+          "label": "Products",
+          "type": "reference",
+          "required": true,
+          "unique": false,
+          "validation": {
+            "targetCollection": "pricing_items",
+            "multiple": true,
+            "relation": "campaigns_products",
+            "relationSide": "parent"
+          }
+        },
+        {
+          "slug": "products_title",
+          "label": "Products Section Title",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "products_note",
+          "label": "Products Section Note",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "homepage_title",
+          "label": "Homepage Promotion Title",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "homepage_description",
+          "label": "Homepage Promotion Description",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "homepage_cta_label",
+          "label": "Homepage Button Label",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "banner_text",
+          "label": "Banner Text",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "banner_cta_label",
+          "label": "Banner Link Label",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "inquiry_title",
+          "label": "Inquiry Section Title",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "inquiry_description",
+          "label": "Inquiry Section Description",
+          "type": "text",
+          "required": false,
+          "unique": false
+        }
+      ]
+    },
+    {
       "slug": "homepage",
       "label": "Homepage",
       "labelSingular": "Homepage",
@@ -8,6 +193,7 @@
         "drafts",
         "revisions"
       ],
+      "hidden": false,
       "fields": [
         {
           "slug": "hero_pill",
@@ -230,6 +416,7 @@
         "revisions",
         "search"
       ],
+      "hidden": false,
       "fields": [
         {
           "slug": "title",
@@ -264,6 +451,7 @@
         "search",
         "seo"
       ],
+      "hidden": false,
       "fields": [
         {
           "slug": "title",
@@ -304,12 +492,13 @@
     },
     {
       "slug": "pricing_items",
-      "label": "Pricing Items",
-      "labelSingular": "Pricing Item",
+      "label": "Products",
+      "labelSingular": "Product",
       "supports": [
         "drafts",
         "revisions"
       ],
+      "hidden": false,
       "fields": [
         {
           "slug": "title",
@@ -338,6 +527,21 @@
           "type": "integer",
           "required": false,
           "unique": false
+        },
+        {
+          "slug": "image",
+          "label": "Image",
+          "type": "image",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "show_in_standard_catalog",
+          "label": "Show in Standard Catalog",
+          "type": "boolean",
+          "required": false,
+          "unique": false,
+          "defaultValue": true
         }
       ]
     },
@@ -349,23 +553,26 @@
         "drafts",
         "revisions"
       ],
+      "hidden": false,
       "fields": [
-        {
-          "slug": "label",
-          "label": "Label",
-          "type": "string",
-          "required": false,
-          "unique": false
-        },
         {
           "slug": "item",
           "label": "Pricing Item",
           "type": "reference",
           "required": true,
           "unique": false,
-          "options": {
-            "collection": "pricing_items"
+          "validation": {
+            "targetCollection": "pricing_items",
+            "relation": "pricing_options_item",
+            "relationSide": "parent"
           }
+        },
+        {
+          "slug": "label",
+          "label": "Label",
+          "type": "string",
+          "required": false,
+          "unique": false
         },
         {
           "slug": "amount",
@@ -391,6 +598,7 @@
         "drafts",
         "revisions"
       ],
+      "hidden": false,
       "fields": [
         {
           "slug": "eyebrow",
@@ -458,6 +666,7 @@
         "drafts",
         "revisions"
       ],
+      "hidden": false,
       "fields": [
         {
           "slug": "title",
@@ -497,6 +706,7 @@
         "drafts",
         "revisions"
       ],
+      "hidden": false,
       "fields": [
         {
           "slug": "title",
@@ -522,5 +732,5 @@
       ]
     }
   ],
-  "version": "8da6977124cf5c0a"
+  "version": "45db97032e6882b2"
 }

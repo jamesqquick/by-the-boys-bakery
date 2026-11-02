@@ -42,7 +42,7 @@ const {
   error: pricingOptionsError,
   cacheHints: pricingOptionsHints,
 } = pricingOptionsResult;
-const { campaign: promotedCampaign, cacheHints: campaignHints } = await getPromotedCampaign();
+const { campaign: promotedCampaign, cacheHints: campaignHints } = await getPromotedCampaign("homepage");
 
 const pricingError = pricingPageError ?? pricingItemsError ?? pricingOptionsError;
 if (pricingError) throw pricingError;

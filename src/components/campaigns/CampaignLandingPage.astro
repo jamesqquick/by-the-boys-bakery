@@ -6,7 +6,7 @@ import type { EditableCampaign, EditableCampaignProduct } from "../../lib/season
 import { getCampaignTheme } from "../../lib/seasonal-campaigns";
 import { getMetadataImage } from "../../lib/metadata";
 import BakeryLayout from "../../layouts/BakeryLayout.astro";
-import InquiryForm from "../InquiryForm";
+import SeasonalInquiryForm from "../SeasonalInquiryForm";
 import CampaignProductGrid from "./CampaignProductGrid.astro";
 
 interface Props {
@@ -33,12 +33,11 @@ const endLabel = endsAt && Number.isFinite(endsAt.getTime())
   <article class="campaign-page" data-campaign-theme={theme}>
     <header class:list={["campaign-hero", { "campaign-hero-full": !campaign.data.hero_image }]}>
       <div class="campaign-hero-copy">
-        <span class="campaign-eyebrow" {...campaign.edit.eyebrow}>
-          {campaign.data.eyebrow || "Limited-time menu"}
-        </span>
         <h1 {...campaign.edit.title}>{campaign.data.title}</h1>
         {campaign.data.summary && <p {...campaign.edit.summary}>{campaign.data.summary}</p>}
-        <a class="btn campaign-hero-cta" href="#request">Build your request</a>
+        <a class="btn campaign-hero-cta" href="#request" {...campaign.edit.hero_cta_label}>
+          {campaign.data.hero_cta_label || "Build your request"}
+        </a>
         {endLabel && <small>Requests open through {endLabel}, subject to availability.</small>}
       </div>
       {campaign.data.hero_image && (
@@ -50,7 +49,6 @@ const endLabel = endsAt && Number.isFinite(endsAt.getTime())
 
     <section class="campaign-menu" aria-labelledby="campaign-menu-title">
       <div class="campaign-section-heading">
-        <span>Seasonal selection</span>
         <h2 id="campaign-menu-title" {...campaign.edit.products_title}>
           {campaign.data.products_title || "Pick your treats"}
         </h2>
@@ -71,7 +69,6 @@ const endLabel = endsAt && Number.isFinite(endsAt.getTime())
 
     <section id="request" class="campaign-request" aria-labelledby="campaign-request-title">
       <div class="campaign-request-heading">
-        <span>Request, not checkout</span>
         <h2 id="campaign-request-title" {...campaign.edit.inquiry_title}>
           {campaign.data.inquiry_title || `Request ${campaign.data.title}`}
         </h2>
@@ -79,9 +76,9 @@ const endLabel = endsAt && Number.isFinite(endsAt.getTime())
           {campaign.data.inquiry_description || "Choose quantities for an estimate. Submitting this form does not confirm an order, availability, or final price."}
         </p>
       </div>
-      <InquiryForm
+      <SeasonalInquiryForm
         packages={packages}
-        campaign={{ slug: campaign.id, title: campaign.data.title }}
+        campaignSlug={campaign.id}
         client:load
       />
     </section>
@@ -113,8 +110,7 @@ const endLabel = endsAt && Number.isFinite(endsAt.getTime())
 
   .campaign-hero-full { grid-template-columns: 1fr; }
   .campaign-hero-copy { display: flex; align-items: flex-start; justify-content: center; flex-direction: column; padding: 5rem 4rem; }
-  .campaign-eyebrow { padding: 0.35rem 0.9rem; background: var(--campaign-secondary); border: 3px solid var(--campaign-ink); border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; }
-  .campaign-hero h1 { max-width: 850px; margin: 1.5rem 0; color: var(--campaign-ink); font-size: clamp(4rem, 9vw, 8rem); }
+  .campaign-hero h1 { max-width: 850px; margin: 0 0 1.5rem; color: var(--campaign-ink); font-size: clamp(4rem, 9vw, 8rem); }
   .campaign-hero p { max-width: 60ch; color: var(--campaign-ink); font-size: 1.12rem; font-weight: 700; }
   .campaign-hero-cta { margin-top: 2rem; background: var(--campaign-accent); border-color: var(--campaign-ink); color: var(--campaign-ink); box-shadow: 4px 4px 0 var(--campaign-ink); }
   .campaign-hero small { margin-top: 1rem; font-weight: 800; }
@@ -123,8 +119,6 @@ const endLabel = endsAt && Number.isFinite(endsAt.getTime())
 
   .campaign-menu { padding: 6rem 4rem 7rem; background: var(--campaign-secondary); }
   .campaign-section-heading { max-width: 760px; margin-bottom: 3rem; }
-  .campaign-section-heading > span,
-  .campaign-request-heading > span { display: inline-block; margin-bottom: 0.8rem; font-size: 0.72rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; }
   .campaign-section-heading h2,
   .campaign-request-heading h2 { color: var(--campaign-ink); font-size: clamp(3rem, 6vw, 5.5rem); }
   .campaign-section-heading p,
