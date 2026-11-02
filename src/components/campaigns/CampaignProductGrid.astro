@@ -1,0 +1,131 @@
+---
+import { Image } from "emdash/ui";
+import type { EditablePricingOption } from "../../lib/pricing-options";
+import type { EditableCampaignProduct } from "../../lib/seasonal-campaigns";
+
+interface Props {
+  products: EditableCampaignProduct[];
+  pricingOptions: EditablePricingOption[];
+}
+
+const { products, pricingOptions } = Astro.props;
+const optionsByProduct = new Map<string, EditablePricingOption[]>();
+for (const option of pricingOptions) {
+  if (!option.data.itemId) continue;
+  const options = optionsByProduct.get(option.data.itemId) ?? [];
+  options.push(option);
+  optionsByProduct.set(option.data.itemId, options);
+}
+const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2,
+});
+---
+
+<div class="campaign-products">
+  {products.map((product) => {
+    const options = optionsByProduct.get(product.data.id) ?? [];
+    return (
+      <article class="campaign-product">
+        {product.data.image ? (
+          <div class="campaign-product-image" {...product.edit.image}>
+            <Image image={product.data.image} />
+          </div>
+        ) : (
+          <div class="campaign-product-placeholder" aria-hidden="true">Fresh batch</div>
+        )}
+        <div class="campaign-product-copy">
+          <h3 {...product.edit.title}>{product.data.title}</h3>
+          {product.data.subtitle && <strong {...product.edit.subtitle}>{product.data.subtitle}</strong>}
+          {product.data.description && <p {...product.edit.description}>{product.data.description}</p>}
+          <div class="campaign-product-prices">
+            {options.length > 0 ? options.map((option) => (
+              <span>
+                {option.data.label && <small {...option.edit.label}>{option.data.label}</small>}
+                <b {...option.edit.amount}>{formatter.format(option.data.amount)}</b>
+              </span>
+            )) : <span><small>Custom request</small><b>Ask us</b></span>}
+          </div>
+        </div>
+      </article>
+    );
+  })}
+</div>
+
+<style>
+  .campaign-products {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .campaign-product {
+    display: grid;
+    grid-template-columns: minmax(150px, 0.7fr) minmax(0, 1.3fr);
+    min-height: 250px;
+    overflow: hidden;
+    background: var(--campaign-paper);
+    border: 3px solid var(--campaign-ink);
+    border-radius: 22px;
+    box-shadow: 6px 6px 0 var(--campaign-ink);
+  }
+
+  .campaign-product-image,
+  .campaign-product-placeholder {
+    min-height: 100%;
+    border-right: 3px solid var(--campaign-ink);
+  }
+
+  .campaign-product-image :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .campaign-product-placeholder {
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: var(--campaign-accent);
+    font-family: var(--font-family-display);
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .campaign-product-copy { padding: 1.75rem; }
+  .campaign-product h3 { color: var(--campaign-ink); font-size: clamp(1.8rem, 3vw, 2.5rem); }
+  .campaign-product strong { display: block; margin: 0.6rem 0; font-size: 0.75rem; letter-spacing: 0.07em; text-transform: uppercase; }
+  .campaign-product p { color: var(--campaign-ink); font-weight: 700; }
+
+  .campaign-product-prices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+  }
+
+  .campaign-product-prices span {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    padding: 0.45rem 0.7rem;
+    background: var(--campaign-accent);
+    border: 2px solid var(--campaign-ink);
+    border-radius: 10px;
+  }
+
+  .campaign-product-prices small { font-weight: 900; }
+  .campaign-product-prices b { font-size: 1.05rem; }
+
+  @media (max-width: 1050px) {
+    .campaign-products { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .campaign-product { grid-template-columns: 1fr; }
+    .campaign-product-image,
+    .campaign-product-placeholder { min-height: 220px; border-right: 0; border-bottom: 3px solid var(--campaign-ink); }
+  }
+</style>

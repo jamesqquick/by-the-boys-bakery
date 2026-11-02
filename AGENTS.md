@@ -3,13 +3,16 @@ This is an EmDash site -- a CMS built on Astro with a full admin UI.
 ## Commands
 
 ```bash
-npx emdash dev        # Start dev server (runs migrations, seeds, generates types)
+pnpm dev              # Start the local Astro/EmDash development server
 npx emdash types      # Regenerate TypeScript types from schema
 ```
 
-This checkout uses Cloudflare D1/R2 with `remoteBindings: true`. Do not run `npx emdash dev` or another command that applies migrations/seeds unless the target database is explicitly confirmed; use a local-only binding configuration for local CMS work.
+Local development uses Cloudflare D1/R2 with `remoteBindings: false` and shared state at `~/.local/share/by-the-boys-bakery/wrangler`, so every worktree sees the same local CMS data. Override the location with `EMDASH_LOCAL_STATE_PATH` when isolation is required.
+
+Do not enable remote bindings or run a command against deployed D1/R2 unless the target database is explicitly confirmed. Local migrations and seeds must stay on the shared local state.
 
 The admin UI is at `http://localhost:4321/_emdash/admin`.
+For local admin access without signing in, use `http://localhost:4321/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin`.
 
 ## Key Files
 

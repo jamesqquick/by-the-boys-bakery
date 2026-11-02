@@ -12,10 +12,10 @@ const items = [
   { id: "cake-id", slug: "cakes", title: "Cakes", sort: 3 },
 ];
 const options = [
-  { id: "cupcake-option", item: "cupcake-id", amount: 28, sort: 1 },
-  { id: "cookie-option", item: "cookie-id", amount: 28, sort: 1 },
-  { id: "cake-6", item: "cake-id", label: "6-inch", amount: 30, sort: 1 },
-  { id: "cake-8", item: "cake-id", label: "8-inch", amount: 40, sort: 2 },
+  { id: "cupcake-option", itemId: "cupcake-id", amount: 28, sort: 1 },
+  { id: "cookie-option", itemId: "cookie-id", amount: 28, sort: 1 },
+  { id: "cake-6", itemId: "cake-id", label: "6-inch", amount: 30, sort: 1 },
+  { id: "cake-8", itemId: "cake-id", label: "8-inch", amount: 40, sort: 2 },
 ];
 
 const packages = makeInquiryPackages(items, options);
@@ -46,6 +46,13 @@ test("allows a custom-only inquiry with notes and no subtotal", () => {
   assert.deepEqual(priceInquiry("[]", packages, "Custom character cake"), {
     lines: [], total: 0,
   });
+});
+
+test("requires at least one package for seasonal inquiries", () => {
+  assert.throws(
+    () => priceInquiry("[]", packages, "Please add a gift note", false),
+    (error) => error instanceof InquiryPricingError && error.message === "Choose at least one seasonal item.",
+  );
 });
 
 test("rejects an empty inquiry, duplicate lines, tampered prices, and unavailable choices", () => {

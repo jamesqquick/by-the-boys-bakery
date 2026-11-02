@@ -2,8 +2,9 @@ import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro/zod";
 import { env } from "cloudflare:workers";
 import { getEmDashCollection } from "emdash";
-import type { PricingItem } from "../../.emdash/types";
 import { getPricingOptions } from "../lib/pricing-options";
+import type { CatalogProduct } from "../lib/seasonal-campaigns";
+import { getActiveCampaign, getCampaignProducts } from "../lib/seasonal-campaigns";
 import {
 	formatInquiryPrice,
 	InquiryPricingError,
@@ -11,57 +12,32 @@ import {
 	priceInquiry,
 } from "../lib/inquiry-pricing";
 
+const contactFields = {
+	name: z.string().min(1, "Name is required"),
+	email: z.string().email("A valid email address is required"),
+	phone: z.string().nullable().optional(),
+};
+
+const requestFields = {
+	order: z.string().max(5000),
+	notes: z.string().nullable().optional(),
+};
+
 export const server = {
 	submitInquiry: defineAction({
 		accept: "form",
 		input: z.object({
-			name: z.string().min(1, "Name is required"),
-			email: z.string().email("A valid email address is required"),
-			phone: z.string().nullable().optional(),
+			...contactFields,
+			...requestFields,
 			occasion: z.string().min(1, "Occasion is required"),
 			date: z.string().min(1, "Date is required"),
 			quantity: z.string().min(1, "Quantity is required"),
-			order: z.string().max(5000),
-			notes: z.string().nullable().optional(),
 		}),
-		handler: async (input) => {
-			const { name, email, phone, occasion, date, quantity, order, notes } = input;
-			const [itemsResult, optionsResult] = await Promise.all([
-				getEmDashCollection("pricing_items", { status: "published", orderBy: { sort: "asc" } }),
-				getPricingOptions("published"),
-			]);
-			if (itemsResult.error || optionsResult.error) {
-				throw new ActionError({
-					code: "INTERNAL_SERVER_ERROR",
-					message: "Pricing is unavailable right now. Please try again shortly.",
-				});
-			}
-
-			let pricedOrder;
-			try {
-				pricedOrder = priceInquiry(
-					order,
-					makeInquiryPackages(
-						itemsResult.entries.map((item) => item.data as PricingItem),
-						optionsResult.entries.map((option) => option.data),
-					),
-					notes ?? "",
-				);
-			} catch (error) {
-				if (error instanceof InquiryPricingError) {
-					throw new ActionError({ code: "BAD_REQUEST", message: error.message });
-				}
-				throw error;
-			}
-
-			const lines = pricedOrder.lines.map((line) =>
-				`${line.title} — ${line.label}: ${line.quantity} × ${formatInquiryPrice(line.amount)} = ${formatInquiryPrice(line.lineTotal)}`,
-			);
-			const estimate = pricedOrder.lines.length > 0
-				? formatInquiryPrice(pricedOrder.total)
-				: "Custom request — quote to follow";
+		handler: async ({ name, email, phone, occasion, date, quantity, order, notes }) => {
+			const items = await getStandardItems();
+			const pricedOrder = await priceSelectedOrder(items, order, notes);
+			const { lines, estimate } = describeOrder(pricedOrder);
 			const subject = `New Inquiry from ${name} — ${occasion} on ${date}`;
-
 			const html = `
 				<h2 style="font-family:sans-serif;color:#3b1f0c;">New Bakery Inquiry</h2>
 				<table style="font-family:sans-serif;border-collapse:collapse;width:100%;max-width:480px;">
@@ -77,7 +53,6 @@ export const server = {
 				</table>
 				<p style="font-family:sans-serif;">Estimate covers standard packages only. Confirm availability and final price with the customer.</p>
 			`;
-
 			const text = [
 				"New Bakery Inquiry",
 				"",
@@ -96,43 +71,197 @@ export const server = {
 				.filter((line) => line !== null)
 				.join("\n");
 
-			if (!env.EMAIL) {
-				console.info("[inquiry] EMAIL binding not available — would have sent:", {
-					to: "james.q.quick@gmail.com",
-					subject,
-					name,
-					email,
-					phone,
-					occasion,
-					date,
-					lines,
-					quantity,
-					estimate,
-					notes,
-				});
-			} else {
-				try {
-					await env.EMAIL.send({
-						to: "james.q.quick@gmail.com",
-						from: { email: "hello@bytheboysbakery.com", name: "By the Boys Bakery" },
-						replyTo: email,
-						subject,
-						html,
-						text,
-					});
-				} catch (err) {
-					console.error("Email send failed:", err);
-					throw new ActionError({
-						code: "INTERNAL_SERVER_ERROR",
-						message: "Failed to send your inquiry. Please try again.",
-					});
-				}
-			}
+			await sendInquiryEmail({
+				replyTo: email,
+				subject,
+				html,
+				text,
+				logDetails: { name, email, phone, occasion, date, quantity, lines, estimate, notes },
+			});
+
+			return { success: true as const };
+		},
+	}),
+
+	submitSeasonalInquiry: defineAction({
+		accept: "form",
+		input: z.object({
+			...contactFields,
+			...requestFields,
+			campaign: z.string().min(1, "Campaign is required").max(100),
+		}),
+		handler: async ({ name, email, phone, campaign, order, notes }) => {
+			const { title: campaignTitle, items } = await getCampaignItems(campaign);
+			const pricedOrder = await priceSelectedOrder(items, order, notes, false);
+			const { lines, estimate } = describeOrder(pricedOrder);
+			const subject = `New ${campaignTitle} Inquiry from ${name}`;
+			const html = `
+				<h2 style="font-family:sans-serif;color:#3b1f0c;">New Seasonal Inquiry</h2>
+				<table style="font-family:sans-serif;border-collapse:collapse;width:100%;max-width:480px;">
+					${row("Name", name)}
+					${row("Email", email)}
+					${phone ? row("Phone", phone) : ""}
+					${row("Seasonal campaign", campaignTitle)}
+					${row("Requested packages", lines.join("\n"))}
+					${row("Estimated subtotal", estimate)}
+					${notes ? row("Notes", notes) : ""}
+				</table>
+				<p style="font-family:sans-serif;">Confirm availability and final price with the customer.</p>
+			`;
+			const text = [
+				"New Seasonal Inquiry",
+				"",
+				`Name: ${name}`,
+				`Email: ${email}`,
+				phone ? `Phone: ${phone}` : null,
+				`Seasonal campaign: ${campaignTitle}`,
+				"Requested packages:",
+				...lines,
+				`Estimated subtotal: ${estimate}`,
+				"Confirm availability and final price with the customer.",
+				notes ? `Notes: ${notes}` : null,
+			]
+				.filter((line) => line !== null)
+				.join("\n");
+
+			await sendInquiryEmail({
+				replyTo: email,
+				subject,
+				html,
+				text,
+				logDetails: { name, email, phone, campaign: campaignTitle, lines, estimate, notes },
+			});
 
 			return { success: true as const };
 		},
 	}),
 };
+
+async function getStandardItems(): Promise<CatalogProduct[]> {
+	const itemsResult = await getEmDashCollection("pricing_items", {
+		status: "published",
+		orderBy: { sort: "asc" },
+	});
+	if (itemsResult.error) {
+		throw new ActionError({
+			code: "INTERNAL_SERVER_ERROR",
+			message: "Pricing is unavailable right now. Please try again shortly.",
+		});
+	}
+
+	return itemsResult.entries
+		.map((item) => item.data as CatalogProduct)
+		.filter((item) => item.show_in_standard_catalog !== false);
+}
+
+async function getCampaignItems(campaignSlug: string): Promise<{ title: string; items: CatalogProduct[] }> {
+	const campaignResult = await getActiveCampaign(campaignSlug);
+	if (campaignResult.error) {
+		throw new ActionError({
+			code: "INTERNAL_SERVER_ERROR",
+			message: "Seasonal pricing is unavailable right now. Please try again shortly.",
+		});
+	}
+	if (!campaignResult.campaign) {
+		throw new ActionError({
+			code: "BAD_REQUEST",
+			message: "This seasonal special is no longer accepting requests.",
+		});
+	}
+
+	const productsResult = await getCampaignProducts(campaignResult.campaign.id);
+	if (productsResult.error) {
+		throw new ActionError({
+			code: "INTERNAL_SERVER_ERROR",
+			message: "Seasonal pricing is unavailable right now. Please try again shortly.",
+		});
+	}
+
+	return {
+		title: campaignResult.campaign.data.title,
+		items: productsResult.products.map((product) => product.data),
+	};
+}
+
+async function priceSelectedOrder(
+	items: CatalogProduct[],
+	order: string,
+	notes: string | null | undefined,
+	allowCustomRequest = true,
+) {
+	const optionsResult = await getPricingOptions("published");
+	if (optionsResult.error) {
+		throw new ActionError({
+			code: "INTERNAL_SERVER_ERROR",
+			message: "Pricing is unavailable right now. Please try again shortly.",
+		});
+	}
+
+	try {
+		return priceInquiry(
+			order,
+			makeInquiryPackages(items, optionsResult.entries.map((option) => option.data)),
+			notes ?? "",
+			allowCustomRequest,
+		);
+	} catch (error) {
+		if (error instanceof InquiryPricingError) {
+			throw new ActionError({ code: "BAD_REQUEST", message: error.message });
+		}
+		throw error;
+	}
+}
+
+function describeOrder(pricedOrder: ReturnType<typeof priceInquiry>) {
+	const lines = pricedOrder.lines.map((line) => line.amount === null
+		? `${line.title} — ${line.label}: ${line.quantity} × quote required`
+		: `${line.title} — ${line.label}: ${line.quantity} × ${formatInquiryPrice(line.amount)} = ${formatInquiryPrice(line.lineTotal ?? 0)}`,
+	);
+	const hasQuotedItems = pricedOrder.lines.some((line) => line.amount === null);
+	const estimate = pricedOrder.lines.length > 0
+		? pricedOrder.total > 0
+			? `${formatInquiryPrice(pricedOrder.total)}${hasQuotedItems ? " plus quoted items" : ""}`
+			: "Quote to follow"
+		: "Custom request — quote to follow";
+
+	return { lines, estimate };
+}
+
+interface InquiryEmail {
+	replyTo: string;
+	subject: string;
+	html: string;
+	text: string;
+	logDetails: Record<string, unknown>;
+}
+
+async function sendInquiryEmail({ replyTo, subject, html, text, logDetails }: InquiryEmail) {
+	if (!env.EMAIL) {
+		console.info("[inquiry] EMAIL binding not available — would have sent:", {
+			to: "james.q.quick@gmail.com",
+			subject,
+			...logDetails,
+		});
+		return;
+	}
+
+	try {
+		await env.EMAIL.send({
+			to: "james.q.quick@gmail.com",
+			from: { email: "hello@bytheboysbakery.com", name: "By the Boys Bakery" },
+			replyTo,
+			subject,
+			html,
+			text,
+		});
+	} catch (error) {
+		console.error("Email send failed:", error);
+		throw new ActionError({
+			code: "INTERNAL_SERVER_ERROR",
+			message: "Failed to send your inquiry. Please try again.",
+		});
+	}
+}
 
 function row(label: string, value: string): string {
 	return `

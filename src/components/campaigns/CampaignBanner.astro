@@ -1,0 +1,67 @@
+---
+import type { EditableCampaign } from "../../lib/seasonal-campaigns";
+import { getCampaignTheme } from "../../lib/seasonal-campaigns";
+
+interface Props {
+  campaign?: EditableCampaign;
+}
+
+const { campaign } = Astro.props;
+const theme = getCampaignTheme(campaign?.data.theme);
+---
+
+{campaign && (
+  <aside class="campaign-banner" data-campaign-theme={theme} aria-label="Seasonal special">
+    <p {...campaign.edit.banner_text}>
+      {campaign.data.banner_text || `${campaign.data.title} is available for a limited time.`}
+    </p>
+    <a href={`/${campaign.id}`} {...campaign.edit.banner_cta_label}>
+      {campaign.data.banner_cta_label || "See the special"}
+    </a>
+  </aside>
+)}
+
+<style>
+  .campaign-banner {
+    --campaign-accent: #f28c88;
+    --campaign-ink: var(--color-choco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 42px;
+    padding: 0.6rem 1.25rem;
+    background: var(--campaign-accent);
+    border-bottom: 3px solid var(--campaign-ink);
+    color: var(--campaign-ink);
+    text-align: center;
+  }
+
+  .campaign-banner[data-campaign-theme="halloween"] { --campaign-accent: #f59a3c; --campaign-ink: #28162d; }
+  .campaign-banner[data-campaign-theme="christmas"] { --campaign-accent: #b7d9a6; --campaign-ink: #193d2c; }
+  .campaign-banner[data-campaign-theme="valentines"] { --campaign-accent: #f5a9bd; --campaign-ink: #5b1832; }
+  .campaign-banner[data-campaign-theme="spring"] { --campaign-accent: #a9dfbd; --campaign-ink: #25452f; }
+
+  .campaign-banner p {
+    color: inherit;
+    font-size: 0.86rem;
+    font-weight: 900;
+  }
+
+  .campaign-banner a {
+    color: inherit;
+    font-size: 0.78rem;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 600px) {
+    .campaign-banner {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.2rem;
+      padding-inline: 1rem;
+      text-align: left;
+    }
+  }
+</style>

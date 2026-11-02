@@ -1,10 +1,10 @@
 ---
 import { getEmDashCollection } from "emdash";
-import type { PricingItem } from "../../.emdash/types";
 import { getPricingOptions } from "../lib/pricing-options";
 import BakeryLayout from "../layouts/BakeryLayout.astro";
 import InquiryForm from "../components/InquiryForm";
 import { makeInquiryPackages } from "../lib/inquiry-pricing";
+import type { CatalogProduct } from "../lib/seasonal-campaigns";
 
 const [
   { entries: items, error: itemsError, cacheHint: itemsHint },
@@ -22,7 +22,9 @@ if (Astro.cache?.enabled) {
 }
 
 const packages = makeInquiryPackages(
-  items.map((item) => item.data as PricingItem),
+  items
+    .map((item) => item.data as CatalogProduct)
+    .filter((item) => item.show_in_standard_catalog !== false),
   options.map((option) => option.data),
 );
 ---

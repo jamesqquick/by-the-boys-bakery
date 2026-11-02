@@ -22,9 +22,7 @@
 	"send_email": [
 		{
 			"name": "EMAIL",
-			// remote: true sends real emails in local dev via wrangler dev.
-			// Remove or set to false to simulate locally (logs only, nothing sent).
-			"remote": true,
+			// Local development logs emails without sending them.
 		},
 	],
 	// Drives scheduled publishing, plugin cron, and maintenance (see src/worker.ts)
