@@ -30,7 +30,6 @@ const photos = [
 <section id="gallery" class="gallery-section">
   <!-- Header -->
   <div class="gallery-header">
-    <span class="section-label">Fresh From the Kitchen</span>
     <h2 class="gallery-title">
       Real Food, Real <span class="pop">Love</span>
     </h2>
@@ -53,19 +52,6 @@ const photos = [
         </div>
       </div>
     ))}
-  </div>
-
-  <!-- Footer squiggle note -->
-  <div class="gallery-footer">
-    <div class="gallery-note">
-      <svg width="40" height="20" viewBox="0 0 40 20" fill="none" aria-hidden="true">
-        <path d="M2 10 Q8 2 14 10 Q20 18 26 10 Q32 2 38 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-      </svg>
-      Every batch made by hand, with love, right here in Germantown, TN
-      <svg width="40" height="20" viewBox="0 0 40 20" fill="none" aria-hidden="true">
-        <path d="M2 10 Q8 18 14 10 Q20 2 26 10 Q32 18 38 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-      </svg>
-    </div>
   </div>
 </section>
 
@@ -95,19 +81,6 @@ const photos = [
     text-align: center;
     margin-bottom: 4rem;
     position: relative;
-  }
-
-  .section-label {
-    display: inline-block;
-    background: var(--color-choco);
-    color: var(--color-butter);
-    padding: 0.35rem 0.9rem;
-    border-radius: 100px;
-    font-size: 0.72rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 1rem;
   }
 
   .gallery-title {
@@ -183,32 +156,6 @@ const photos = [
     border-radius: 2px;
   }
 
-  /* ─── Footer note ─── */
-  .gallery-footer {
-    text-align: center;
-    margin-top: 3rem;
-    position: relative;
-  }
-
-  .gallery-note {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: var(--color-choco);
-    color: var(--color-butter);
-    padding: 0.6rem 1.4rem;
-    border-radius: 100px;
-    font-size: 0.82rem;
-    font-weight: 800;
-    border: 3px solid var(--color-choco);
-    box-shadow: 4px 4px 0 #8B6555;
-  }
-
-  .gallery-note svg {
-    flex-shrink: 0;
-    color: var(--color-butter);
-  }
-
   /* ─── Tablet ─── */
   @media (max-width: 1023px) {
     .gallery-section {
@@ -234,12 +181,5 @@ const photos = [
     /* Reduce rotation on mobile so nothing looks broken */
     .rot-r1, .rot-r2, .rot-r3 { transform: rotate(1deg); }
     .rot-l1, .rot-l2, .rot-l3 { transform: rotate(-1deg); }
-
-    .gallery-note {
-      font-size: 0.72rem;
-      padding: 0.5rem 1rem;
-      gap: 0.5rem;
-    }
-    .gallery-note svg { display: none; }
   }
 </style>

@@ -80,7 +80,6 @@ const edit = (home?.edit ?? {}) as Record<string, Record<string, unknown>>;
   currentPath="/"
 >
   <HeroSection
-    pill={d?.hero_pill}
     title={d?.hero_title}
     titleAccent={d?.hero_title_accent}
     desc={d?.hero_desc}
@@ -88,25 +87,20 @@ const edit = (home?.edit ?? {}) as Record<string, Record<string, unknown>>;
     ctaHref={d?.hero_cta_href}
     note={d?.hero_note}
     image={d?.hero_image}
-    sticker1={d?.hero_sticker_1}
-    sticker2={d?.hero_sticker_2}
     edit={edit}
   />
   <TickerSection items={d?.ticker_items} />
   {promotedCampaign && <CampaignPromo campaign={promotedCampaign} />}
   <AboutSection
-    label={d?.about_label}
     title={d?.about_title}
     titleAccent={d?.about_title_accent}
     intro={d?.about_intro}
     list={d?.about_list}
     outro={d?.about_outro}
     image={d?.about_image}
-    badge={d?.about_badge}
     edit={edit}
   />
   <MenuHighlights
-    label={d?.treats_label}
     title={d?.treats_title}
     note={d?.treats_note}
     treats={treatEntries}
@@ -119,7 +113,6 @@ const edit = (home?.edit ?? {}) as Record<string, Record<string, unknown>>;
     pricingOptions={pricingOptions}
   />
   <ValuesSection
-    label={d?.values_label}
     title={d?.values_title}
     values={valueEntries}
     edit={edit}

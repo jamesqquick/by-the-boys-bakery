@@ -11,7 +11,6 @@ interface TreatEntry {
 }
 
 interface Props {
-  label?: string;
   title?: string;
   note?: string;
   treats?: TreatEntry[];
@@ -26,7 +25,6 @@ const fallbackTreats: TreatEntry[] = [
 ];
 
 const {
-  label = "What We Make",
   title = "Our Treats",
   note = "See something you like? Submit an inquiry and we'll sort out the details.",
   treats: treatsProp,
@@ -39,10 +37,7 @@ const treats =
 
 <section id="treats" class="menu">
   <div class="menu-header">
-    <div>
-      <span class="section-label" {...edit.treats_label}>{label}</span>
-      <h2 class="section-title" {...edit.treats_title}>{title}</h2>
-    </div>
+    <h2 class="section-title" {...edit.treats_title}>{title}</h2>
     <p class="menu-note" {...edit.treats_note}>{note}</p>
   </div>
   <div class="menu-grid">
@@ -69,20 +64,6 @@ const treats =
     justify-content: space-between;
     margin-bottom: 3rem;
     gap: 1.5rem;
-  }
-
-  .section-label {
-    display: inline-block;
-    background: var(--color-sky);
-    color: var(--color-choco);
-    border: 3px solid var(--color-choco);
-    padding: 0.3rem 0.85rem;
-    border-radius: 100px;
-    font-size: 0.72rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 0.75rem;
   }
 
   .section-title {

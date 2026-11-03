@@ -7,7 +7,6 @@ interface ValueEntry {
 }
 
 interface Props {
-  label?: string;
   title?: string;
   values?: ValueEntry[];
   edit?: Record<string, Record<string, unknown>>;
@@ -20,7 +19,6 @@ const fallbackValues: ValueEntry[] = [
 ];
 
 const {
-  label = "What Makes Us Different",
   title = "Why the Boys?",
   values: valuesProp,
   edit = {},
@@ -32,7 +30,6 @@ const values =
 
 <section class="values">
   <div class="values-header">
-    <span class="values-label" {...edit.values_label}>{label}</span>
     <h2 class="values-title" {...edit.values_title}>{title}</h2>
   </div>
   <div class="values-grid">
@@ -59,19 +56,6 @@ const values =
   .values-header {
     text-align: center;
     margin-bottom: 3rem;
-  }
-
-  .values-label {
-    display: inline-block;
-    background: var(--color-choco);
-    color: var(--color-butter);
-    padding: 0.35rem 0.85rem;
-    border-radius: 100px;
-    font-size: 0.72rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 0.75rem;
   }
 
   .values-title {
