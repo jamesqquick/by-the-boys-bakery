@@ -1,0 +1,21 @@
+src/components/sections/MenuHighlights.astro
+  s_5bc09201e75855::t_c923652ed893df 40
+src/components/sections/PricingSection.astro
+  s_5bc09201e75855::t_61f5d4aff150d3 169
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "31d0d9d6d9860d7b0d8616b0e90d751a2a097f7a",
+  "prompts": {},
+  "sessions": {
+    "s_5bc09201e75855": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_e61e32f61ffeBkW1l6I5A4EVi4",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "James Q Quick <james@learnwithjason.dev>"
+    }
+  }
+}
