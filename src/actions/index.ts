@@ -3,6 +3,7 @@ import { z } from "astro/zod";
 import { env } from "cloudflare:workers";
 import { getEmDashCollection } from "emdash";
 import { getPricingOptions } from "../lib/pricing-options";
+import { inquiryReferralSources } from "../lib/inquiry-referral-sources";
 import type { CatalogProduct } from "../lib/seasonal-campaigns";
 import { getActiveCampaign, getCampaignProducts } from "../lib/seasonal-campaigns";
 import {
@@ -16,6 +17,8 @@ const contactFields = {
 	name: z.string().min(1, "Name is required"),
 	email: z.string().email("A valid email address is required"),
 	phone: z.string().nullable().optional(),
+	referralSource: z.enum(inquiryReferralSources).or(z.literal("")).optional(),
+	referralSourceDetails: z.string().nullable().optional(),
 };
 
 const requestFields = {
@@ -33,10 +36,11 @@ export const server = {
 			date: z.string().min(1, "Date is required"),
 			quantity: z.string().min(1, "Quantity is required"),
 		}),
-		handler: async ({ name, email, phone, occasion, date, quantity, order, notes }) => {
+		handler: async ({ name, email, phone, referralSource, referralSourceDetails, occasion, date, quantity, order, notes }) => {
 			const items = await getStandardItems();
 			const pricedOrder = await priceSelectedOrder(items, order, notes);
 			const { lines, estimate } = describeOrder(pricedOrder);
+			const referralSourceAnswer = describeReferralSource(referralSource, referralSourceDetails);
 			const subject = `New Inquiry from ${name} — ${occasion} on ${date}`;
 			const html = `
 				<h2 style="font-family:sans-serif;color:#3b1f0c;">New Bakery Inquiry</h2>
@@ -44,6 +48,7 @@ export const server = {
 					${row("Name", name)}
 					${row("Email", email)}
 					${phone ? row("Phone", phone) : ""}
+					${referralSourceAnswer ? row("How did you hear about us?", referralSourceAnswer) : ""}
 					${row("Occasion", occasion)}
 					${row("Date needed", date)}
 					${row("Guests", quantity)}
@@ -59,6 +64,7 @@ export const server = {
 				`Name: ${name}`,
 				`Email: ${email}`,
 				phone ? `Phone: ${phone}` : null,
+				referralSourceAnswer ? `How did you hear about us: ${referralSourceAnswer}` : null,
 				`Occasion: ${occasion}`,
 				`Date needed: ${date}`,
 				`Guests: ${quantity}`,
@@ -76,7 +82,7 @@ export const server = {
 				subject,
 				html,
 				text,
-				logDetails: { name, email, phone, occasion, date, quantity, lines, estimate, notes },
+				logDetails: { name, email, phone, referralSource, referralSourceDetails, occasion, date, quantity, lines, estimate, notes },
 			});
 
 			return { success: true as const };
@@ -90,10 +96,11 @@ export const server = {
 			...requestFields,
 			campaign: z.string().min(1, "Campaign is required").max(100),
 		}),
-		handler: async ({ name, email, phone, campaign, order, notes }) => {
+		handler: async ({ name, email, phone, referralSource, referralSourceDetails, campaign, order, notes }) => {
 			const { title: campaignTitle, items } = await getCampaignItems(campaign);
 			const pricedOrder = await priceSelectedOrder(items, order, notes, false);
 			const { lines, estimate } = describeOrder(pricedOrder);
+			const referralSourceAnswer = describeReferralSource(referralSource, referralSourceDetails);
 			const subject = `New ${campaignTitle} Inquiry from ${name}`;
 			const html = `
 				<h2 style="font-family:sans-serif;color:#3b1f0c;">New Seasonal Inquiry</h2>
@@ -101,6 +108,7 @@ export const server = {
 					${row("Name", name)}
 					${row("Email", email)}
 					${phone ? row("Phone", phone) : ""}
+					${referralSourceAnswer ? row("How did you hear about us?", referralSourceAnswer) : ""}
 					${row("Seasonal campaign", campaignTitle)}
 					${row("Requested packages", lines.join("\n"))}
 					${row("Estimated subtotal", estimate)}
@@ -114,6 +122,7 @@ export const server = {
 				`Name: ${name}`,
 				`Email: ${email}`,
 				phone ? `Phone: ${phone}` : null,
+				referralSourceAnswer ? `How did you hear about us: ${referralSourceAnswer}` : null,
 				`Seasonal campaign: ${campaignTitle}`,
 				"Requested packages:",
 				...lines,
@@ -129,7 +138,7 @@ export const server = {
 				subject,
 				html,
 				text,
-				logDetails: { name, email, phone, campaign: campaignTitle, lines, estimate, notes },
+				logDetails: { name, email, phone, referralSource, referralSourceDetails, campaign: campaignTitle, lines, estimate, notes },
 			});
 
 			return { success: true as const };
@@ -225,6 +234,16 @@ function describeOrder(pricedOrder: ReturnType<typeof priceInquiry>) {
 		: "Custom request — quote to follow";
 
 	return { lines, estimate };
+}
+
+function describeReferralSource(
+	referralSource: string | undefined,
+	referralSourceDetails: string | null | undefined,
+): string | undefined {
+	if (referralSource !== "Other") return referralSource || undefined;
+
+	const details = referralSourceDetails?.trim();
+	return details ? `Other — ${details}` : "Other";
 }
 
 interface InquiryEmail {

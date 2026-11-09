@@ -86,7 +86,7 @@ export default function InquiryForm({ packages }: InquiryFormProps) {
           </div>
           <div className="field">
             <Label htmlFor="quantity">How many people? <span className="required">*</span></Label>
-            <Select name="quantity" required>
+            <Select name="quantity" defaultValue="1-4" required>
               <SelectTrigger id="quantity" aria-describedby={fieldErrors.quantity ? "quantity-error" : undefined}>
                 <SelectValue placeholder="Pick one..." />
               </SelectTrigger>

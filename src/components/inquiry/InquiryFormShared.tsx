@@ -3,7 +3,15 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { inquiryReferralSources } from "@/lib/inquiry-referral-sources";
 import { formatInquiryPrice, type InquiryPackage } from "@/lib/inquiry-pricing";
 
 export type InquiryFieldErrors = Record<string, string[] | undefined>;
@@ -21,6 +29,8 @@ export function InquirySuccess() {
 }
 
 export function ContactFields({ fieldErrors }: { fieldErrors: InquiryFieldErrors }) {
+  const [referralSource, setReferralSource] = useState("");
+
   return (
     <div className="form-section">
       <p className="form-section-label" data-step="1">Contact Info</p>
@@ -50,6 +60,41 @@ export function ContactFields({ fieldErrors }: { fieldErrors: InquiryFieldErrors
           <span className="optional">(optional, faster response)</span>
         </Label>
         <Input id="phone" name="phone" type="tel" placeholder="(901) 555-0100" />
+      </div>
+      <div className="field" style={{ marginTop: "1.25rem" }}>
+        <Label htmlFor="referralSource">
+          How did you hear about us? <span className="optional">(optional)</span>
+        </Label>
+        <Select name="referralSource" value={referralSource} onValueChange={setReferralSource}>
+          <SelectTrigger
+            id="referralSource"
+            aria-describedby={fieldErrors.referralSource ? "referralSource-error" : undefined}
+          >
+            <SelectValue placeholder="Select an option..." />
+          </SelectTrigger>
+          <SelectContent>
+            {inquiryReferralSources.map((source) => (
+              <SelectItem key={source} value={source}>{source}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {fieldErrors.referralSource && (
+          <p id="referralSource-error" className="field-error">
+            {fieldErrors.referralSource.join(", ")}
+          </p>
+        )}
+        {referralSource === "Other" && (
+          <div className="field" style={{ marginTop: "0.5rem" }}>
+            <Label htmlFor="referralSourceDetails">
+              Please specify <span className="optional">(optional)</span>
+            </Label>
+            <Input
+              id="referralSourceDetails"
+              name="referralSourceDetails"
+              placeholder="Tell us how you found us"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
