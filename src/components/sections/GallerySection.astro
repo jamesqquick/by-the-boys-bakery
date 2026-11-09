@@ -58,8 +58,8 @@ const photos = [
 <style>
   /* ─── Section wrapper ─── */
   .gallery-section {
-    background: var(--color-butter);
-    border-bottom: 4px solid var(--color-choco);
+    background: var(--color-cream);
+    border-bottom: var(--border-width) solid var(--color-choco);
     padding: 6rem 3rem 5rem;
     position: relative;
     overflow: hidden;
@@ -92,7 +92,7 @@ const photos = [
   }
 
   .gallery-title .pop {
-    color: var(--color-strawberry);
+    color: var(--color-choco); text-decoration: underline; text-decoration-color: var(--color-coral); text-decoration-thickness: 0.08em; text-underline-offset: 0.1em;
   }
 
   .gallery-subtitle {
@@ -138,15 +138,15 @@ const photos = [
 
   /* Polaroid frame */
   .photo-frame {
-    background: #fff;
-    border: 3px solid var(--color-choco);
-    box-shadow: 5px 5px 0 var(--color-choco);
+    background: var(--color-cream);
+    border: var(--border-width) solid var(--color-choco);
+    box-shadow: var(--brand-shadow);
     padding: 8px;
     border-radius: 4px;
   }
 
   .photo-card:hover .photo-frame {
-    box-shadow: 8px 8px 0 var(--color-choco);
+    box-shadow: var(--brand-shadow);
   }
 
   .photo-frame img {

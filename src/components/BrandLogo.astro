@@ -1,0 +1,20 @@
+---
+interface Props {
+  tone?: "brand" | "cream";
+  class?: string;
+}
+const { tone = "brand", class: className } = Astro.props;
+---
+
+<img
+  src={`/brand/btb-horizontal-${tone}.svg`}
+  alt="By the Boys Bakery"
+  width="800"
+  height="320"
+  class:list={["brand-logo", className]}
+  decoding="async"
+/>
+
+<style>
+  .brand-logo { display: block; width: 240px; max-width: 100%; height: auto; }
+</style>

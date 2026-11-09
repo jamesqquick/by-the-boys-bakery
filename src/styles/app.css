@@ -1,62 +1,48 @@
 @import "tailwindcss";
 @import "./global.css";
 
-/* ============================================================
-   Tailwind v4 theme — maps our brand tokens into Tailwind's
-   color / spacing / radius utilities and shadcn's CSS-var API.
-   ============================================================ */
-
+/* Tailwind v4 aliases. Primitive values live only in tokens.css.
+   Inline aliases avoid self-references between --color-* theme variables. */
 @theme inline {
-  /* Fonts */
-  --font-sans:    "Nunito", sans-serif;
-  --font-display: "Pacifico", cursive;
-
-  /* Brand colors (Tailwind utilities: bg-butter, text-choco, etc.) */
-  --color-butter:      #FFE566;
-  --color-choco:       #3D1F0A;
-  --color-sky:         #7BCFED;
-  --color-strawberry:  #E85D5D;
-  --color-mint:        #6DDBA1;
-  --color-cream:       #FFF9EE;
-  --color-muted-brown: #8B6555;
-  --color-border-warm: #D4C5B8;
-
-  /* shadcn semantic aliases */
-  --color-background:           #FFF9EE;
-  --color-foreground:           #3D1F0A;
-  --color-primary:              #E85D5D;
-  --color-primary-foreground:   #ffffff;
-  --color-secondary:            #FFE566;
-  --color-secondary-foreground: #3D1F0A;
-  --color-muted:                #D4C5B8;
-  --color-muted-foreground:     #8B6555;
-  --color-accent:               #7BCFED;
-  --color-accent-foreground:    #3D1F0A;
-  --color-destructive:          #E85D5D;
-  --color-border:               #3D1F0A;
-  --color-input:                #FFF9EE;
-  --color-ring:                 #3D1F0A;
-
-  /* Radius */
-  --radius-sm:  8px;
-  --radius-md:  12px;
-  --radius-lg:  16px;
-  --radius-xl:  20px;
-  --radius-2xl: 24px;
-
-  /* Neo-brutalist shadows (use with shadow-neo etc.) */
-  --shadow-neo-sm: 2px 2px 0 #3D1F0A;
-  --shadow-neo:    4px 4px 0 #3D1F0A;
-  --shadow-neo-lg: 8px 8px 0 #3D1F0A;
+  --font-sans: var(--font-family);
+  --font-display: var(--font-family-display);
+  --color-coral: var(--brand-coral);
+  --color-choco: var(--brand-chocolate);
+  --color-cream: var(--brand-cream);
+  --color-gold: var(--brand-gold);
+  --color-butter: var(--brand-cream);
+  --color-sky: var(--brand-cream);
+  --color-strawberry: var(--brand-coral);
+  --color-mint: var(--brand-coral);
+  --color-muted-brown: var(--brand-muted);
+  --color-border-warm: var(--brand-border-soft);
+  --color-background: var(--brand-cream);
+  --color-foreground: var(--brand-chocolate);
+  --color-primary: var(--action-primary-bg);
+  --color-primary-foreground: var(--action-primary-text);
+  --color-primary-hover: var(--action-primary-hover-bg);
+  --color-primary-hover-foreground: var(--action-primary-hover-text);
+  --color-secondary: var(--action-secondary-bg);
+  --color-secondary-foreground: var(--action-secondary-text);
+  --color-muted: var(--brand-border-soft);
+  --color-muted-foreground: var(--brand-muted);
+  --color-accent: var(--brand-gold);
+  --color-accent-foreground: var(--brand-chocolate);
+  --color-destructive: var(--status-error);
+  --color-destructive-foreground: var(--brand-cream);
+  --color-border: var(--brand-chocolate);
+  --color-input: var(--brand-chocolate);
+  --color-ring: var(--brand-chocolate);
+  --radius-sm: var(--brand-radius-sm);
+  --radius-md: var(--brand-radius-md);
+  --radius-lg: var(--brand-radius-lg);
+  --radius-xl: var(--brand-radius-xl);
+  --radius-2xl: var(--brand-radius-2xl);
+  --shadow-neo-sm: var(--brand-shadow);
+  --shadow-neo: var(--brand-shadow);
+  --shadow-neo-lg: var(--brand-shadow);
 }
 
-/* ============================================================
-   shadcn component overrides — apply the neo-brutalist style
-   to all shadcn primitives automatically.
-   ============================================================ */
-
 @layer base {
-  * {
-    border-color: theme(colors.choco / 15%);
-  }
+  * { border-color: var(--brand-border-soft); }
 }

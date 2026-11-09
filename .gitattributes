@@ -1,0 +1,6 @@
+# Preserve design exports and font software byte-for-byte.
+*.pdf binary
+*.png binary
+*.ttf binary
+# Keep the supplied font license unchanged, including its original whitespace.
+docs/brand/fonts/Nunito-OFL.txt -whitespace

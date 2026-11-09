@@ -27,8 +27,8 @@ const {
 
 <style>
   .cta {
-    background: var(--color-strawberry);
-    border-top: 4px solid var(--color-choco);
+    background: var(--color-coral);
+    border-top: var(--border-width) solid var(--color-choco);
     padding: 7rem 4rem;
     text-align: center;
   }
@@ -36,14 +36,14 @@ const {
   .cta-title {
     font-family: var(--font-family-display);
     font-size: clamp(2.5rem, 5vw, 4rem);
-    color: #fff;
+    color: var(--color-choco);
     margin-bottom: 1.25rem;
   }
 
   .cta-desc {
     font-size: 1.1rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--color-choco);
     max-width: 520px;
     margin: 0 auto 2.5rem;
     line-height: 1.7;
@@ -51,20 +51,22 @@ const {
 
   .cta-btn {
     display: inline-block;
-    background: #fff;
+    background: var(--color-cream);
     color: var(--color-choco);
-    border: 3px solid var(--color-choco);
+    border: var(--border-width) solid var(--color-choco);
     box-shadow: var(--shadow-neo);
     padding: 1.1rem 2.75rem;
     border-radius: 12px;
     font-size: 1.1rem;
-    font-weight: 900;
+    font-weight: 700;
     text-decoration: none;
     transition: transform 0.15s, box-shadow 0.15s;
   }
 
   .cta-btn:hover {
-    transform: translate(-3px, -3px);
+    background: var(--action-primary-hover-bg);
+    color: var(--action-primary-hover-text);
+    transform: none;
     box-shadow: var(--shadow-neo-lg);
   }
 
@@ -72,7 +74,7 @@ const {
     margin-top: 1.25rem;
     font-size: 0.85rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-choco);
   }
 
   /* ── Tablet ── */

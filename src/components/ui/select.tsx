@@ -40,13 +40,13 @@ function SelectTrigger({
         // Spacing
         "px-4 py-4",
         // Shape
-        "rounded-xl border-[3px] border-choco",
+        "rounded-xl border-[length:var(--border-width)] border-choco",
         // Color + typography — override global button text-transform/letter-spacing
         "bg-cream text-choco font-bold text-[0.95rem] normal-case tracking-normal",
         // Placeholder text
         "data-[placeholder]:text-muted-foreground data-[placeholder]:font-normal",
-        // Focus — neo offset ring
-        "outline-none transition-[box-shadow] focus-visible:shadow-[2px_2px_0_var(--color-choco)]",
+        // Visible keyboard focus
+        "outline-none transition-[box-shadow] focus-visible:outline-2 focus-visible:outline-choco focus-visible:outline-offset-2",
         // Disabled
         "disabled:cursor-not-allowed disabled:opacity-50",
         // Chevron icon
@@ -78,11 +78,11 @@ function SelectContent({
           // Base
           "relative z-50 overflow-hidden",
           // Shape + border
-          "rounded-xl border-[3px] border-choco",
+          "rounded-xl border-[length:var(--border-width)] border-choco",
           // Color
-          "bg-white text-choco",
+          "bg-cream text-choco",
           // Shadow
-          "shadow-[4px_4px_0_var(--color-choco)]",
+          "shadow-none",
           // Size
           "max-h-(--radix-select-content-available-height) min-w-[var(--radix-select-trigger-width)]",
           // Animations
@@ -137,7 +137,7 @@ function SelectItem({
         "relative flex w-full cursor-pointer select-none items-center",
         "rounded-lg",
         "text-[0.9rem] font-bold text-choco normal-case tracking-normal outline-none",
-        "focus:bg-butter data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "focus:bg-accent data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
       )}
@@ -148,7 +148,7 @@ function SelectItem({
         className="absolute right-2 flex size-4 items-center justify-center"
       >
         <SelectPrimitive.ItemIndicator>
-          <CheckIcon className="size-4 text-strawberry" />
+          <CheckIcon className="size-4 text-choco" />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

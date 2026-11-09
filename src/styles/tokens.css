@@ -1,0 +1,169 @@
+/* Canonical runtime tokens. See docs/brand/README.md.
+   All brand HEX values live here; Tailwind aliases reference these variables. */
+:root {
+  --brand-coral: #EF7858;
+  --brand-cream: #FFF3E3;
+  --brand-chocolate: #4B2418;
+  --brand-gold: #F4B775;
+  --brand-muted: #785446;
+  --brand-border-soft: #D8C4B6;
+
+  --color-coral: var(--brand-coral);
+  --color-choco: var(--brand-chocolate);
+  --color-cream: var(--brand-cream);
+  --color-gold: var(--brand-gold);
+  --color-muted: var(--brand-muted);
+  --color-muted-brown: var(--brand-muted);
+  --color-border-gray: var(--brand-border-soft);
+  --color-dark-gray: var(--brand-chocolate);
+  --color-black: var(--brand-chocolate);
+  --color-white: var(--brand-cream);
+
+  /* Compatibility for the previous palette. Use semantic roles in new code. */
+  --color-strawberry: var(--brand-coral);
+  --color-butter: var(--brand-cream);
+  --color-sky: var(--brand-cream);
+  --color-mint: var(--brand-coral);
+
+  --color-bg-white: var(--brand-cream);
+  --color-bg-light-gray: var(--brand-cream);
+  --color-bg-sage: var(--brand-coral);
+  --color-bg-sky: var(--brand-cream);
+  --color-bg-charcoal: var(--brand-chocolate);
+  --color-bg: var(--brand-cream);
+  --color-fg: var(--brand-chocolate);
+  --color-fg-heading: var(--brand-chocolate);
+  --color-fg-muted: var(--brand-muted);
+  --color-border: var(--brand-chocolate);
+
+  /* Functional states are distinct from decorative accents. */
+  --status-success-surface: #E3EFDE;
+  --status-success-text: #315335;
+  --status-warning-surface: #F8E6BE;
+  --status-warning-text: #654A16;
+  --status-error: #9B302D;
+  --status-error-surface: #FAE1D9;
+  --color-in-stock: var(--status-success-surface);
+  --color-low-stock: var(--status-warning-surface);
+  --color-out-of-stock: var(--brand-border-soft);
+  --color-error: var(--status-error);
+  --color-success: var(--status-success-text);
+
+  --action-primary-bg: var(--brand-coral);
+  --action-primary-text: var(--brand-chocolate);
+  --action-primary-hover-bg: var(--brand-chocolate);
+  --action-primary-hover-text: var(--brand-cream);
+  --action-secondary-bg: var(--brand-cream);
+  --action-secondary-text: var(--brand-chocolate);
+  --action-secondary-hover-bg: var(--brand-gold);
+  --action-secondary-hover-text: var(--brand-chocolate);
+  --color-btn-primary-bg: var(--action-primary-bg);
+  --color-btn-primary-text: var(--action-primary-text);
+  --color-btn-primary-hover-bg: var(--action-primary-hover-bg);
+  --color-btn-primary-hover-text: var(--action-primary-hover-text);
+  --color-btn-secondary-bg: var(--action-secondary-bg);
+  --color-btn-secondary-text: var(--action-secondary-text);
+  --color-btn-secondary-border: var(--brand-chocolate);
+  --color-btn-secondary-hover-bg: var(--action-secondary-hover-bg);
+  --color-btn-secondary-hover-text: var(--action-secondary-hover-text);
+
+  --color-input-bg: var(--brand-cream);
+  --color-input-text: var(--brand-chocolate);
+  --color-input-border: var(--brand-chocolate);
+}
+
+/* ------------------------------------------------------------
+   Typography Tokens
+   ------------------------------------------------------------ */
+:root {
+  --font-family: 'Nunito', sans-serif;
+  --font-family-display: var(--font-family);
+
+  --font-weight-normal:    400;
+  --font-weight-semibold:  600;
+  --font-weight-bold:      700;
+  --font-weight-extrabold: 800;
+  --font-weight-black:     900;
+
+  --font-size-3xs: 0.625rem;
+  --font-size-2xs: 0.75rem;
+  --font-size-xs:  0.8125rem;
+  --font-size-sm:  0.875rem;
+  --font-size-md:  1rem;
+  --font-size-lg:  1.125rem;
+  --font-size-xl:  1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.5rem;
+
+  --font-size-h1: clamp(3rem, 5.6vw, 3.5rem);
+  --font-size-h2: clamp(2.25rem, 4.8vw, 3rem);
+  --font-size-h3: 2rem;
+  --font-size-h4: 1.5rem;
+  --font-size-h5: 0.875rem;
+  --font-size-h6: 0.75rem;
+  --font-size-body: 1rem;
+
+  --line-height-tight:  1;
+  --line-height-snug:   1.1;
+  --line-height-normal: 1.25;
+  --line-height-body:   1.6;
+
+  --letter-spacing-tight:  -0.03em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide:   0.03em;
+  --letter-spacing-label:  0.08em;
+}
+
+/* ------------------------------------------------------------
+   Spacing Tokens
+   ------------------------------------------------------------ */
+:root {
+  --space-3xs: 0.125rem;
+  --space-2xs: 0.3rem;
+  --space-xs:  0.5rem;
+  --space-sm:  0.7rem;
+  --space-md:  0.8rem;
+  --space-lg:  1rem;
+  --space-xl:  1.25rem;
+  --space-2xl: 1.5rem;
+  --space-3xl: 1.75rem;
+  --space-4xl: 2rem;
+  --space-5xl: 3rem;
+  --space-6xl: 5rem;
+}
+
+/* Shape and layout */
+:root {
+  --brand-radius-sm: 8px;
+  --brand-radius-md: 12px;
+  --brand-radius-lg: 16px;
+  --brand-radius-xl: 20px;
+  --brand-radius-2xl: 24px;
+  --brand-border-width: 1.5px;
+  --brand-shadow: none;
+  --radius-xs: 0.2rem;
+  --radius-sm: var(--brand-radius-sm);
+  --radius-md: var(--brand-radius-md);
+  --radius-lg: var(--brand-radius-lg);
+  --radius-card: var(--brand-radius-xl);
+  --radius-input: var(--brand-radius-md);
+  --radius-button: var(--brand-radius-md);
+  --radius-popover: var(--brand-radius-lg);
+  --radius-pill: 100px;
+  --radius-circle: 50%;
+  --border-width: var(--brand-border-width);
+  --border-color: var(--brand-chocolate);
+  /* Compatibility aliases for existing consumers. */
+  --shadow-neo-sm: var(--brand-shadow);
+  --shadow-neo: var(--brand-shadow);
+  --shadow-neo-lg: var(--brand-shadow);
+  --page-width-narrow: 90rem;
+  --page-width-normal: 120rem;
+  --page-width-wide: 150rem;
+  --touch-target-min: 44px;
+  /* Horizontal mark is 240 × 96px; include navigation padding and border. */
+  --site-header-height: calc(96px + 2rem + var(--border-width));
+}
