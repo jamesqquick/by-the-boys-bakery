@@ -1,8 +1,15 @@
-# EmDash Starter Template (Cloudflare)
+# By the Boys Bakery
 
-A general-purpose starting point for building sites with [EmDash](https://github.com/emdash-cms/emdash) on Cloudflare Workers. Includes posts, pages, categories, and tags with minimal styling -- designed as a base you can build on rather than a finished theme.
+Astro / EmDash site for By the Boys Bakery in Germantown, Tennessee.
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/emdash-cms/templates/tree/main/starter-cloudflare)
+## Brand and design
+
+The selected identity is versioned in [docs/brand](docs/brand/README.md). Read [DESIGN.md](DESIGN.md) before changing interface styling and [PRODUCT.md](PRODUCT.md) for audience and brand context.
+
+- Runtime values: `src/styles/tokens.css`
+- Tailwind aliases: `src/styles/app.css`
+- Outlined logo masters: `public/brand/`
+- Guide, booth sheets and packaging references: `docs/brand/`
 
 ## What's Included
 
@@ -35,7 +42,6 @@ A general-purpose starting point for building sites with [EmDash](https://github
 
 ```bash
 pnpm install
-pnpm bootstrap
 pnpm dev
 ```
 

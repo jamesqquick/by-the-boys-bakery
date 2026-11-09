@@ -69,8 +69,8 @@ const introParagraphs = (intro ?? "")
 <style>
   /* ── Desktop ── */
   .about {
-    background: var(--color-sky);
-    border-bottom: 4px solid var(--color-choco);
+    background: var(--color-cream);
+    border-bottom: var(--border-width) solid var(--color-choco);
     padding: 7rem 4rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -81,13 +81,13 @@ const introParagraphs = (intro ?? "")
   .about-img {
     aspect-ratio: 4/5;
     border-radius: var(--radius-card);
-    border: 3px solid var(--color-choco);
+    border: var(--border-width) solid var(--color-choco);
     box-shadow: var(--shadow-neo);
     overflow: hidden;
   }
 
   .about-img--empty {
-    background: var(--color-butter);
+    background: var(--color-cream);
   }
 
   /* Image component renders in a child component, so the class it's given
@@ -107,7 +107,7 @@ const introParagraphs = (intro ?? "")
     margin-bottom: 1.5rem;
   }
 
-  .about-title .pop { color: var(--color-strawberry); }
+  .about-title .pop { color: var(--color-choco); text-decoration: underline; text-decoration-color: var(--color-coral); text-decoration-thickness: 0.08em; text-underline-offset: 0.1em; }
 
   .about-content p {
     font-size: 1rem;
@@ -141,7 +141,7 @@ const introParagraphs = (intro ?? "")
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: var(--color-strawberry);
+    background: var(--color-coral);
     border: 2px solid var(--color-choco);
     flex-shrink: 0;
   }

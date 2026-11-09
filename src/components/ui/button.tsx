@@ -9,20 +9,20 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary-hover hover:text-primary-hover-foreground",
         destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:ring-destructive/20",
         outline:
           "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost:
           "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        // Neo-brutalist variants — thick border + offset shadow + lift on hover
-        neo: "bg-strawberry text-white border-[3px] border-choco rounded-xl font-black shadow-[4px_4px_0_#3D1F0A] hover:-translate-x-[3px] hover:-translate-y-[3px] hover:shadow-[8px_8px_0_#3D1F0A] active:translate-x-0 active:translate-y-0",
-        "neo-secondary": "bg-butter text-choco border-[3px] border-choco rounded-xl font-black shadow-[4px_4px_0_#3D1F0A] hover:-translate-x-[3px] hover:-translate-y-[3px] hover:shadow-[8px_8px_0_#3D1F0A] active:translate-x-0 active:translate-y-0",
-        "neo-white": "bg-white text-choco border-[3px] border-choco rounded-xl font-black shadow-[4px_4px_0_#3D1F0A] hover:-translate-x-[3px] hover:-translate-y-[3px] hover:shadow-[8px_8px_0_#3D1F0A] active:translate-x-0 active:translate-y-0",
+        link: "text-foreground underline-offset-4 hover:underline",
+        // Retain existing variant names while using the shared brand button styles.
+        neo: "bg-primary text-primary-foreground border-[length:var(--border-width)] border-choco rounded-xl font-bold shadow-none hover:bg-primary-hover hover:text-primary-hover-foreground",
+        "neo-secondary": "bg-secondary text-secondary-foreground border-[length:var(--border-width)] border-choco rounded-xl font-bold shadow-none hover:bg-accent",
+        "neo-white": "bg-cream text-choco border-[length:var(--border-width)] border-choco rounded-xl font-bold shadow-none hover:bg-accent",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

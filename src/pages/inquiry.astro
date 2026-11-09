@@ -63,8 +63,8 @@ const packages = makeInquiryPackages(
 <style is:global>
   /* ── Page Header ── */
   .page-header {
-    background: var(--color-butter);
-    border-bottom: 4px solid var(--color-choco);
+    background: var(--color-cream);
+    border-bottom: var(--border-width) solid var(--color-choco);
     padding: 4rem 4rem 3.5rem;
     display: grid;
     grid-template-columns: 1fr auto;
@@ -89,8 +89,8 @@ const packages = makeInquiryPackages(
   }
 
   .page-header-aside {
-    background: #fff;
-    border: 3px solid var(--color-choco);
+    background: var(--color-cream);
+    border: var(--border-width) solid var(--color-choco);
     box-shadow: var(--shadow-neo);
     border-radius: var(--radius-card);
     padding: 1.5rem 1.75rem;
@@ -124,7 +124,7 @@ const packages = makeInquiryPackages(
 
   .aside-list li::before {
     content: "✓";
-    color: var(--color-mint);
+    color: var(--color-success);
     font-weight: 900;
     flex-shrink: 0;
   }
@@ -138,8 +138,8 @@ const packages = makeInquiryPackages(
 
   /* ── InquiryForm card ── */
   .inquiry-form {
-    background: #fff;
-    border: 3px solid var(--color-choco);
+    background: var(--color-cream);
+    border: var(--border-width) solid var(--color-choco);
     border-radius: 24px;
     box-shadow: var(--shadow-neo-lg);
     overflow: hidden;
@@ -147,7 +147,7 @@ const packages = makeInquiryPackages(
 
   .form-section {
     padding: 2.5rem 3rem;
-    border-bottom: 3px solid var(--color-choco);
+    border-bottom: var(--border-width) solid var(--color-choco);
   }
 
   .form-section:last-of-type {
@@ -173,7 +173,7 @@ const packages = makeInquiryPackages(
     justify-content: center;
     width: 28px;
     height: 28px;
-    background: var(--color-butter);
+    background: var(--color-cream);
     border: 2px solid var(--color-choco);
     border-radius: 50%;
     font-size: 0.8rem;
@@ -209,7 +209,7 @@ const packages = makeInquiryPackages(
   .inquiry-form input,
   .inquiry-form textarea {
     background: var(--color-cream);
-    border: 3px solid var(--color-choco);
+    border: var(--border-width) solid var(--color-choco);
     border-radius: 12px;
     font-family: var(--font-family);
     font-weight: 700;
@@ -218,9 +218,10 @@ const packages = makeInquiryPackages(
 
   .inquiry-form input:focus,
   .inquiry-form textarea:focus {
-    background: #fff;
+    background: var(--color-cream);
     box-shadow: var(--shadow-neo-sm);
-    outline: none;
+    outline: 2px solid var(--color-choco);
+    outline-offset: 3px;
   }
 
   .inquiry-form textarea {
@@ -238,7 +239,7 @@ const packages = makeInquiryPackages(
   }
 
   .required {
-    color: var(--color-strawberry);
+    color: var(--color-error);
     margin-left: 2px;
   }
 
@@ -259,7 +260,7 @@ const packages = makeInquiryPackages(
   .package-group {
     padding: 1.25rem;
     background: var(--color-cream);
-    border: 3px solid var(--color-choco);
+    border: var(--border-width) solid var(--color-choco);
     border-radius: 16px;
   }
 
@@ -303,7 +304,7 @@ const packages = makeInquiryPackages(
   .package-stepper {
     display: grid;
     grid-template-columns: 2.75rem 3rem 2.75rem;
-    border: 3px solid var(--color-choco);
+    border: var(--border-width) solid var(--color-choco);
     border-radius: 12px;
     overflow: hidden;
   }
@@ -330,7 +331,7 @@ const packages = makeInquiryPackages(
   }
 
   .package-option .package-stepper input:focus-visible {
-    outline: 2px solid var(--color-strawberry);
+    outline: 2px solid var(--color-choco);
     outline-offset: -2px;
   }
 
@@ -341,7 +342,7 @@ const packages = makeInquiryPackages(
     padding: 0;
     border: 0;
     border-radius: 0;
-    background: var(--color-butter);
+    background: var(--color-cream);
     color: var(--color-choco);
     box-shadow: none;
     transform: none;
@@ -356,12 +357,12 @@ const packages = makeInquiryPackages(
   }
 
   .package-stepper button:focus-visible {
-    outline: 2px solid var(--color-strawberry);
+    outline: 2px solid var(--color-choco);
     outline-offset: -3px;
   }
 
   .package-stepper button:not(:disabled):hover {
-    background: var(--color-sky);
+    background: var(--color-cream);
     box-shadow: none;
     transform: none;
   }
@@ -369,9 +370,9 @@ const packages = makeInquiryPackages(
   .estimate {
     margin-top: 1.5rem;
     padding: 1.25rem;
-    border: 3px solid var(--color-choco);
+    border: var(--border-width) solid var(--color-choco);
     border-radius: 16px;
-    background: var(--color-sky);
+    background: var(--color-cream);
     box-shadow: var(--shadow-neo-sm);
   }
 
@@ -392,8 +393,8 @@ const packages = makeInquiryPackages(
 
   /* Form footer */
   .form-footer {
-    background: var(--color-butter);
-    border-top: 3px solid var(--color-choco);
+    background: var(--color-cream);
+    border-top: var(--border-width) solid var(--color-choco);
     padding: 2.5rem 3rem;
     display: flex;
     align-items: center;
@@ -541,7 +542,7 @@ const packages = makeInquiryPackages(
   .field-error {
     font-size: 0.78rem;
     font-weight: 700;
-    color: var(--color-strawberry);
+    color: var(--color-error);
     margin-top: 0.35rem;
     line-height: 1.4;
   }

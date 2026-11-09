@@ -1,0 +1,20 @@
+{
+  "release": "1.0",
+  "source": "Selected identity kit, 2026-11-09",
+  "sha256": {
+    "public/brand/btb-badge-brand.svg": "5d3bd8771f9a44b5fff45f73a00eb1f795c33b2d21532c129e922351f64868f6",
+    "public/brand/btb-badge-chocolate.svg": "65a72dbdc45f4f62c9bc894ec6dca68b344c3b86fcfe88b694caa0d16f780f46",
+    "public/brand/btb-badge-cream.svg": "94cb82a56de475335bfe42722215891f0c8b4868f91b1c3b89e0ebe8c1e9a478",
+    "public/brand/btb-checkerboard.svg": "c1cc0919b99d993ea2e80502d9d007fec612dcd114410e235cbf772ef4fd1573",
+    "public/brand/btb-horizontal-brand.svg": "6c1aa2cadb76f2ce832605adbe763c2168610981f8df9d99a3d7a2ce76a94f65",
+    "public/brand/btb-horizontal-chocolate.svg": "9b87d5a3fb503e28a776dffa8c3016cfad72e6c1ea02e9eac10c49d8e0fb9359",
+    "public/brand/btb-horizontal-cream.svg": "5af5d8551e9170376b71d26a2cb47d8fec9aa73372d74985163224539d379656",
+    "public/brand/btb-monogram-brand.svg": "edbffde9a9b54bff98503e965c1fa515052636a6b3f8e8a2dcddda5a16378a6b",
+    "public/brand/btb-monogram-chocolate.svg": "f4b39b3c9213cc814d8c096d79bb8a98cdda38a9c00717cbf32cb8b28345abd7",
+    "public/brand/btb-monogram-cream.svg": "ff4ac4dd4f85c4f13ab07ed9835feb2e621c19a92563e2653aeae0c62aea7ed7",
+    "public/brand/btb-primary-brand.svg": "a654ec41d74dda2cd6a75283c5c116b24d0cd1b8bc89fbe142918f6cd6ac5456",
+    "public/brand/btb-primary-chocolate.svg": "d4db05e1d22055e43fad7c7c4056758023d5be400cd88fdad69b9432ac30332b",
+    "public/brand/btb-primary-cream.svg": "1aa3d4dfacac280a193d88ccf70ebc75c9e3b1ec7c4d8fd336e969415dcffa5a",
+    "public/brand/btb-rays.svg": "ec1a267cf8486ed528678d2e10eabd40d7f7988246320a6f69078a365ebab3f4"
+  }
+}

@@ -27,8 +27,8 @@ const { name, description, image } = Astro.props;
 
 <style>
   .menu-card {
-    background: #fff;
-    border: 3px solid var(--color-choco);
+    background: var(--color-cream);
+    border: var(--border-width) solid var(--color-choco);
     border-radius: var(--radius-card);
     overflow: hidden;
     box-shadow: var(--shadow-neo);
@@ -36,7 +36,7 @@ const { name, description, image } = Astro.props;
   }
 
   .menu-card:hover {
-    transform: translate(-4px, -4px);
+    transform: none;
     box-shadow: var(--shadow-neo-lg);
   }
 
@@ -48,8 +48,8 @@ const { name, description, image } = Astro.props;
   }
 
   .menu-card-img--empty {
-    background: var(--color-sky);
-    border-bottom: 3px solid var(--color-choco);
+    background: var(--color-cream);
+    border-bottom: var(--border-width) solid var(--color-choco);
   }
 
   /* Image component renders in a child component, so the class it's given
@@ -63,7 +63,7 @@ const { name, description, image } = Astro.props;
 
   .menu-card-body {
     padding: 1.25rem;
-    border-top: 3px solid var(--color-choco);
+    border-top: var(--border-width) solid var(--color-choco);
   }
 
   .menu-card-name {
