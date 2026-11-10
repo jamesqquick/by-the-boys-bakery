@@ -184,7 +184,7 @@ const { currentPath = "/" } = Astro.props;
     transition: color 0.15s;
   }
 
-  .nav-links a:hover,
+  .nav-links a:hover:not(.nav-cta),
   .nav-links a.active {
     color: var(--color-choco);
     text-decoration: underline;
