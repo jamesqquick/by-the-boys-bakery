@@ -41,9 +41,9 @@ export const server = {
 			const pricedOrder = await priceSelectedOrder(items, order, notes);
 			const { lines, estimate } = describeOrder(pricedOrder);
 			const referralSourceAnswer = describeReferralSource(referralSource, referralSourceDetails);
-			const subject = `New Inquiry from ${name} — ${occasion} on ${date}`;
+			const subject = `New Order Request from ${name} — ${occasion} on ${date}`;
 			const html = `
-				<h2 style="font-family:sans-serif;color:#3b1f0c;">New Bakery Inquiry</h2>
+				<h2 style="font-family:sans-serif;color:#3b1f0c;">New Bakery Order Request</h2>
 				<table style="font-family:sans-serif;border-collapse:collapse;width:100%;max-width:480px;">
 					${row("Name", name)}
 					${row("Email", email)}
@@ -59,7 +59,7 @@ export const server = {
 				<p style="font-family:sans-serif;">Estimate covers standard packages only. Confirm availability and final price with the customer.</p>
 			`;
 			const text = [
-				"New Bakery Inquiry",
+				"New Bakery Order Request",
 				"",
 				`Name: ${name}`,
 				`Email: ${email}`,
@@ -101,9 +101,9 @@ export const server = {
 			const pricedOrder = await priceSelectedOrder(items, order, notes, false);
 			const { lines, estimate } = describeOrder(pricedOrder);
 			const referralSourceAnswer = describeReferralSource(referralSource, referralSourceDetails);
-			const subject = `New ${campaignTitle} Inquiry from ${name}`;
+			const subject = `New ${campaignTitle} Order Request from ${name}`;
 			const html = `
-				<h2 style="font-family:sans-serif;color:#3b1f0c;">New Seasonal Inquiry</h2>
+				<h2 style="font-family:sans-serif;color:#3b1f0c;">New Seasonal Order Request</h2>
 				<table style="font-family:sans-serif;border-collapse:collapse;width:100%;max-width:480px;">
 					${row("Name", name)}
 					${row("Email", email)}
@@ -117,7 +117,7 @@ export const server = {
 				<p style="font-family:sans-serif;">Confirm availability and final price with the customer.</p>
 			`;
 			const text = [
-				"New Seasonal Inquiry",
+				"New Seasonal Order Request",
 				"",
 				`Name: ${name}`,
 				`Email: ${email}`,
@@ -277,7 +277,7 @@ async function sendInquiryEmail({ replyTo, subject, html, text, logDetails }: In
 		console.error("Email send failed:", error);
 		throw new ActionError({
 			code: "INTERNAL_SERVER_ERROR",
-			message: "Failed to send your inquiry. Please try again.",
+			message: "We couldn't send your order request. Please try again.",
 		});
 	}
 }

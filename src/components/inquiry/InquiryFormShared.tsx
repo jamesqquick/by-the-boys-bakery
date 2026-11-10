@@ -264,7 +264,7 @@ export function InquirySubmitFooter({ pending, generalError, disabled = false }:
     <div className="form-footer">
       <div>
         <p className="form-footer-note">
-          <strong>No payment yet.</strong> This is an inquiry. We'll reach out within
+          <strong>No payment yet.</strong> This is an order request. We'll reach out within
           48 hours to confirm availability and final pricing. Submitting this request does not confirm an order.
         </p>
         {generalError && (
@@ -274,7 +274,7 @@ export function InquirySubmitFooter({ pending, generalError, disabled = false }:
         )}
       </div>
       <Button type="submit" variant="neo" size="lg" className="submit-btn" disabled={pending || disabled}>
-        {pending ? "Sending…" : "Send My Inquiry"}
+        {pending ? "Sending…" : "Send My Order Request"}
       </Button>
     </div>
   );
