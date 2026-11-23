@@ -171,14 +171,14 @@
         },
         {
           "slug": "inquiry_title",
-          "label": "Inquiry Section Title",
+          "label": "Order Section Title",
           "type": "string",
           "required": false,
           "unique": false
         },
         {
           "slug": "inquiry_description",
-          "label": "Inquiry Section Description",
+          "label": "Order Section Description",
           "type": "text",
           "required": false,
           "unique": false

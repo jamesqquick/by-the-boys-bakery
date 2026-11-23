@@ -191,8 +191,8 @@
 				{ "slug": "homepage_cta_label", "label": "Homepage Button Label", "type": "string" },
 				{ "slug": "banner_text", "label": "Banner Text", "type": "string" },
 				{ "slug": "banner_cta_label", "label": "Banner Link Label", "type": "string" },
-				{ "slug": "inquiry_title", "label": "Inquiry Section Title", "type": "string" },
-				{ "slug": "inquiry_description", "label": "Inquiry Section Description", "type": "text" }
+				{ "slug": "inquiry_title", "label": "Order Section Title", "type": "string" },
+				{ "slug": "inquiry_description", "label": "Order Section Description", "type": "text" }
 			]
 		},
 		{
@@ -371,7 +371,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Fill out our inquiry form and we'll get back to you within 48 hours. We need at least 5–7 days notice to plan and bake your order.",
+									"text": "Fill out our order form and we'll get back to you within 48 hours. We need at least 5–7 days notice to plan and bake your order.",
 									"_key": "k7"
 								}
 							],
@@ -432,7 +432,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Head to the inquiry page, fill out the form, and we'll get back to you within 48 hours. We ask for at least 5–7 days notice so we can plan and bake everything fresh.",
+									"text": "Head to the order page, fill out the form, and we'll get back to you within 48 hours. We ask for at least 5–7 days notice so we can plan and bake everything fresh.",
 									"_key": "k7"
 								}
 							],
@@ -529,11 +529,11 @@
 					"eyebrow": "The Good Stuff",
 					"title": "Simple prices.",
 					"description": "These prices are intentionally friendly. By the Boys Bakery is a small hobby bakery, made for fun, family, and sharing good food. Prices mainly help cover ingredients, packaging, and supplies.",
-					"cta_label": "Start an Inquiry",
+					"cta_label": "Start an order",
 					"cta_href": "/inquiry",
 					"list_title": "Pick a favorite",
 					"list_note": "Simple decoration included",
-					"closing_note": "Looking for a detailed design, specialty filling, fondant, or a character cake? Send an inquiry and we will let you know what is possible."
+					"closing_note": "Looking for a detailed design, specialty filling, fondant, or a character cake? Start an order and we will let you know what is possible."
 				}
 			}
 		],
@@ -678,7 +678,7 @@
 					"hero_title": "Homemade treats from",
 					"hero_title_accent": "the boys!",
 					"hero_desc": "By the Boys Bakery is a home-based micro bakery in Germantown, TN. James bakes cookies and desserts in small batches, fresh every time.",
-					"hero_cta_label": "Submit an Inquiry",
+					"hero_cta_label": "Start an order",
 					"hero_cta_href": "/inquiry",
 					"hero_note": "Not sure yet? Tell us the occasion and we'll figure it out.",
 					"hero_sticker_1": "Home Baked with Love",
@@ -703,12 +703,12 @@
 					"about_badge": "Made with Real Love",
 					"treats_label": "What We Make",
 					"treats_title": "Our Treats",
-					"treats_note": "See something you like? Submit an inquiry and we'll sort out the details.",
+					"treats_note": "See something you like? Start an order and we'll sort out the details.",
 					"values_label": "What Makes Us Different",
 					"values_title": "Why the Boys?",
 					"cta_title": "Want something delicious?",
 					"cta_desc": "Tell us the occasion, the flavor, the quantity. We'll let you know what we can do. No payment upfront.",
-					"cta_cta_label": "Submit an Inquiry",
+					"cta_cta_label": "Start an order",
 					"cta_cta_href": "/inquiry",
 					"cta_note": "We'll get back to you within 48 hours."
 				}
