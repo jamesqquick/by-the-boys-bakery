@@ -10,6 +10,7 @@ import BakeryLayout from "../layouts/BakeryLayout.astro";
 import HeroSection from "../components/sections/HeroSection.astro";
 import TickerSection from "../components/sections/TickerSection.astro";
 import AboutSection from "../components/sections/AboutSection.astro";
+import CheckerboardDivider from "../components/sections/CheckerboardDivider.astro";
 import MenuHighlights from "../components/sections/MenuHighlights.astro";
 import PricingSection from "../components/sections/PricingSection.astro";
 import ValuesSection from "../components/sections/ValuesSection.astro";
@@ -100,6 +101,7 @@ const edit = (home?.edit ?? {}) as Record<string, Record<string, unknown>>;
     image={d?.about_image}
     edit={edit}
   />
+  <CheckerboardDivider />
   <MenuHighlights
     title={d?.treats_title}
     note={d?.treats_note}

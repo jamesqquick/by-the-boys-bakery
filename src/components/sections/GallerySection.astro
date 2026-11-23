@@ -55,6 +55,20 @@ const photos = [
   </div>
 </section>
 
+<script>
+  if (matchMedia("(prefers-reduced-motion: no-preference)").matches && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add("is-placed");
+        observer.unobserve(entry.target);
+      }
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll("#gallery .photo-card:nth-child(-n+3)").forEach((card) => observer.observe(card));
+  }
+</script>
+
 <style>
   /* ─── Section wrapper ─── */
   .gallery-section {
@@ -143,6 +157,17 @@ const photos = [
     box-shadow: var(--brand-shadow);
     padding: 8px;
     border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .photo-card.is-placed .photo-frame {
+      animation: lay-photo-down 450ms cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i) * 80ms) backwards;
+    }
+  }
+
+  @keyframes lay-photo-down {
+    from { transform: translate(-9px, -12px) rotate(-2deg) scale(1.025); }
+    to { transform: none; }
   }
 
   .photo-card:hover .photo-frame {

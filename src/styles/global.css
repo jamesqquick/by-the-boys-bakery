@@ -71,6 +71,21 @@ a:hover {
   color: var(--color-fg-heading);
 }
 
+a:is([href="/inquiry"], [href="/inquiry/"], .campaign-hero-cta[href="#request"]) {
+  &::after {
+    content: "→" / "";
+    display: inline-block;
+    margin-inline-start: 0.4em;
+    line-height: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &::after { transition: transform 160ms ease-out; }
+    &:is(:hover, :focus-visible)::after { transform: translateX(0.22em); }
+    &:active { translate: 0 1px; }
+  }
+}
+
 /* ------------------------------------------------------------
    Buttons
    ------------------------------------------------------------ */
