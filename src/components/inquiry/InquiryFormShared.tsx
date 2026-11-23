@@ -1,5 +1,5 @@
 import { Minus, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,9 +17,14 @@ import { formatInquiryPrice, type InquiryPackage } from "@/lib/inquiry-pricing";
 export type InquiryFieldErrors = Record<string, string[] | undefined>;
 
 export function InquirySuccess() {
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => { heading.current?.focus(); }, []);
+
   return (
     <div className="form-success">
-      <h2 className="success-title">We got it!</h2>
+      <h2 className="success-title" ref={heading} tabIndex={-1}>
+        <span className="receipt-stamp">Inquiry received</span>
+      </h2>
       <p className="success-body">
         This is a request, not a confirmed order. James will get back to you within 48 hours
         to confirm availability, details, and final pricing.
@@ -97,6 +102,27 @@ export function ContactFields({ fieldErrors }: { fieldErrors: InquiryFieldErrors
         )}
       </div>
     </div>
+  );
+}
+
+function RollingPrice({ amount }: { amount: number }) {
+  const price = formatInquiryPrice(amount);
+  // Anchor digit columns to the decimal point when the formatted length changes.
+  const decimalIndex = price.includes(".") ? price.indexOf(".") : price.length;
+
+  return (
+    <>
+      <span className="sr-only">{price}</span>
+      <span className="rolling-price" aria-hidden="true">
+        {Array.from(price, (character, index) => /\d/.test(character) ? (
+          <span
+            key={index - decimalIndex}
+            className="rolling-price-digit"
+            style={{ "--digit-offset": `${-Number(character) * 10}%` } as CSSProperties}
+          />
+        ) : character)}
+      </span>
+    </>
   );
 }
 
@@ -224,7 +250,7 @@ export function PackageRequestFields({
             <div className="estimate-total">
               <span>{hasQuoteOnlyItems ? "Estimated priced subtotal" : "Estimated total"}</span>
               <span>
-                {totalCents > 0 ? formatInquiryPrice(totalCents / 100) : "Quote after review"}
+                {totalCents > 0 ? <RollingPrice amount={totalCents / 100} /> : "Quote after review"}
                 {hasQuoteOnlyItems && totalCents > 0 ? " + quoted items" : ""}
               </span>
             </div>

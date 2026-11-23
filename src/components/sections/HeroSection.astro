@@ -30,7 +30,7 @@ const {
   <div class="hero-left">
     <h1 class="hero-title">
       <span {...edit.hero_title}>{title}</span>{" "}
-      <span class="red" {...edit.hero_title_accent}>{titleAccent}</span>
+      <span class="hero-accent" {...edit.hero_title_accent}>{titleAccent}</span>
     </h1>
     <p class="hero-desc" {...edit.hero_desc}>{desc}</p>
     <a href={ctaHref} class="hero-cta" {...edit.hero_cta_label}>{ctaLabel}</a>
@@ -70,7 +70,33 @@ const {
     margin-bottom: 1.5rem;
   }
 
-  .hero-title .red { color: var(--color-choco); text-decoration: underline; text-decoration-color: var(--color-coral); text-decoration-thickness: 0.08em; text-underline-offset: 0.1em; }
+  .hero-accent {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .hero-accent::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 -0.06em;
+    height: 0.09em;
+    background: var(--color-coral);
+    border-radius: 65% 35% 58% 22% / 80% 55% 70% 40%;
+    transform: rotate(-0.8deg);
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-accent::after {
+      animation: draw-underline 550ms ease-out 120ms backwards;
+    }
+  }
+
+  @keyframes draw-underline {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0); }
+  }
 
   .hero-desc {
     font-size: 1.05rem;

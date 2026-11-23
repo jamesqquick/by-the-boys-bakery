@@ -102,6 +102,22 @@
 .estimate-total { display: flex; justify-content: space-between; gap: 1rem; font-size: 1.25rem; font-weight: 900; }
 .estimate p { margin-top: 0.5rem; color: var(--color-choco); font-size: 0.82rem; font-weight: 700; }
 
+.rolling-price { display: inline-flex; font-variant-numeric: tabular-nums; line-height: 1.25; }
+.rolling-price-digit { height: 1.25em; overflow: hidden; }
+.rolling-price-digit::before {
+  content: "0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9";
+  display: block;
+  white-space: pre;
+  transform: translateY(var(--digit-offset));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rolling-price-digit::before { transition: transform 240ms ease-out; }
+  @starting-style {
+    .rolling-price-digit::before { transform: translateY(0); }
+  }
+}
+
 .form-footer { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 2.5rem 3rem; background: var(--color-cream); border-top: var(--border-width) solid var(--color-choco); }
 .form-footer-note { max-width: 390px; color: var(--color-choco); font-size: 0.85rem; font-weight: 700; line-height: 1.5; }
 .form-footer-note strong { color: var(--color-choco); font-weight: 900; }
@@ -109,6 +125,31 @@
 .form-success { padding: 4rem 3rem; text-align: center; }
 .success-title { margin-bottom: 0.75rem; color: var(--color-choco); font-family: var(--font-family-display); font-size: 2rem; }
 .success-body { max-width: 480px; margin: 0 auto; color: var(--color-fg-muted); font-size: 1rem; font-weight: 700; line-height: 1.7; }
+
+.receipt-stamp {
+  display: inline-block;
+  margin-block: 0.25rem 0.5rem;
+  padding: 0.35em 0.7em;
+  border: 4px double currentColor;
+  border-radius: 0.3em;
+  background: var(--color-cream);
+  color: var(--color-choco);
+  font-size: clamp(1.1rem, 3vw, 1.65rem);
+  line-height: 1.1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: rotate(-3deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .receipt-stamp { animation: stamp-receipt 260ms ease-out; }
+}
+
+@keyframes stamp-receipt {
+  from { opacity: 0.4; transform: translateY(-8px) rotate(-6deg) scale(1.14); }
+  75% { transform: rotate(-3deg) scale(0.985); }
+  to { opacity: 1; transform: rotate(-3deg); }
+}
 .field-error { margin-top: 0.35rem; color: var(--color-error); font-size: 0.78rem; font-weight: 700; line-height: 1.4; }
 
 @media (max-width: 767px) {

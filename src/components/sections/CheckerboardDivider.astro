@@ -1,0 +1,47 @@
+<div id="checkerboard-divider" class="checkerboard" aria-hidden="true">
+  {Array.from({ length: 64 }, (_, index) => <span style={`--step: ${index}`}></span>)}
+</div>
+
+<script>
+  const divider = document.getElementById("checkerboard-divider");
+  if (divider && "IntersectionObserver" in window && matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      divider.classList.add("is-rippling");
+      observer.disconnect();
+    }, { threshold: 0.5 });
+    observer.observe(divider);
+  }
+</script>
+
+<style>
+  .checkerboard {
+    display: grid;
+    grid-auto-columns: minmax(1rem, 1fr);
+    overflow: hidden;
+    background: var(--color-cream);
+  }
+
+  .checkerboard span {
+    grid-column: calc(var(--step) + 1);
+    grid-row: 1;
+    aspect-ratio: 1;
+    background: var(--color-coral);
+    transform-origin: bottom right;
+  }
+
+  .checkerboard span:nth-child(even) {
+    grid-row: 2;
+    transform-origin: top left;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .checkerboard.is-rippling span {
+      animation: tip-check 360ms ease-in-out calc(var(--step) * 13ms);
+    }
+  }
+
+  @keyframes tip-check {
+    40% { transform: rotate(-20deg); }
+  }
+</style>
